@@ -10,7 +10,9 @@ const TextAreaElement: React.FC<TextAreaElementProps> = ({ element }) => {
   const { updateElement } = useFormContext();
   const [isEditing, setIsEditing] = useState(false);
   const [labelText, setLabelText] = useState(element.label);
+  const [value, setValue] = useState(element.defaultValue?.toString() || '');
   const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -32,6 +34,12 @@ const TextAreaElement: React.FC<TextAreaElementProps> = ({ element }) => {
     if (labelText.trim() !== element.label) {
       updateElement(element.id, { label: labelText.trim() });
     }
+  };
+
+  const handleValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    updateElement(element.id, { defaultValue: newValue });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -68,9 +76,11 @@ const TextAreaElement: React.FC<TextAreaElementProps> = ({ element }) => {
         <p className="text-sm text-gray-500 mb-1">{element.description}</p>
       )}
       <textarea
+        ref={textareaRef}
         placeholder={element.placeholder}
         className="input"
-        disabled
+        value={value}
+        onChange={handleValueChange}
         rows={3}
       ></textarea>
     </div>
