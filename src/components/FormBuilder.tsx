@@ -100,8 +100,8 @@ const FormBuilder: React.FC = () => {
             </div>
           </div>
         ) : (
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+            <DragDropContext onDragEnd={handleDragEnd}>
               <Droppable droppableId="form-builder">
                 {(provided, snapshot) => (
                   <div
@@ -112,39 +112,37 @@ const FormBuilder: React.FC = () => {
                     {elements.length === 0 ? (
                       renderEmptyState()
                     ) : (
-                      <>
-                        {elements.map((element, index) => (
-                          <Draggable 
-                            key={element.id} 
-                            draggableId={element.id} 
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                style={{
-                                  ...provided.draggableProps.style,
-                                  cursor: snapshot.isDragging ? 'grabbing' : 'default'
-                                }}
-                                className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
-                              >
-                                <FormElement 
-                                  element={element} 
-                                  dragHandleProps={provided.dragHandleProps}
-                                />
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                      </>
+                      elements.map((element, index) => (
+                        <Draggable 
+                          key={element.id} 
+                          draggableId={element.id} 
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              style={{
+                                ...provided.draggableProps.style,
+                                cursor: snapshot.isDragging ? 'grabbing' : 'default'
+                              }}
+                              className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
+                            >
+                              <FormElement 
+                                element={element} 
+                                dragHandleProps={provided.dragHandleProps}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))
                     )}
                     {provided.placeholder}
                   </div>
                 )}
               </Droppable>
-            </div>
-          </DragDropContext>
+            </DragDropContext>
+          </div>
         )}
       </div>
     </div>
