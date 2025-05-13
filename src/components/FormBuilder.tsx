@@ -87,7 +87,7 @@ const FormBuilder: React.FC = () => {
         ) : (
           <DragDropContext onDragEnd={handleDragEnd}>
             <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-              <Droppable droppableId="form-builder">
+              <Droppable droppableId="form-builder-droppable">
                 {(provided, snapshot) => (
                   <div
                     {...provided.droppableProps}
