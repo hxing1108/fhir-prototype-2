@@ -27,7 +27,22 @@ const FormBuilder: React.FC = () => {
   };
 
   const handleQuickAdd = () => {
-    addElement('text');
+    // Find the selected group element if any
+    const findSelectedGroup = (elements: FormElement[]): FormElement | null => {
+      for (const element of elements) {
+        if (element.id === selectedElementId && element.type === 'group') {
+          return element;
+        }
+        if (element.elements) {
+          const found = findSelectedGroup(element.elements);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+
+    const selectedGroup = findSelectedGroup(elements);
+    addElement('text', selectedGroup?.id);
   };
 
   const renderEmptyState = () => (
@@ -87,7 +102,7 @@ const FormBuilder: React.FC = () => {
         ) : (
           <DragDropContext onDragEnd={handleDragEnd}>
             <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-              <Droppable droppableId="form-builder-droppable">
+              <Droppable droppableId="form-builder">
                 {(provided, snapshot) => (
                   <div
                     {...provided.droppableProps}
@@ -107,10 +122,11 @@ const FormBuilder: React.FC = () => {
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''} ${
-                                selectedElementId === element.id ? 'form-element-selected' : ''
-                              }`}
-                              onClick={() => setSelectedElementId(element.id)}
+                              style={{
+                                ...provided.draggableProps.style,
+                                cursor: snapshot.isDragging ? 'grabbing' : 'default'
+                              }}
+                              className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
                             >
                               <FormElement 
                                 element={element} 
