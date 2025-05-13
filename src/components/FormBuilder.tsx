@@ -79,8 +79,8 @@ const FormBuilder: React.FC = () => {
       </div>
 
       <div className="flex-1 flex flex-col">
-        {previewMode ? (
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+          {previewMode ? (
             <div className="p-6">
               <form onSubmit={(e) => e.preventDefault()}>
                 {elements.map((element) => (
@@ -98,9 +98,7 @@ const FormBuilder: React.FC = () => {
                 </div>
               </form>
             </div>
-          </div>
-        ) : (
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+          ) : (
             <DragDropContext onDragEnd={handleDragEnd}>
               <Droppable droppableId="form-builder">
                 {(provided, snapshot) => (
@@ -122,10 +120,7 @@ const FormBuilder: React.FC = () => {
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                                cursor: snapshot.isDragging ? 'grabbing' : 'default'
-                              }}
+                              style={provided.draggableProps.style}
                               className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
                             >
                               <FormElement 
@@ -142,8 +137,8 @@ const FormBuilder: React.FC = () => {
                 )}
               </Droppable>
             </DragDropContext>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
