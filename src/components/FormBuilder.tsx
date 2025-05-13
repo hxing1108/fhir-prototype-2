@@ -27,22 +27,7 @@ const FormBuilder: React.FC = () => {
   };
 
   const handleQuickAdd = () => {
-    // Find the selected group element if any
-    const findSelectedGroup = (elements: FormElement[]): FormElement | null => {
-      for (const element of elements) {
-        if (element.id === selectedElementId && element.type === 'group') {
-          return element;
-        }
-        if (element.elements) {
-          const found = findSelectedGroup(element.elements);
-          if (found) return found;
-        }
-      }
-      return null;
-    };
-
-    const selectedGroup = findSelectedGroup(elements);
-    addElement('text', selectedGroup?.id);
+    addElement('text');
   };
 
   const renderEmptyState = () => (
@@ -122,8 +107,10 @@ const FormBuilder: React.FC = () => {
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              style={provided.draggableProps.style}
-                              className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
+                              className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''} ${
+                                selectedElementId === element.id ? 'form-element-selected' : ''
+                              }`}
+                              onClick={() => setSelectedElementId(element.id)}
                             >
                               <FormElement 
                                 element={element} 
