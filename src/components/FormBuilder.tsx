@@ -122,10 +122,7 @@ const FormBuilder: React.FC = () => {
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                                cursor: snapshot.isDragging ? 'grabbing' : 'default'
-                              }}
+                              style={provided.draggableProps.style}
                               className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
                             >
                               <FormElement 
