@@ -10,9 +10,7 @@ const TextFieldElement: React.FC<TextFieldElementProps> = ({ element }) => {
   const { updateElement } = useFormContext();
   const [isEditing, setIsEditing] = useState(false);
   const [labelText, setLabelText] = useState(element.label);
-  const [value, setValue] = useState(element.defaultValue?.toString() || '');
   const inputRef = useRef<HTMLInputElement>(null);
-  const valueInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -49,12 +47,6 @@ const TextFieldElement: React.FC<TextFieldElementProps> = ({ element }) => {
     }
   };
 
-  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setValue(newValue);
-    updateElement(element.id, { defaultValue: newValue });
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleLabelBlur();
@@ -89,12 +81,10 @@ const TextFieldElement: React.FC<TextFieldElementProps> = ({ element }) => {
         <p className="text-sm text-gray-500 mb-1">{element.description}</p>
       )}
       <input
-        ref={valueInputRef}
         type={getInputType()}
         placeholder={element.placeholder}
         className="input"
-        value={value}
-        onChange={handleValueChange}
+        disabled
         min={element.min}
         max={element.max}
       />

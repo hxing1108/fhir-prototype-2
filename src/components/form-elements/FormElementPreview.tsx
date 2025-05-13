@@ -92,16 +92,6 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({ element }) => {
             ))}
           </div>
         );
-      case 'group':
-        return (
-          <div className="pl-4 border-l-2 border-gray-200 space-y-4 mt-4">
-            {element.elements?.map((childElement) => (
-              <div key={childElement.id} className="mb-4">
-                <FormElementPreview element={childElement} />
-              </div>
-            ))}
-          </div>
-        );
       default:
         return <div>Unknown element type</div>;
     }
