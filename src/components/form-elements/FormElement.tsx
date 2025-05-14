@@ -68,6 +68,10 @@ const FormElement: React.FC<FormElementProps> = ({
     updateElement(element.id, { label: e.target.value });
   };
 
+  const handleRequiredChange = () => {
+    updateElement(element.id, { required: !element.required });
+  };
+
   if (element.type === 'group') {
     return renderElementByType();
   }
@@ -90,13 +94,22 @@ const FormElement: React.FC<FormElementProps> = ({
                 {index}.
               </span>
             )}
-            <input
-              type="text"
-              value={element.label}
-              onChange={handleLabelChange}
-              className="text-sm font-medium editable-text w-40"
-              placeholder="Enter label..."
-            />
+            <div className="flex items-center gap-1">
+              <input
+                type="text"
+                value={element.label}
+                onChange={handleLabelChange}
+                className="text-sm font-medium editable-text w-40"
+                placeholder="Enter label..."
+              />
+              <button
+                type="button"
+                onClick={handleRequiredChange}
+                className="text-xs text-error-500 hover:text-error-700 transition-colors"
+              >
+                *
+              </button>
+            </div>
           </div>
         </div>
         <button

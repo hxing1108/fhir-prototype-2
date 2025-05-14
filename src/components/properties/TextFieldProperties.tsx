@@ -63,7 +63,7 @@ const TextFieldProperties: React.FC<TextFieldPropertiesProps> = ({ element }) =>
           name="required"
           checked={element.required}
           onChange={handleCheckboxChange}
-          className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
+          className="h-4 w-4 text-[#2D2D85] focus:ring-[#2D2D85] border-gray-300 rounded"
         />
         <label htmlFor="required" className="ml-2 text-sm text-gray-700">
           Required field
