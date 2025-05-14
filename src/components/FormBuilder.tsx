@@ -54,23 +54,22 @@ const FormBuilder: React.FC = () => {
   ];
 
   const handleAddElement = (type: FormElementType) => {
-    // Find the selected group element if any
-    const findSelectedGroup = (elements: FormElement[]): FormElement | null => {
-      for (const element of elements) {
-        if (element.id === selectedElementId && element.type === 'group') {
-          return element;
-        }
-        if (element.elements) {
-          const found = findSelectedGroup(element.elements);
-          if (found) return found;
-        }
-      }
-      return null;
-    };
-
     const selectedGroup = findSelectedGroup(elements);
     addElement(type, selectedGroup?.id);
     setShowAddMenu(false);
+  };
+
+  const findSelectedGroup = (elements: FormElement[]): FormElement | null => {
+    for (const element of elements) {
+      if (element.id === selectedElementId && element.type === 'group') {
+        return element;
+      }
+      if (element.elements) {
+        const found = findSelectedGroup(element.elements);
+        if (found) return found;
+      }
+    }
+    return null;
   };
 
   const renderEmptyState = () => (
@@ -188,7 +187,6 @@ const FormBuilder: React.FC = () => {
                               <div
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
-                                style={provided.draggableProps.style}
                                 className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
                               >
                                 <FormElement 

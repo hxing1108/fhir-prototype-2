@@ -6,9 +6,11 @@ import FormElementComponent from './FormElement';
 
 interface GroupElementProps {
   element: FormElement;
+  dragHandleProps?: any;
+  isNested?: boolean;
 }
 
-const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
+const GroupElement: React.FC<GroupElementProps> = ({ element, dragHandleProps, isNested = false }) => {
   const { updateElement, addElement, selectedElementId, setSelectedElementId, removeElement } = useFormContext();
   const [showAddMenu, setShowAddMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -52,9 +54,11 @@ const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
     >
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
-          <div className="cursor-move p-1 -ml-1">
-            <GripVertical size={16} className="text-gray-400" />
-          </div>
+          {!isNested && (
+            <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
+              <GripVertical size={16} className="text-gray-400" />
+            </div>
+          )}
           <input
             type="text"
             value={element.label}
