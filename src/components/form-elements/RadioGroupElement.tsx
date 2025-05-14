@@ -9,6 +9,12 @@ interface RadioGroupElementProps {
 const RadioGroupElement: React.FC<RadioGroupElementProps> = ({ element }) => {
   const { updateElement } = useFormContext();
 
+  const handleOptionLabelChange = (index: number, newLabel: string) => {
+    const newOptions = [...(element.options || [])];
+    newOptions[index] = { ...newOptions[index], label: newLabel, value: newLabel };
+    updateElement(element.id, { options: newOptions });
+  };
+
   return (
     <div>
       {element.description && (
@@ -25,12 +31,13 @@ const RadioGroupElement: React.FC<RadioGroupElementProps> = ({ element }) => {
               disabled
               className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300"
             />
-            <label
-              htmlFor={`${element.id}-${index}`}
-              className="ml-2 text-sm text-gray-700"
-            >
-              {option.label}
-            </label>
+            <input
+              type="text"
+              value={option.label}
+              onChange={(e) => handleOptionLabelChange(index, e.target.value)}
+              className="ml-2 text-sm text-gray-700 bg-transparent border-0 focus:outline-none focus:ring-0"
+              placeholder="Enter option label..."
+            />
           </div>
         ))}
       </div>

@@ -9,12 +9,31 @@ interface SelectElementProps {
 const SelectElement: React.FC<SelectElementProps> = ({ element }) => {
   const { updateElement } = useFormContext();
 
+  const handleOptionLabelChange = (index: number, newLabel: string) => {
+    const newOptions = [...(element.options || [])];
+    newOptions[index] = { ...newOptions[index], label: newLabel, value: newLabel };
+    updateElement(element.id, { options: newOptions });
+  };
+
   return (
     <div>
       {element.description && (
         <p className="text-sm text-gray-500 mb-1">{element.description}</p>
       )}
-      <select className="input" disabled>
+      <div className="space-y-2 mt-1">
+        {element.options?.map((option, index) => (
+          <div key={index} className="flex items-center">
+            <input
+              type="text"
+              value={option.label}
+              onChange={(e) => handleOptionLabelChange(index, e.target.value)}
+              className="text-sm text-gray-700 bg-transparent border-0 focus:outline-none focus:ring-0"
+              placeholder="Enter option label..."
+            />
+          </div>
+        ))}
+      </div>
+      <select className="input mt-2" disabled>
         <option value="" disabled selected>
           {element.placeholder || 'Select an option'}
         </option>
