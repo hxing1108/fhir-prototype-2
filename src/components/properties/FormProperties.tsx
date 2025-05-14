@@ -84,16 +84,16 @@ const FormProperties: React.FC = () => {
                 Visually styles the group's title text as a prominent header
               </p>
             </div>
-            <div className="relative inline-block w-12 h-6 cursor-pointer">
+            <label className="toggle-switch">
               <input
                 type="checkbox"
-                className="sr-only peer"
                 checked={formSettings.groupTitleAsHeader}
                 onChange={() => updateFormSettings({ groupTitleAsHeader: !formSettings.groupTitleAsHeader })}
-                id="group-title-header"
               />
-              <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-500"></div>
-            </div>
+              <div className="toggle-switch-track">
+                <div className="toggle-switch-thumb"></div>
+              </div>
+            </label>
           </div>
 
           <div className="flex items-center justify-between py-3">
@@ -105,16 +105,16 @@ const FormProperties: React.FC = () => {
                 Displays the assigned number before each question
               </p>
             </div>
-            <div className="relative inline-block w-12 h-6 cursor-pointer">
+            <label className="toggle-switch">
               <input
                 type="checkbox"
-                className="sr-only peer"
                 checked={formSettings.showQuestionNumbers}
                 onChange={() => updateFormSettings({ showQuestionNumbers: !formSettings.showQuestionNumbers })}
-                id="show-question-numbers"
               />
-              <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-500"></div>
-            </div>
+              <div className="toggle-switch-track">
+                <div className="toggle-switch-thumb"></div>
+              </div>
+            </label>
           </div>
         </div>
       </div>
