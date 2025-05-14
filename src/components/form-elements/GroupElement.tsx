@@ -55,6 +55,10 @@ const GroupElement: React.FC<GroupElementProps> = ({
     setSelectedElementId(element.id);
   };
 
+  const handleLabelChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    updateElement(element.id, { label: e.target.value });
+  };
+
   if (!groupTitleAsHeader) {
     return (
       <div 
@@ -62,18 +66,23 @@ const GroupElement: React.FC<GroupElementProps> = ({
         onClick={handleClick}
       >
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center">
+          <div className="flex items-center flex-1 min-w-0">
             {!isNested && (
-              <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
+              <div {...dragHandleProps} className="cursor-move p-1 -ml-1 flex-shrink-0">
                 <GripVertical size={16} className="text-gray-400" />
               </div>
             )}
-            <input
-              type="text"
+            <textarea
               value={element.label}
-              onChange={(e) => updateElement(element.id, { label: e.target.value })}
-              className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
+              onChange={handleLabelChange}
+              className="text-sm font-medium editable-text min-w-0 w-full resize-none overflow-hidden"
               placeholder="Enter label..."
+              rows={1}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = 'auto';
+                target.style.height = `${target.scrollHeight}px`;
+              }}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -145,19 +154,24 @@ const GroupElement: React.FC<GroupElementProps> = ({
       onClick={handleClick}
     >
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center">
+        <div className="flex items-center flex-1 min-w-0">
           {!isNested && (
-            <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
+            <div {...dragHandleProps} className="cursor-move p-1 -ml-1 flex-shrink-0">
               <GripVertical size={16} className="text-gray-400" />
             </div>
           )}
-          <h3 className="text-xl font-semibold">
-            <input
-              type="text"
+          <h3 className="text-xl font-semibold flex-1 min-w-0">
+            <textarea
               value={element.label}
-              onChange={(e) => updateElement(element.id, { label: e.target.value })}
-              className="editable-text"
+              onChange={handleLabelChange}
+              className="editable-text min-w-0 w-full resize-none overflow-hidden"
               placeholder="Enter group title..."
+              rows={1}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = 'auto';
+                target.style.height = `${target.scrollHeight}px`;
+              }}
             />
           </h3>
         </div>
