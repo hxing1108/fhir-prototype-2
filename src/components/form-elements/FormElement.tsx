@@ -27,7 +27,7 @@ const FormElement: React.FC<FormElementProps> = ({
   showNumbers = false,
   groupTitleAsHeader = false
 }) => {
-  const { removeElement, selectedElementId, setSelectedElementId, updateElement } = useFormContext();
+  const { removeElement, selectedElementId, setSelectedElementId, updateElement, formSettings } = useFormContext();
 
   const renderElementByType = () => {
     switch (element.type) {
@@ -76,6 +76,10 @@ const FormElement: React.FC<FormElementProps> = ({
     return renderElementByType();
   }
 
+  const labelStyle = {
+    fontSize: formSettings.fontSize
+  };
+
   return (
     <div 
       className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
@@ -102,8 +106,9 @@ const FormElement: React.FC<FormElementProps> = ({
                 type="text"
                 value={element.label}
                 onChange={handleLabelChange}
-                className="text-sm font-medium editable-text w-40"
+                className="editable-text"
                 placeholder="Enter label..."
+                style={labelStyle}
               />
             </div>
           </div>
