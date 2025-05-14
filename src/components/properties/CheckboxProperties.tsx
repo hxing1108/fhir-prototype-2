@@ -108,7 +108,7 @@ const CheckboxProperties: React.FC<CheckboxPropertiesProps> = ({ element }) => {
                       >
                         <div
                           {...provided.dragHandleProps}
-                          className="cursor-move text-gray-400 p-1"
+                          className="cursor-move text-gray-400"
                         >
                           <GripVertical size={16} />
                         </div>
