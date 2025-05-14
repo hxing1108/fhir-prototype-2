@@ -108,31 +108,36 @@ const FormBuilder: React.FC = () => {
                     className={`p-6 min-h-[400px] ${snapshot.isDraggingOver ? 'bg-gray-50' : ''}`}
                   >
                     {elements.length === 0 ? (
-                      renderEmptyState()
+                      <>
+                        {renderEmptyState()}
+                        {provided.placeholder}
+                      </>
                     ) : (
-                      elements.map((element, index) => (
-                        <Draggable 
-                          key={element.id} 
-                          draggableId={element.id} 
-                          index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              style={provided.draggableProps.style}
-                              className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
-                            >
-                              <FormElement 
-                                element={element} 
-                                dragHandleProps={provided.dragHandleProps}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))
+                      <>
+                        {elements.map((element, index) => (
+                          <Draggable 
+                            key={element.id} 
+                            draggableId={element.id} 
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                style={provided.draggableProps.style}
+                                className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
+                              >
+                                <FormElement 
+                                  element={element} 
+                                  dragHandleProps={provided.dragHandleProps}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </>
                     )}
-                    {provided.placeholder}
                   </div>
                 )}
               </Droppable>
