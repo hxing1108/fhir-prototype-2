@@ -9,7 +9,7 @@ interface GroupElementProps {
 }
 
 const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
-  const { updateElement, addElement } = useFormContext();
+  const { updateElement, addElement, selectedElementId, setSelectedElementId } = useFormContext();
   const [showAddMenu, setShowAddMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -40,8 +40,56 @@ const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
     setShowAddMenu(false);
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedElementId(element.id);
+  };
+
   return (
-    <div className="space-y-4">
+    <div 
+      className={`space-y-4 p-4 border rounded-lg ${selectedElementId === element.id ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200'}`}
+      onClick={handleClick}
+    >
+      <div className="flex items-center justify-between">
+        <input
+          type="text"
+          value={element.label}
+          onChange={(e) => updateElement(element.id, { label: e.target.value })}
+          className="text-lg font-semibold bg-transparent border-0 focus:outline-none focus:ring-0"
+          placeholder="Enter group name..."
+        />
+        <div className="relative" ref={menuRef}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAddMenu(!showAddMenu);
+            }}
+            className="btn btn-sm btn-secondary flex items-center gap-1"
+          >
+            Add Field
+            <ChevronDown size={16} className={`transform transition-transform ${showAddMenu ? 'rotate-180' : ''}`} />
+          </button>
+          
+          {showAddMenu && (
+            <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+              {elementTypes.map((type) => (
+                <button
+                  key={type.type}
+                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddElement(type.type);
+                  }}
+                >
+                  {type.icon}
+                  {type.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       {element.description && (
         <p className="text-sm text-gray-500">{element.description}</p>
       )}
