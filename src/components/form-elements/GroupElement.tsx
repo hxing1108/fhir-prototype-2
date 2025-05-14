@@ -55,29 +55,19 @@ const GroupElement: React.FC<GroupElementProps> = ({
     setSelectedElementId(element.id);
   };
 
-  return (
-    <div 
-      className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
-      onClick={handleClick}
-    >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center">
-          {!isNested && (
-            <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
-              <GripVertical size={16} className="text-gray-400" />
-            </div>
-          )}
-          {groupTitleAsHeader ? (
-            <h3 className="text-xl font-semibold">
-              <input
-                type="text"
-                value={element.label}
-                onChange={(e) => updateElement(element.id, { label: e.target.value })}
-                className="bg-transparent border-0 focus:outline-none focus:ring-0"
-                placeholder="Enter group title..."
-              />
-            </h3>
-          ) : (
+  if (!groupTitleAsHeader) {
+    return (
+      <div 
+        className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
+        onClick={handleClick}
+      >
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center">
+            {!isNested && (
+              <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
+                <GripVertical size={16} className="text-gray-400" />
+              </div>
+            )}
             <input
               type="text"
               value={element.label}
@@ -85,7 +75,91 @@ const GroupElement: React.FC<GroupElementProps> = ({
               className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
               placeholder="Enter label..."
             />
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="relative" ref={menuRef}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowAddMenu(!showAddMenu);
+                }}
+                className="btn btn-sm btn-secondary flex items-center gap-1"
+              >
+                Add Field
+                <ChevronDown size={16} className={`transform transition-transform ${showAddMenu ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {showAddMenu && (
+                <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+                  {elementTypes.map((type) => (
+                    <button
+                      key={type.type}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddElement(type.type);
+                      }}
+                    >
+                      {type.icon}
+                      {type.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                removeElement(element.id);
+              }}
+              className="p-1 text-gray-400 hover:text-error-500 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        </div>
+
+        {element.description && (
+          <p className="text-sm text-gray-500">{element.description}</p>
+        )}
+
+        <div className="pl-4 border-l-2 border-gray-200 space-y-4 mt-4">
+          {element.elements?.map((childElement, index) => (
+            <FormElementComponent
+              key={childElement.id}
+              element={childElement}
+              isNested={true}
+              index={showNumbers ? index + 1 : undefined}
+              showNumbers={showNumbers}
+              groupTitleAsHeader={groupTitleAsHeader}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div 
+      className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
+      onClick={handleClick}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center">
+          {!isNested && (
+            <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
+              <GripVertical size={16} className="text-gray-400" />
+            </div>
           )}
+          <h3 className="text-xl font-semibold">
+            <input
+              type="text"
+              value={element.label}
+              onChange={(e) => updateElement(element.id, { label: e.target.value })}
+              className="bg-transparent border-0 focus:outline-none focus:ring-0"
+              placeholder="Enter group title..."
+            />
+          </h3>
         </div>
         <div className="flex items-center gap-2">
           <div className="relative" ref={menuRef}>

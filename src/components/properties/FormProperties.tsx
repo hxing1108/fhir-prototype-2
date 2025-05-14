@@ -75,7 +75,7 @@ const FormProperties: React.FC = () => {
             </select>
           </div>
 
-          <div className="flex items-center justify-between border rounded-lg p-4 bg-gray-50">
+          <div className="flex items-center justify-between py-3">
             <div>
               <label className="text-sm font-medium text-gray-900 block">
                 Display Group Title as Header
@@ -84,23 +84,19 @@ const FormProperties: React.FC = () => {
                 Visually styles the group's title text as a prominent header
               </p>
             </div>
-            <button
-              role="switch"
-              aria-checked={formSettings.groupTitleAsHeader}
-              onClick={() => updateFormSettings({ groupTitleAsHeader: !formSettings.groupTitleAsHeader })}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
-                formSettings.groupTitleAsHeader ? 'bg-primary-500' : 'bg-gray-200'
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  formSettings.groupTitleAsHeader ? 'translate-x-6' : 'translate-x-1'
-                }`}
+            <div className="relative inline-block w-12 h-6 cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={formSettings.groupTitleAsHeader}
+                onChange={() => updateFormSettings({ groupTitleAsHeader: !formSettings.groupTitleAsHeader })}
+                id="group-title-header"
               />
-            </button>
+              <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-500"></div>
+            </div>
           </div>
 
-          <div className="flex items-center justify-between border rounded-lg p-4 bg-gray-50">
+          <div className="flex items-center justify-between py-3">
             <div>
               <label className="text-sm font-medium text-gray-900 block">
                 Show Question Numbers
@@ -109,20 +105,16 @@ const FormProperties: React.FC = () => {
                 Displays the assigned number before each question
               </p>
             </div>
-            <button
-              role="switch"
-              aria-checked={formSettings.showQuestionNumbers}
-              onClick={() => updateFormSettings({ showQuestionNumbers: !formSettings.showQuestionNumbers })}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
-                formSettings.showQuestionNumbers ? 'bg-primary-500' : 'bg-gray-200'
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  formSettings.showQuestionNumbers ? 'translate-x-6' : 'translate-x-1'
-                }`}
+            <div className="relative inline-block w-12 h-6 cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={formSettings.showQuestionNumbers}
+                onChange={() => updateFormSettings({ showQuestionNumbers: !formSettings.showQuestionNumbers })}
+                id="show-question-numbers"
               />
-            </button>
+              <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-500"></div>
+            </div>
           </div>
         </div>
       </div>
