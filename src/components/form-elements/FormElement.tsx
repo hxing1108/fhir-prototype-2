@@ -52,11 +52,14 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
       onClick={handleClick}
     >
       <div className="flex items-center justify-between mb-2">
-        {!isNested && (
-          <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
-            <GripVertical size={16} className="text-gray-400" />
-          </div>
-        )}
+        <div className="flex items-center">
+          {!isNested && (
+            <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
+              <GripVertical size={16} className="text-gray-400" />
+            </div>
+          )}
+          <div className="text-sm font-medium text-gray-500">{element.type.charAt(0).toUpperCase() + element.type.slice(1)}</div>
+        </div>
         <button
           onClick={(e) => {
             e.stopPropagation();
