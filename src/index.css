@@ -64,6 +64,11 @@
   .sidebar-title {
     @apply text-sm font-medium text-gray-500 uppercase tracking-wider mb-3;
   }
+
+  /* Add a new class for dropdown menus */
+  .dropdown-menu {
+    @apply absolute left-1/2 transform -translate-x-1/2 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50;
+  }
 }
 
 .element-dragging {
