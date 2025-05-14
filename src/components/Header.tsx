@@ -12,11 +12,11 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-black text-white py-2">
+    <header className="bg-[#F5F6F8] text-gray-900 py-2">
       <div className="w-full px-4 flex items-center justify-between">
         {/* Left section */}
         <div className="flex items-center space-x-4">
-          <button className="flex items-center text-gray-300 hover:text-white">
+          <button className="flex items-center text-gray-600 hover:text-gray-900">
             <ArrowLeft size={18} className="mr-2" />
             <span>Back</span>
           </button>
@@ -30,10 +30,10 @@ const Header: React.FC = () => {
         </div>
 
         {/* Right section */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           <div className="relative">
             <button 
-              className="nav-button"
+              className="btn btn-secondary flex items-center"
               onClick={() => setShowImportMenu(!showImportMenu)}
             >
               Import
@@ -64,20 +64,20 @@ const Header: React.FC = () => {
             )}
           </div>
           
-          <button className="nav-button">
+          <button className="btn btn-secondary flex items-center">
             <FileDown size={16} className="mr-2" />
             Download XML
           </button>
           
           <button 
-            className="nav-button"
+            className="btn btn-secondary flex items-center"
             onClick={togglePreviewMode}
           >
             <Eye size={16} className="mr-2" />
             {previewMode ? 'Edit' : 'Preview'}
           </button>
           
-          <button className="nav-button bg-indigo-600 hover:bg-indigo-700">
+          <button className="btn btn-primary flex items-center">
             <Save size={16} className="mr-2" />
             Save
           </button>
