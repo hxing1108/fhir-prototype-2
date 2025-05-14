@@ -79,6 +79,13 @@ const FormBuilder: React.FC = () => {
     return null;
   };
 
+  const handleFormBodyClick = (e: React.MouseEvent) => {
+    // Only select form body if clicking directly on it, not on child elements
+    if (e.target === e.currentTarget) {
+      setSelectedElementId(null);
+    }
+  };
+
   const renderEmptyState = () => (
     <div className="flex-1 flex flex-col items-center justify-center bg-white border-2 border-dashed border-gray-300 rounded-lg p-8">
       <div className="text-center">
@@ -187,8 +194,9 @@ const FormBuilder: React.FC = () => {
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    className={`p-6 min-h-[400px] ${snapshot.isDraggingOver ? 'bg-gray-50' : ''}`}
+                    className={`p-6 min-h-[400px] ${snapshot.isDraggingOver ? 'bg-gray-50' : ''} ${selectedElementId === null ? 'ring-2 ring-primary-200' : ''}`}
                     style={formStyle}
+                    onClick={handleFormBodyClick}
                   >
                     {elements.length === 0 ? (
                       <>
