@@ -83,7 +83,7 @@ const FormBuilder: React.FC = () => {
       <div className="text-center">
         <h3 className="text-lg font-medium text-gray-700 mb-2">Start Building Your Form</h3>
         <p className="text-gray-500 mb-6">Add elements from the sidebar or click the button below</p>
-        <div className="relative" ref={emptyStateMenuRef}>
+        <div className="relative inline-block" ref={emptyStateMenuRef}>
           <button 
             className="btn btn-primary inline-flex items-center gap-2"
             onClick={() => setShowEmptyStateAddMenu(!showEmptyStateAddMenu)}
@@ -94,7 +94,7 @@ const FormBuilder: React.FC = () => {
           </button>
           
           {showEmptyStateAddMenu && (
-            <div className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+            <div className="absolute left-1/2 transform -translate-x-1/2 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
               {elementTypes.map((type) => (
                 <button
                   key={type.type}
@@ -119,7 +119,7 @@ const FormBuilder: React.FC = () => {
           {previewMode ? 'Form Preview' : 'Form Builder'}
         </h2>
         {!previewMode && (
-          <div className="relative" ref={headerMenuRef}>
+          <div className="relative inline-block" ref={headerMenuRef}>
             <button 
               className="btn btn-sm btn-secondary inline-flex items-center gap-2"
               onClick={() => setShowHeaderAddMenu(!showHeaderAddMenu)}
@@ -130,7 +130,7 @@ const FormBuilder: React.FC = () => {
             </button>
             
             {showHeaderAddMenu && (
-              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+              <div className="absolute left-1/2 transform -translate-x-1/2 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
                 {elementTypes.map((type) => (
                   <button
                     key={type.type}
