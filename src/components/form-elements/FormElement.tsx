@@ -99,17 +99,17 @@ const FormElement: React.FC<FormElementProps> = ({
               </span>
             )}
             <div className="flex items-center gap-1">
-              {element.required && (
-                <span className="text-error-500 text-xs">*</span>
-              )}
               <input
                 type="text"
                 value={element.label}
                 onChange={handleLabelChange}
-                className="editable-text"
+                className="editable-text min-w-[60px] w-auto"
                 placeholder="Enter label..."
                 style={labelStyle}
               />
+              {element.required && (
+                <span className="text-error-500 text-xs">*</span>
+              )}
             </div>
           </div>
         </div>

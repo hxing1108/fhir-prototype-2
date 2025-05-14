@@ -25,12 +25,12 @@ const TextFieldProperties: React.FC<TextFieldPropertiesProps> = ({ element }) =>
     <div className="space-y-4">
       <div>
         <label className="label">Label</label>
-        <input
-          type="text"
+        <textarea
           name="label"
           value={element.label}
           onChange={handleChange}
-          className="input"
+          className="input min-h-[60px] resize-y"
+          placeholder="Enter label..."
         />
       </div>
 
