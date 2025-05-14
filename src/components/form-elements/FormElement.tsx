@@ -64,7 +64,7 @@ const FormElement: React.FC<FormElementProps> = ({
     setSelectedElementId(element.id);
   };
 
-  const handleLabelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLabelChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     updateElement(element.id, { label: e.target.value });
   };
 
@@ -86,29 +86,37 @@ const FormElement: React.FC<FormElementProps> = ({
       onClick={handleClick}
     >
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center">
+        <div className="flex items-center flex-1 min-w-0">
           {!isNested && (
-            <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
+            <div {...dragHandleProps} className="cursor-move p-1 -ml-1 flex-shrink-0">
               <GripVertical size={16} className="text-gray-400" />
             </div>
           )}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
             {showNumbers && (
-              <span className="text-sm font-medium text-gray-500">
+              <span className="text-sm font-medium text-gray-500 flex-shrink-0">
                 {index}.
               </span>
             )}
-            <div className="flex items-center gap-1">
-              <input
-                type="text"
+            <div className="flex items-center gap-1 flex-1 min-w-0">
+              <textarea
                 value={element.label}
                 onChange={handleLabelChange}
-                className="editable-text min-w-0 w-full"
+                className="editable-text min-w-0 w-full resize-none overflow-hidden"
                 placeholder="Enter label..."
-                style={labelStyle}
+                style={{
+                  ...labelStyle,
+                  height: 'auto',
+                }}
+                rows={1}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = 'auto';
+                  target.style.height = `${target.scrollHeight}px`;
+                }}
               />
               {element.required && (
-                <span className="text-error-500 text-xs">*</span>
+                <span className="text-error-500 text-xs flex-shrink-0">*</span>
               )}
             </div>
           </div>
@@ -118,7 +126,7 @@ const FormElement: React.FC<FormElementProps> = ({
             e.stopPropagation();
             removeElement(element.id);
           }}
-          className="p-1 text-gray-400 hover:text-error-500 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="p-1 text-gray-400 hover:text-error-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
         >
           <Trash2 size={16} />
         </button>

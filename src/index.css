@@ -92,7 +92,7 @@
 
   /* Editable text inputs */
   .editable-text {
-    @apply bg-transparent border-0 focus:outline-none focus:ring-0 transition-colors duration-150 whitespace-normal break-words;
+    @apply bg-transparent border-0 focus:outline-none focus:ring-0 transition-colors duration-150 whitespace-pre-wrap break-words;
   }
 
   .editable-text:hover {
