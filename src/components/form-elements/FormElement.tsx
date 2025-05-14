@@ -17,7 +17,7 @@ interface FormElementProps {
 }
 
 const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isNested = false }) => {
-  const { removeElement, selectedElementId, setSelectedElementId } = useFormContext();
+  const { removeElement, selectedElementId, setSelectedElementId, updateElement } = useFormContext();
 
   const renderElementByType = () => {
     switch (element.type) {
@@ -46,6 +46,10 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
     setSelectedElementId(element.id);
   };
 
+  const handleLabelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateElement(element.id, { label: e.target.value });
+  };
+
   return (
     <div 
       className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
@@ -61,10 +65,7 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
           <input
             type="text"
             value={element.label}
-            onChange={(e) => {
-              const { updateElement } = useFormContext();
-              updateElement(element.id, { label: e.target.value });
-            }}
+            onChange={handleLabelChange}
             className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
             placeholder="Enter label..."
           />
