@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FormElement, FormElementType } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
-import { ChevronDown, Type, AlignLeft, Hash, Mail, List, CheckSquare, Circle, CalendarDays } from 'lucide-react';
+import { ChevronDown, Type, AlignLeft, Hash, Mail, List, CheckSquare, Circle, CalendarDays, GripVertical, Trash2 } from 'lucide-react';
 import FormElementComponent from './FormElement';
 
 interface GroupElementProps {
@@ -9,7 +9,7 @@ interface GroupElementProps {
 }
 
 const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
-  const { updateElement, addElement, selectedElementId, setSelectedElementId } = useFormContext();
+  const { updateElement, addElement, selectedElementId, setSelectedElementId, removeElement } = useFormContext();
   const [showAddMenu, setShowAddMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -50,14 +50,35 @@ const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
       className={`space-y-4 p-4 border rounded-lg ${selectedElementId === element.id ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200'}`}
       onClick={handleClick}
     >
-      <div className="flex items-center justify-between">
-        <input
-          type="text"
-          value={element.label}
-          onChange={(e) => updateElement(element.id, { label: e.target.value })}
-          className="text-lg font-semibold bg-transparent border-0 focus:outline-none focus:ring-0"
-          placeholder="Enter group name..."
-        />
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center">
+          <div className="cursor-move p-1 -ml-1">
+            <GripVertical size={16} className="text-gray-400" />
+          </div>
+          <input
+            type="text"
+            value={element.label}
+            onChange={(e) => updateElement(element.id, { label: e.target.value })}
+            className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
+            placeholder="Enter label..."
+          />
+        </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            removeElement(element.id);
+          }}
+          className="p-1 text-gray-400 hover:text-error-500 opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          <Trash2 size={16} />
+        </button>
+      </div>
+
+      {element.description && (
+        <p className="text-sm text-gray-500">{element.description}</p>
+      )}
+
+      <div className="flex items-center justify-end">
         <div className="relative" ref={menuRef}>
           <button
             onClick={(e) => {
@@ -89,10 +110,6 @@ const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
           )}
         </div>
       </div>
-
-      {element.description && (
-        <p className="text-sm text-gray-500">{element.description}</p>
-      )}
 
       <div className="pl-4 border-l-2 border-gray-200 space-y-4">
         {element.elements?.map((childElement) => (
