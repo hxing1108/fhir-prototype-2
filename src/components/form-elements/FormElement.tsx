@@ -103,7 +103,7 @@ const FormElement: React.FC<FormElementProps> = ({
                 type="text"
                 value={element.label}
                 onChange={handleLabelChange}
-                className="editable-text min-w-[60px] w-auto"
+                className="editable-text min-w-0 w-full"
                 placeholder="Enter label..."
                 style={labelStyle}
               />
