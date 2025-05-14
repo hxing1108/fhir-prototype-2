@@ -156,7 +156,7 @@ const GroupElement: React.FC<GroupElementProps> = ({
               type="text"
               value={element.label}
               onChange={(e) => updateElement(element.id, { label: e.target.value })}
-              className="bg-transparent border-0 focus:outline-none focus:ring-0"
+              className="editable-text"
               placeholder="Enter group title..."
             />
           </h3>
