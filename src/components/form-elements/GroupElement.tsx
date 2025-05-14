@@ -47,7 +47,7 @@ const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
 
   return (
     <div 
-      className={`space-y-4 p-4 border rounded-lg ${selectedElementId === element.id ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200'}`}
+      className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
       onClick={handleClick}
     >
       <div className="flex items-center justify-between mb-2">
@@ -63,55 +63,54 @@ const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
             placeholder="Enter label..."
           />
         </div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            removeElement(element.id);
-          }}
-          className="p-1 text-gray-400 hover:text-error-500 opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          <Trash2 size={16} />
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowAddMenu(!showAddMenu);
+              }}
+              className="btn btn-sm btn-secondary flex items-center gap-1"
+            >
+              Add Field
+              <ChevronDown size={16} className={`transform transition-transform ${showAddMenu ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {showAddMenu && (
+              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+                {elementTypes.map((type) => (
+                  <button
+                    key={type.type}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddElement(type.type);
+                    }}
+                  >
+                    {type.icon}
+                    {type.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              removeElement(element.id);
+            }}
+            className="p-1 text-gray-400 hover:text-error-500 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
       </div>
 
       {element.description && (
         <p className="text-sm text-gray-500">{element.description}</p>
       )}
 
-      <div className="flex items-center justify-end">
-        <div className="relative" ref={menuRef}>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowAddMenu(!showAddMenu);
-            }}
-            className="btn btn-sm btn-secondary flex items-center gap-1"
-          >
-            Add Field
-            <ChevronDown size={16} className={`transform transition-transform ${showAddMenu ? 'rotate-180' : ''}`} />
-          </button>
-          
-          {showAddMenu && (
-            <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
-              {elementTypes.map((type) => (
-                <button
-                  key={type.type}
-                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddElement(type.type);
-                  }}
-                >
-                  {type.icon}
-                  {type.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="pl-4 border-l-2 border-gray-200 space-y-4">
+      <div className="pl-4 border-l-2 border-gray-200 space-y-4 mt-4">
         {element.elements?.map((childElement) => (
           <FormElementComponent
             key={childElement.id}
