@@ -52,7 +52,8 @@ const FormBuilder: React.FC = () => {
     { type: 'group' as FormElementType, icon: <FolderPlus size={16} />, label: 'Question Group' },
   ];
 
-  const handleAddElement = (type: FormElementType) => {
+  const handleAddElement = (type: FormElementType, e: React.MouseEvent) => {
+    e.stopPropagation();
     addElement(type);
     setShowAddMenu(false);
   };
@@ -65,20 +66,23 @@ const FormBuilder: React.FC = () => {
         <div className="relative" ref={menuRef}>
           <button 
             className="btn btn-primary inline-flex items-center"
-            onClick={() => setShowAddMenu(!showAddMenu)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAddMenu(!showAddMenu);
+            }}
           >
             <Plus size={16} className="mr-1" />
             <span>Add Your First Field</span>
-            <ChevronDown size={16} className="ml-2" />
+            <ChevronDown size={16} className={`ml-2 transform transition-transform ${showAddMenu ? 'rotate-180' : ''}`} />
           </button>
           
           {showAddMenu && (
-            <div className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+            <div className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50">
               {elementTypes.map((type) => (
                 <button
                   key={type.type}
                   className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
-                  onClick={() => handleAddElement(type.type)}
+                  onClick={(e) => handleAddElement(type.type, e)}
                 >
                   {type.icon}
                   {type.label}
@@ -101,7 +105,10 @@ const FormBuilder: React.FC = () => {
           <div className="relative" ref={menuRef}>
             <button 
               className="btn btn-sm btn-secondary inline-flex items-center gap-1"
-              onClick={() => setShowAddMenu(!showAddMenu)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowAddMenu(!showAddMenu);
+              }}
             >
               <Plus size={16} />
               <span>Add Field</span>
@@ -109,12 +116,12 @@ const FormBuilder: React.FC = () => {
             </button>
             
             {showAddMenu && (
-              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50">
                 {elementTypes.map((type) => (
                   <button
                     key={type.type}
                     className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
-                    onClick={() => handleAddElement(type.type)}
+                    onClick={(e) => handleAddElement(type.type, e)}
                   >
                     {type.icon}
                     {type.label}
