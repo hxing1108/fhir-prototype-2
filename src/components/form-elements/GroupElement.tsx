@@ -79,26 +79,24 @@ const GroupElement: React.FC<GroupElementProps> = ({ element }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center flex-1">
-          {isEditing ? (
-            <input
-              ref={inputRef}
-              type="text"
-              value={labelText}
-              onChange={handleLabelChange}
-              onBlur={handleLabelBlur}
-              onKeyDown={handleKeyDown}
-              className="text-lg font-semibold w-full bg-transparent border-b border-primary-500 focus:outline-none px-0"
-            />
-          ) : (
-            <h3 
-              className="text-lg font-semibold cursor-text" 
-              onClick={handleLabelClick}
-            >
-              {element.label}
-            </h3>
-          )}
-        </div>
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={labelText}
+            onChange={handleLabelChange}
+            onBlur={handleLabelBlur}
+            onKeyDown={handleKeyDown}
+            className="text-lg font-semibold w-full bg-transparent border-b border-primary-500 focus:outline-none px-0"
+          />
+        ) : (
+          <h3 
+            className="text-lg font-semibold cursor-text" 
+            onClick={handleLabelClick}
+          >
+            {element.label}
+          </h3>
+        )}
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setShowAddMenu(!showAddMenu)}

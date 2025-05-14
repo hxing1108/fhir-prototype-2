@@ -51,18 +51,12 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
       className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
       onClick={handleClick}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          {!isNested && (
-            <div {...dragHandleProps} className="cursor-move">
-              <GripVertical size={16} className="text-gray-400" />
-            </div>
-          )}
-          <div className="label cursor-text">
-            {element.label}
-            {element.required && <span className="text-error-500 ml-1">*</span>}
+      <div className="flex items-center justify-between mb-2">
+        {!isNested && (
+          <div {...dragHandleProps} className="cursor-move p-1 -ml-1">
+            <GripVertical size={16} className="text-gray-400" />
           </div>
-        </div>
+        )}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -73,9 +67,7 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
           <Trash2 size={16} />
         </button>
       </div>
-      <div className="pl-6">
-        {renderElementByType()}
-      </div>
+      {renderElementByType()}
     </div>
   );
 };
