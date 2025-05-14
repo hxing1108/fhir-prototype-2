@@ -30,3 +30,12 @@ export interface FormElement {
   pattern?: string;
   elements?: FormElement[]; // For group elements
 }
+
+export interface FormSettings {
+  backgroundColor: string;
+  textColor: string;
+  groupTitleAsHeader: boolean;
+  showQuestionNumbers: boolean;
+  fontFamily: string;
+  fontSize: string;
+}

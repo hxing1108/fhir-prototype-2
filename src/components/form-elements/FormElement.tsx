@@ -14,9 +14,19 @@ interface FormElementProps {
   element: FormElementType;
   dragHandleProps?: DraggableProvidedDragHandleProps;
   isNested?: boolean;
+  index?: number;
+  showNumbers?: boolean;
+  groupTitleAsHeader?: boolean;
 }
 
-const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isNested = false }) => {
+const FormElement: React.FC<FormElementProps> = ({ 
+  element, 
+  dragHandleProps, 
+  isNested = false,
+  index,
+  showNumbers = false,
+  groupTitleAsHeader = false
+}) => {
   const { removeElement, selectedElementId, setSelectedElementId, updateElement } = useFormContext();
 
   const renderElementByType = () => {
@@ -35,7 +45,15 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
       case 'radio':
         return <RadioGroupElement element={element} />;
       case 'group':
-        return <GroupElement element={element} />;
+        return (
+          <GroupElement 
+            element={element} 
+            dragHandleProps={dragHandleProps}
+            isNested={isNested}
+            showNumbers={showNumbers}
+            groupTitleAsHeader={groupTitleAsHeader}
+          />
+        );
       default:
         return <div>Unknown element type</div>;
     }
@@ -66,13 +84,20 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
               <GripVertical size={16} className="text-gray-400" />
             </div>
           )}
-          <input
-            type="text"
-            value={element.label}
-            onChange={handleLabelChange}
-            className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
-            placeholder="Enter label..."
-          />
+          <div className="flex items-center gap-2">
+            {showNumbers && (
+              <span className="text-sm font-medium text-gray-500">
+                {index}.
+              </span>
+            )}
+            <input
+              type="text"
+              value={element.label}
+              onChange={handleLabelChange}
+              className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
+              placeholder="Enter label..."
+            />
+          </div>
         </div>
         <button
           onClick={(e) => {

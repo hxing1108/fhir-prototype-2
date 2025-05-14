@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { FormElement, FormElementType } from '../types/form';
+import { FormElement, FormElementType, FormSettings } from '../types/form';
 
 interface FormContextType {
   elements: FormElement[];
@@ -12,7 +12,18 @@ interface FormContextType {
   moveElement: (fromIndex: number, toIndex: number) => void;
   previewMode: boolean;
   togglePreviewMode: () => void;
+  formSettings: FormSettings;
+  updateFormSettings: (updates: Partial<FormSettings>) => void;
 }
+
+const defaultFormSettings: FormSettings = {
+  backgroundColor: '#ffffff',
+  textColor: '#111827',
+  groupTitleAsHeader: true,
+  showQuestionNumbers: true,
+  fontFamily: 'Inter',
+  fontSize: '16px',
+};
 
 const defaultFormContext: FormContextType = {
   elements: [],
@@ -24,6 +35,8 @@ const defaultFormContext: FormContextType = {
   moveElement: () => {},
   previewMode: false,
   togglePreviewMode: () => {},
+  formSettings: defaultFormSettings,
+  updateFormSettings: () => {},
 };
 
 const FormContext = createContext<FormContextType>(defaultFormContext);
@@ -34,6 +47,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [elements, setElements] = useState<FormElement[]>([]);
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
+  const [formSettings, setFormSettings] = useState<FormSettings>(defaultFormSettings);
 
   const addElement = (type: FormElementType, parentId?: string): FormElement => {
     const newElement: FormElement = {
@@ -116,6 +130,10 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSelectedElementId(null);
   };
 
+  const updateFormSettings = (updates: Partial<FormSettings>) => {
+    setFormSettings({ ...formSettings, ...updates });
+  };
+
   // Helper functions
   const getDefaultLabel = (type: FormElementType): string => {
     switch(type) {
@@ -155,6 +173,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
         moveElement,
         previewMode,
         togglePreviewMode,
+        formSettings,
+        updateFormSettings,
       }}
     >
       {children}

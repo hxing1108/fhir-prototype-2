@@ -13,7 +13,8 @@ const FormBuilder: React.FC = () => {
     setSelectedElementId, 
     moveElement,
     previewMode,
-    addElement
+    addElement,
+    formSettings
   } = useFormContext();
 
   const [showHeaderAddMenu, setShowHeaderAddMenu] = React.useState(false);
@@ -112,6 +113,13 @@ const FormBuilder: React.FC = () => {
     </div>
   );
 
+  const formStyle = {
+    backgroundColor: formSettings.backgroundColor,
+    color: formSettings.textColor,
+    fontFamily: formSettings.fontFamily,
+    fontSize: formSettings.fontSize,
+  };
+
   return (
     <div className="p-6 min-h-full flex flex-col">
       <div className="mb-6 flex items-center justify-between">
@@ -150,11 +158,16 @@ const FormBuilder: React.FC = () => {
       <div className="flex-1 flex flex-col">
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
           {previewMode ? (
-            <div className="p-6">
+            <div className="p-6" style={formStyle}>
               <form onSubmit={(e) => e.preventDefault()}>
-                {elements.map((element) => (
+                {elements.map((element, index) => (
                   <div key={element.id} className="mb-6">
-                    <FormElementPreview element={element} />
+                    <FormElementPreview 
+                      element={element} 
+                      index={index + 1} 
+                      showNumbers={formSettings.showQuestionNumbers}
+                      groupTitleAsHeader={formSettings.groupTitleAsHeader}
+                    />
                   </div>
                 ))}
                 <div className="mt-8">
@@ -175,6 +188,7 @@ const FormBuilder: React.FC = () => {
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                     className={`p-6 min-h-[400px] ${snapshot.isDraggingOver ? 'bg-gray-50' : ''}`}
+                    style={formStyle}
                   >
                     {elements.length === 0 ? (
                       <>
@@ -198,6 +212,9 @@ const FormBuilder: React.FC = () => {
                                 <FormElement 
                                   element={element} 
                                   dragHandleProps={provided.dragHandleProps}
+                                  index={index + 1}
+                                  showNumbers={formSettings.showQuestionNumbers}
+                                  groupTitleAsHeader={formSettings.groupTitleAsHeader}
                                 />
                               </div>
                             )}

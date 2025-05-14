@@ -6,6 +6,7 @@ import SelectProperties from './properties/SelectProperties';
 import CheckboxProperties from './properties/CheckboxProperties';
 import RadioProperties from './properties/RadioProperties';
 import GroupProperties from './properties/GroupProperties';
+import FormProperties from './properties/FormProperties';
 
 const PropertiesSidebar: React.FC = () => {
   const { elements, selectedElementId, previewMode } = useFormContext();
@@ -26,7 +27,9 @@ const PropertiesSidebar: React.FC = () => {
   const selectedElement = findSelectedElement(elements);
 
   const renderPropertiesByType = () => {
-    if (!selectedElement) return null;
+    if (!selectedElement) {
+      return <FormProperties />;
+    }
 
     switch (selectedElement.type) {
       case 'text':
@@ -67,15 +70,9 @@ const PropertiesSidebar: React.FC = () => {
       </div>
 
       <div className="flex-1 overflow-auto">
-        {selectedElement ? (
-          <div className="p-4">
-            {renderPropertiesByType()}
-          </div>
-        ) : (
-          <div className="p-4 text-gray-500 text-sm">
-            Select an element to edit its properties
-          </div>
-        )}
+        <div className="p-4">
+          {renderPropertiesByType()}
+        </div>
       </div>
     </div>
   );

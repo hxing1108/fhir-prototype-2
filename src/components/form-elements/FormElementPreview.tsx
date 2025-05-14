@@ -3,9 +3,17 @@ import { FormElement } from '../../types/form';
 
 interface FormElementPreviewProps {
   element: FormElement;
+  index?: number;
+  showNumbers?: boolean;
+  groupTitleAsHeader?: boolean;
 }
 
-const FormElementPreview: React.FC<FormElementPreviewProps> = ({ element }) => {
+const FormElementPreview: React.FC<FormElementPreviewProps> = ({ 
+  element,
+  index,
+  showNumbers = false,
+  groupTitleAsHeader = false
+}) => {
   const renderElementByType = () => {
     switch (element.type) {
       case 'text':
@@ -95,9 +103,14 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({ element }) => {
       case 'group':
         return (
           <div className="pl-4 border-l-2 border-gray-200 mt-4 space-y-4">
-            {element.elements?.map((childElement) => (
+            {element.elements?.map((childElement, childIndex) => (
               <div key={childElement.id} className="mb-6">
-                <FormElementPreview element={childElement} />
+                <FormElementPreview 
+                  element={childElement}
+                  index={index ? `${index}.${childIndex + 1}` : undefined}
+                  showNumbers={showNumbers}
+                  groupTitleAsHeader={groupTitleAsHeader}
+                />
               </div>
             ))}
           </div>
@@ -109,10 +122,17 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({ element }) => {
 
   return (
     <div>
-      <label className="label">
-        {element.label}
-        {element.required && <span className="text-error-500 ml-1">*</span>}
-      </label>
+      <div className="flex items-center gap-2">
+        {showNumbers && index && (
+          <span className="text-sm font-medium text-gray-500">
+            {index}.
+          </span>
+        )}
+        <label className={`${groupTitleAsHeader && element.type === 'group' ? 'text-xl font-semibold' : 'label'}`}>
+          {element.label}
+          {element.required && <span className="text-error-500 ml-1">*</span>}
+        </label>
+      </div>
       {element.description && (
         <p className="text-sm text-gray-500 mb-1">{element.description}</p>
       )}
