@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-[#F5F6F8] text-gray-900 py-2">
+    <header className="bg-white border-b border-gray-200 text-gray-900 py-2">
       <div className="w-full px-4 flex items-center justify-between">
         {/* Left section */}
         <div className="flex items-center space-x-4">
