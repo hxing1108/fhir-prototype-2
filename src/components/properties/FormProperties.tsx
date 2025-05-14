@@ -7,11 +7,11 @@ const FormProperties: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Form Settings</h3>
+        <h3 className="text-sm font-medium text-gray-900 mb-4">Form Settings</h3>
         
         <div className="space-y-4">
           <div>
-            <label className="label">Background Color</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Background Color</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
@@ -23,13 +23,13 @@ const FormProperties: React.FC = () => {
                 type="text"
                 value={formSettings.backgroundColor}
                 onChange={(e) => updateFormSettings({ backgroundColor: e.target.value })}
-                className="input flex-1"
+                className="input flex-1 text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="label">Text Color</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Text Color</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
@@ -41,17 +41,17 @@ const FormProperties: React.FC = () => {
                 type="text"
                 value={formSettings.textColor}
                 onChange={(e) => updateFormSettings({ textColor: e.target.value })}
-                className="input flex-1"
+                className="input flex-1 text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="label">Font Family</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Font Family</label>
             <select
               value={formSettings.fontFamily}
               onChange={(e) => updateFormSettings({ fontFamily: e.target.value })}
-              className="input"
+              className="input text-sm"
             >
               <option value="Inter">Inter</option>
               <option value="Arial">Arial</option>
@@ -62,11 +62,11 @@ const FormProperties: React.FC = () => {
           </div>
 
           <div>
-            <label className="label">Font Size</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Font Size</label>
             <select
               value={formSettings.fontSize}
               onChange={(e) => updateFormSettings({ fontSize: e.target.value })}
-              className="input"
+              className="input text-sm"
             >
               <option value="14px">Small (14px)</option>
               <option value="16px">Medium (16px)</option>
@@ -77,10 +77,10 @@ const FormProperties: React.FC = () => {
 
           <div className="flex items-center justify-between py-3">
             <div>
-              <label className="text-sm font-medium text-gray-900 block">
+              <label className="text-sm font-medium text-gray-700 block">
                 Display Group Title as Header
               </label>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 mt-1">
                 Visually styles the group's title text as a prominent header
               </p>
             </div>
@@ -98,10 +98,10 @@ const FormProperties: React.FC = () => {
 
           <div className="flex items-center justify-between py-3">
             <div>
-              <label className="text-sm font-medium text-gray-900 block">
+              <label className="text-sm font-medium text-gray-700 block">
                 Show Question Numbers
               </label>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 mt-1">
                 Displays the assigned number before each question
               </p>
             </div>
