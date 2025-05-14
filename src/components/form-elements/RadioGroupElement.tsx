@@ -35,7 +35,7 @@ const RadioGroupElement: React.FC<RadioGroupElementProps> = ({ element }) => {
               type="text"
               value={option.label}
               onChange={(e) => handleOptionLabelChange(index, e.target.value)}
-              className="ml-2 text-sm text-gray-700 bg-transparent border-0 focus:outline-none focus:ring-0"
+              className="ml-2 text-sm text-gray-700 editable-text"
               placeholder="Enter option label..."
             />
           </div>

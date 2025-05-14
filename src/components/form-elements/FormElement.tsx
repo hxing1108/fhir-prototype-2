@@ -94,7 +94,7 @@ const FormElement: React.FC<FormElementProps> = ({
               type="text"
               value={element.label}
               onChange={handleLabelChange}
-              className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
+              className="text-sm font-medium editable-text w-40"
               placeholder="Enter label..."
             />
           </div>

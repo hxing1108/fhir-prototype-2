@@ -27,7 +27,7 @@ const SelectElement: React.FC<SelectElementProps> = ({ element }) => {
               type="text"
               value={option.label}
               onChange={(e) => handleOptionLabelChange(index, e.target.value)}
-              className="text-sm text-gray-700 bg-transparent border-0 focus:outline-none focus:ring-0"
+              className="text-sm text-gray-700 editable-text"
               placeholder="Enter option label..."
             />
           </div>
