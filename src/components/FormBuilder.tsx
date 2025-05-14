@@ -3,7 +3,8 @@ import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautif
 import { useFormContext } from '../context/FormContext';
 import FormElement from './form-elements/FormElement';
 import FormElementPreview from './form-elements/FormElementPreview';
-import { Plus } from 'lucide-react';
+import { Plus, Type, AlignLeft, Hash, Mail, List, CheckSquare, Circle, CalendarDays, FolderPlus, ChevronDown } from 'lucide-react';
+import { FormElementType } from '../types/form';
 
 const FormBuilder: React.FC = () => {
   const { 
@@ -14,6 +15,20 @@ const FormBuilder: React.FC = () => {
     previewMode,
     addElement
   } = useFormContext();
+
+  const [showAddMenu, setShowAddMenu] = React.useState(false);
+  const menuRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowAddMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -26,7 +41,19 @@ const FormBuilder: React.FC = () => {
     moveElement(sourceIndex, destinationIndex);
   };
 
-  const handleQuickAdd = () => {
+  const elementTypes = [
+    { type: 'text' as FormElementType, icon: <Type size={16} />, label: 'Text Field' },
+    { type: 'textarea' as FormElementType, icon: <AlignLeft size={16} />, label: 'Text Area' },
+    { type: 'number' as FormElementType, icon: <Hash size={16} />, label: 'Number' },
+    { type: 'email' as FormElementType, icon: <Mail size={16} />, label: 'Email' },
+    { type: 'select' as FormElementType, icon: <List size={16} />, label: 'Dropdown' },
+    { type: 'checkbox' as FormElementType, icon: <CheckSquare size={16} />, label: 'Checkbox Group' },
+    { type: 'radio' as FormElementType, icon: <Circle size={16} />, label: 'Radio Group' },
+    { type: 'date' as FormElementType, icon: <CalendarDays size={16} />, label: 'Date' },
+    { type: 'group' as FormElementType, icon: <FolderPlus size={16} />, label: 'Question Group' },
+  ];
+
+  const handleAddElement = (type: FormElementType) => {
     // Find the selected group element if any
     const findSelectedGroup = (elements: FormElement[]): FormElement | null => {
       for (const element of elements) {
@@ -42,7 +69,8 @@ const FormBuilder: React.FC = () => {
     };
 
     const selectedGroup = findSelectedGroup(elements);
-    addElement('text', selectedGroup?.id);
+    addElement(type, selectedGroup?.id);
+    setShowAddMenu(false);
   };
 
   const renderEmptyState = () => (
@@ -50,13 +78,31 @@ const FormBuilder: React.FC = () => {
       <div className="text-center">
         <h3 className="text-lg font-medium text-gray-700 mb-2">Start Building Your Form</h3>
         <p className="text-gray-500 mb-6">Add elements from the sidebar or click the button below</p>
-        <button 
-          className="btn btn-primary inline-flex items-center"
-          onClick={handleQuickAdd}
-        >
-          <Plus size={16} className="mr-1" />
-          <span>Add Your First Field</span>
-        </button>
+        <div className="relative" ref={menuRef}>
+          <button 
+            className="btn btn-primary inline-flex items-center gap-2"
+            onClick={() => setShowAddMenu(!showAddMenu)}
+          >
+            <Plus size={16} />
+            Add Your First Field
+            <ChevronDown size={16} className={`transform transition-transform ${showAddMenu ? 'rotate-180' : ''}`} />
+          </button>
+          
+          {showAddMenu && (
+            <div className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+              {elementTypes.map((type) => (
+                <button
+                  key={type.type}
+                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                  onClick={() => handleAddElement(type.type)}
+                >
+                  {type.icon}
+                  {type.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -68,13 +114,31 @@ const FormBuilder: React.FC = () => {
           {previewMode ? 'Form Preview' : 'Form Builder'}
         </h2>
         {!previewMode && (
-          <button 
-            className="btn btn-sm btn-secondary inline-flex items-center"
-            onClick={handleQuickAdd}
-          >
-            <Plus size={16} className="mr-1" />
-            <span>Add Field</span>
-          </button>
+          <div className="relative" ref={menuRef}>
+            <button 
+              className="btn btn-sm btn-secondary inline-flex items-center gap-2"
+              onClick={() => setShowAddMenu(!showAddMenu)}
+            >
+              <Plus size={16} />
+              Add Field
+              <ChevronDown size={16} className={`transform transition-transform ${showAddMenu ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {showAddMenu && (
+              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+                {elementTypes.map((type) => (
+                  <button
+                    key={type.type}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                    onClick={() => handleAddElement(type.type)}
+                  >
+                    {type.icon}
+                    {type.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         )}
       </div>
 
