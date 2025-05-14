@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Share, Eye, Save, Settings } from 'lucide-react';
+import { ArrowLeft, Eye, Save, ChevronDown, FileDown } from 'lucide-react';
 import { useFormContext } from '../context/FormContext';
 
 const Header: React.FC = () => {
   const [formName, setFormName] = useState('Untitled Form');
   const { previewMode, togglePreviewMode } = useFormContext();
+  const [showImportMenu, setShowImportMenu] = useState(false);
 
   const handleFormNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormName(e.target.value);
@@ -30,14 +31,42 @@ const Header: React.FC = () => {
 
         {/* Right section */}
         <div className="flex items-center space-x-2">
-          <button className="nav-button">
-            <Settings size={16} className="mr-2" />
-            Settings
-          </button>
+          <div className="relative">
+            <button 
+              className="nav-button"
+              onClick={() => setShowImportMenu(!showImportMenu)}
+            >
+              Import
+              <ChevronDown size={16} className="ml-2" />
+            </button>
+            
+            {showImportMenu && (
+              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                <button 
+                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    // Handle import template
+                    setShowImportMenu(false);
+                  }}
+                >
+                  Import Template
+                </button>
+                <button 
+                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    // Handle import data
+                    setShowImportMenu(false);
+                  }}
+                >
+                  Import Data
+                </button>
+              </div>
+            )}
+          </div>
           
           <button className="nav-button">
-            <Share size={16} className="mr-2" />
-            Share
+            <FileDown size={16} className="mr-2" />
+            Download XML
           </button>
           
           <button 
