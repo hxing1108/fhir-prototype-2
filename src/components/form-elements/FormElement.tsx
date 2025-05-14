@@ -58,6 +58,10 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
               <GripVertical size={16} className="text-gray-400" />
             </div>
           )}
+          <div className="label cursor-text">
+            {element.label}
+            {element.required && <span className="text-error-500 ml-1">*</span>}
+          </div>
         </div>
         <button
           onClick={(e) => {
