@@ -119,7 +119,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
                       >
                         <div
                           {...provided.dragHandleProps}
-                          className="cursor-move text-gray-400"
+                          className="cursor-move text-gray-400 p-1"
                         >
                           <GripVertical size={16} />
                         </div>
