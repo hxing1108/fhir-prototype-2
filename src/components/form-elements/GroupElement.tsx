@@ -81,7 +81,7 @@ const GroupElement: React.FC<GroupElementProps> = ({ element, dragHandleProps, i
             </button>
             
             {showAddMenu && (
-              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+              <div className="dropdown-menu">
                 {elementTypes.map((type) => (
                   <button
                     key={type.type}

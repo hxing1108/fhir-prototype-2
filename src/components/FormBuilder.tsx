@@ -130,7 +130,7 @@ const FormBuilder: React.FC = () => {
             </button>
             
             {showHeaderAddMenu && (
-              <div className="absolute left-1/2 transform -translate-x-1/2 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+              <div className="dropdown-menu">
                 {elementTypes.map((type) => (
                   <button
                     key={type.type}
