@@ -75,58 +75,54 @@ const FormProperties: React.FC = () => {
             </select>
           </div>
 
-          <div className="flex items-center justify-between py-2">
-            <label className="text-sm font-medium text-gray-700">
-              Display Group Title as Header
-            </label>
-            <div className="relative inline-block w-12 h-6">
-              <input
-                type="checkbox"
-                checked={formSettings.groupTitleAsHeader}
-                onChange={(e) => updateFormSettings({ groupTitleAsHeader: e.target.checked })}
-                className="sr-only"
-                id="groupTitleAsHeader"
-              />
-              <label
-                htmlFor="groupTitleAsHeader"
-                className={`block w-12 h-6 rounded-full transition-colors duration-200 ease-in-out cursor-pointer ${
-                  formSettings.groupTitleAsHeader ? 'bg-primary-500' : 'bg-gray-200'
-                }`}
-              >
-                <span
-                  className={`block w-4 h-4 mt-1 ml-1 bg-white rounded-full transition-transform duration-200 ease-in-out ${
-                    formSettings.groupTitleAsHeader ? 'transform translate-x-6' : ''
-                  }`}
-                />
+          <div className="flex items-center justify-between border rounded-lg p-4 bg-gray-50">
+            <div>
+              <label className="text-sm font-medium text-gray-900 block">
+                Display Group Title as Header
               </label>
+              <p className="text-sm text-gray-500 mt-1">
+                Visually styles the group's title text as a prominent header
+              </p>
             </div>
+            <button
+              role="switch"
+              aria-checked={formSettings.groupTitleAsHeader}
+              onClick={() => updateFormSettings({ groupTitleAsHeader: !formSettings.groupTitleAsHeader })}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                formSettings.groupTitleAsHeader ? 'bg-primary-500' : 'bg-gray-200'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  formSettings.groupTitleAsHeader ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
           </div>
 
-          <div className="flex items-center justify-between py-2">
-            <label className="text-sm font-medium text-gray-700">
-              Show Question Numbers
-            </label>
-            <div className="relative inline-block w-12 h-6">
-              <input
-                type="checkbox"
-                checked={formSettings.showQuestionNumbers}
-                onChange={(e) => updateFormSettings({ showQuestionNumbers: e.target.checked })}
-                className="sr-only"
-                id="showQuestionNumbers"
-              />
-              <label
-                htmlFor="showQuestionNumbers"
-                className={`block w-12 h-6 rounded-full transition-colors duration-200 ease-in-out cursor-pointer ${
-                  formSettings.showQuestionNumbers ? 'bg-primary-500' : 'bg-gray-200'
-                }`}
-              >
-                <span
-                  className={`block w-4 h-4 mt-1 ml-1 bg-white rounded-full transition-transform duration-200 ease-in-out ${
-                    formSettings.showQuestionNumbers ? 'transform translate-x-6' : ''
-                  }`}
-                />
+          <div className="flex items-center justify-between border rounded-lg p-4 bg-gray-50">
+            <div>
+              <label className="text-sm font-medium text-gray-900 block">
+                Show Question Numbers
               </label>
+              <p className="text-sm text-gray-500 mt-1">
+                Displays the assigned number before each question
+              </p>
             </div>
+            <button
+              role="switch"
+              aria-checked={formSettings.showQuestionNumbers}
+              onClick={() => updateFormSettings({ showQuestionNumbers: !formSettings.showQuestionNumbers })}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                formSettings.showQuestionNumbers ? 'bg-primary-500' : 'bg-gray-200'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  formSettings.showQuestionNumbers ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
           </div>
         </div>
       </div>

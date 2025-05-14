@@ -8,9 +8,17 @@ interface GroupElementProps {
   element: FormElement;
   dragHandleProps?: any;
   isNested?: boolean;
+  showNumbers?: boolean;
+  groupTitleAsHeader?: boolean;
 }
 
-const GroupElement: React.FC<GroupElementProps> = ({ element, dragHandleProps, isNested = false }) => {
+const GroupElement: React.FC<GroupElementProps> = ({ 
+  element, 
+  dragHandleProps, 
+  isNested = false,
+  showNumbers = false,
+  groupTitleAsHeader = false
+}) => {
   const { updateElement, addElement, selectedElementId, setSelectedElementId, removeElement } = useFormContext();
   const [showAddMenu, setShowAddMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -59,13 +67,25 @@ const GroupElement: React.FC<GroupElementProps> = ({ element, dragHandleProps, i
               <GripVertical size={16} className="text-gray-400" />
             </div>
           )}
-          <input
-            type="text"
-            value={element.label}
-            onChange={(e) => updateElement(element.id, { label: e.target.value })}
-            className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
-            placeholder="Enter label..."
-          />
+          {groupTitleAsHeader ? (
+            <h3 className="text-xl font-semibold">
+              <input
+                type="text"
+                value={element.label}
+                onChange={(e) => updateElement(element.id, { label: e.target.value })}
+                className="bg-transparent border-0 focus:outline-none focus:ring-0"
+                placeholder="Enter group title..."
+              />
+            </h3>
+          ) : (
+            <input
+              type="text"
+              value={element.label}
+              onChange={(e) => updateElement(element.id, { label: e.target.value })}
+              className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
+              placeholder="Enter label..."
+            />
+          )}
         </div>
         <div className="flex items-center gap-2">
           <div className="relative" ref={menuRef}>
@@ -115,11 +135,14 @@ const GroupElement: React.FC<GroupElementProps> = ({ element, dragHandleProps, i
       )}
 
       <div className="pl-4 border-l-2 border-gray-200 space-y-4 mt-4">
-        {element.elements?.map((childElement) => (
+        {element.elements?.map((childElement, index) => (
           <FormElementComponent
             key={childElement.id}
             element={childElement}
             isNested={true}
+            index={showNumbers ? index + 1 : undefined}
+            showNumbers={showNumbers}
+            groupTitleAsHeader={groupTitleAsHeader}
           />
         ))}
       </div>
