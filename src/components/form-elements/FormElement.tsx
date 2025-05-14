@@ -50,6 +50,10 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
     updateElement(element.id, { label: e.target.value });
   };
 
+  if (element.type === 'group') {
+    return renderElementByType();
+  }
+
   return (
     <div 
       className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
