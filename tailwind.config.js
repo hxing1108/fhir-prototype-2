@@ -5,17 +5,17 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#4F46E5', // Primary brand color
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#172554',
+          50: '#EAEAF3',
+          100: '#D5D5E7',
+          200: '#ABABCF',
+          300: '#8181B7',
+          400: '#57579F',
+          500: '#2D2D85', // Primary brand color
+          600: '#24246A',
+          700: '#1B1B50',
+          800: '#121235',
+          900: '#09091B',
+          950: '#04040D',
         },
         gray: {
           50: '#f9fafb',
