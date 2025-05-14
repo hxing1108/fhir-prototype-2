@@ -58,7 +58,16 @@ const FormElement: React.FC<FormElementProps> = ({ element, dragHandleProps, isN
               <GripVertical size={16} className="text-gray-400" />
             </div>
           )}
-          <div className="text-sm font-medium text-gray-500">{element.type.charAt(0).toUpperCase() + element.type.slice(1)}</div>
+          <input
+            type="text"
+            value={element.label}
+            onChange={(e) => {
+              const { updateElement } = useFormContext();
+              updateElement(element.id, { label: e.target.value });
+            }}
+            className="text-sm font-medium bg-transparent border-0 focus:outline-none focus:ring-0 w-40"
+            placeholder="Enter label..."
+          />
         </div>
         <button
           onClick={(e) => {
