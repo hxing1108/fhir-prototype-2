@@ -102,13 +102,9 @@ const FormElement: React.FC<FormElementProps> = ({
                 className="text-sm font-medium editable-text w-40"
                 placeholder="Enter label..."
               />
-              <button
-                type="button"
-                onClick={handleRequiredChange}
-                className="text-xs text-error-500 hover:text-error-700 transition-colors"
-              >
-                *
-              </button>
+              {element.required && (
+                <span className="text-xs text-error-500">*</span>
+              )}
             </div>
           </div>
         </div>
