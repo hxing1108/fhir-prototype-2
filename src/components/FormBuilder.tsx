@@ -16,13 +16,18 @@ const FormBuilder: React.FC = () => {
     addElement
   } = useFormContext();
 
-  const [showAddMenu, setShowAddMenu] = React.useState(false);
-  const menuRef = React.useRef<HTMLDivElement>(null);
+  const [showHeaderAddMenu, setShowHeaderAddMenu] = React.useState(false);
+  const [showEmptyStateAddMenu, setShowEmptyStateAddMenu] = React.useState(false);
+  const headerMenuRef = React.useRef<HTMLDivElement>(null);
+  const emptyStateMenuRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowAddMenu(false);
+      if (headerMenuRef.current && !headerMenuRef.current.contains(event.target as Node)) {
+        setShowHeaderAddMenu(false);
+      }
+      if (emptyStateMenuRef.current && !emptyStateMenuRef.current.contains(event.target as Node)) {
+        setShowEmptyStateAddMenu(false);
       }
     };
 
@@ -56,7 +61,8 @@ const FormBuilder: React.FC = () => {
   const handleAddElement = (type: FormElementType) => {
     const selectedGroup = findSelectedGroup(elements);
     addElement(type, selectedGroup?.id);
-    setShowAddMenu(false);
+    setShowHeaderAddMenu(false);
+    setShowEmptyStateAddMenu(false);
   };
 
   const findSelectedGroup = (elements: FormElement[]): FormElement | null => {
@@ -77,17 +83,17 @@ const FormBuilder: React.FC = () => {
       <div className="text-center">
         <h3 className="text-lg font-medium text-gray-700 mb-2">Start Building Your Form</h3>
         <p className="text-gray-500 mb-6">Add elements from the sidebar or click the button below</p>
-        <div className="relative" ref={menuRef}>
+        <div className="relative" ref={emptyStateMenuRef}>
           <button 
             className="btn btn-primary inline-flex items-center gap-2"
-            onClick={() => setShowAddMenu(!showAddMenu)}
+            onClick={() => setShowEmptyStateAddMenu(!showEmptyStateAddMenu)}
           >
             <Plus size={16} />
             Add Your First Field
-            <ChevronDown size={16} className={`transform transition-transform ${showAddMenu ? 'rotate-180' : ''}`} />
+            <ChevronDown size={16} className={`transform transition-transform ${showEmptyStateAddMenu ? 'rotate-180' : ''}`} />
           </button>
           
-          {showAddMenu && (
+          {showEmptyStateAddMenu && (
             <div className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
               {elementTypes.map((type) => (
                 <button
@@ -113,17 +119,17 @@ const FormBuilder: React.FC = () => {
           {previewMode ? 'Form Preview' : 'Form Builder'}
         </h2>
         {!previewMode && (
-          <div className="relative" ref={menuRef}>
+          <div className="relative" ref={headerMenuRef}>
             <button 
               className="btn btn-sm btn-secondary inline-flex items-center gap-2"
-              onClick={() => setShowAddMenu(!showAddMenu)}
+              onClick={() => setShowHeaderAddMenu(!showHeaderAddMenu)}
             >
               <Plus size={16} />
               Add Field
-              <ChevronDown size={16} className={`transform transition-transform ${showAddMenu ? 'rotate-180' : ''}`} />
+              <ChevronDown size={16} className={`transform transition-transform ${showHeaderAddMenu ? 'rotate-180' : ''}`} />
             </button>
             
-            {showAddMenu && (
+            {showHeaderAddMenu && (
               <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
                 {elementTypes.map((type) => (
                   <button
