@@ -52,8 +52,7 @@ const FormBuilder: React.FC = () => {
     { type: 'group' as FormElementType, icon: <FolderPlus size={16} />, label: 'Question Group' },
   ];
 
-  const handleAddElement = (type: FormElementType, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleAddElement = (type: FormElementType) => {
     addElement(type);
     setShowAddMenu(false);
   };
@@ -63,13 +62,10 @@ const FormBuilder: React.FC = () => {
       <div className="text-center">
         <h3 className="text-lg font-medium text-gray-700 mb-2">Start Building Your Form</h3>
         <p className="text-gray-500 mb-6">Add elements from the sidebar or click the button below</p>
-        <div className="relative" ref={menuRef}>
+        <div className="relative inline-block" ref={menuRef}>
           <button 
             className="btn btn-primary inline-flex items-center"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowAddMenu(!showAddMenu);
-            }}
+            onClick={() => setShowAddMenu(!showAddMenu)}
           >
             <Plus size={16} className="mr-1" />
             <span>Add Your First Field</span>
@@ -82,7 +78,7 @@ const FormBuilder: React.FC = () => {
                 <button
                   key={type.type}
                   className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
-                  onClick={(e) => handleAddElement(type.type, e)}
+                  onClick={() => handleAddElement(type.type)}
                 >
                   {type.icon}
                   {type.label}
@@ -102,13 +98,10 @@ const FormBuilder: React.FC = () => {
           {previewMode ? 'Form Preview' : 'Form Builder'}
         </h2>
         {!previewMode && (
-          <div className="relative" ref={menuRef}>
+          <div className="relative inline-block" ref={menuRef}>
             <button 
               className="btn btn-sm btn-secondary inline-flex items-center gap-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowAddMenu(!showAddMenu);
-              }}
+              onClick={() => setShowAddMenu(!showAddMenu)}
             >
               <Plus size={16} />
               <span>Add Field</span>
@@ -121,7 +114,7 @@ const FormBuilder: React.FC = () => {
                   <button
                     key={type.type}
                     className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
-                    onClick={(e) => handleAddElement(type.type, e)}
+                    onClick={() => handleAddElement(type.type)}
                   >
                     {type.icon}
                     {type.label}
@@ -161,12 +154,10 @@ const FormBuilder: React.FC = () => {
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                     className={`p-6 min-h-[400px] ${snapshot.isDraggingOver ? 'bg-gray-50' : ''}`}
+                    onClick={() => setShowAddMenu(false)}
                   >
                     {elements.length === 0 ? (
-                      <>
-                        {renderEmptyState()}
-                        {provided.placeholder}
-                      </>
+                      renderEmptyState()
                     ) : (
                       <>
                         {elements.map((element, index) => (
