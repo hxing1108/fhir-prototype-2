@@ -95,6 +95,9 @@ const FormElement: React.FC<FormElementProps> = ({
               </span>
             )}
             <div className="flex items-center gap-1">
+              {element.required && (
+                <span className="text-error-500 text-xs">*</span>
+              )}
               <input
                 type="text"
                 value={element.label}
@@ -102,9 +105,6 @@ const FormElement: React.FC<FormElementProps> = ({
                 className="text-sm font-medium editable-text w-40"
                 placeholder="Enter label..."
               />
-              {element.required && (
-                <span className="text-xs text-error-500">*</span>
-              )}
             </div>
           </div>
         </div>
