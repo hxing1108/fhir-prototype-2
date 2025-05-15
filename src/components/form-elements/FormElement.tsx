@@ -99,9 +99,20 @@ const FormElement: React.FC<FormElementProps> = ({
               </span>
             )}
             <div className="flex items-center gap-1 flex-1 min-w-0">
-              {element.required && (
-                <span className="text-error-500 text-xs flex-shrink-0">*</span>
-              )}
+              <div className="flex items-center gap-1 flex-shrink-0">
+                {element.required && (
+                  <span className="text-error-500 text-xs">*</span>
+                )}
+                {element.showTooltip && (
+                  <div className="relative group/tooltip">
+                    <HelpCircle size={16} className="text-gray-400" />
+                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap z-50">
+                      {element.tooltipText || 'Tooltip text'}
+                      <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
               <textarea
                 value={element.label}
                 onChange={handleLabelChange}
@@ -118,15 +129,6 @@ const FormElement: React.FC<FormElementProps> = ({
                   target.style.height = `${target.scrollHeight}px`;
                 }}
               />
-              {element.showTooltip && (
-                <div className="relative group/tooltip">
-                  <HelpCircle size={16} className="text-gray-400 flex-shrink-0" />
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap">
-                    {element.tooltipText || 'Tooltip text'}
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -145,4 +147,4 @@ const FormElement: React.FC<FormElementProps> = ({
   );
 };
 
-export default FormElement
+export default FormElement;
