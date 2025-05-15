@@ -60,6 +60,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ? [{ value: 'Option 1', label: 'Option 1' }, { value: 'Option 2', label: 'Option 2' }] 
         : [],
       elements: type === 'group' ? [] : undefined,
+      header: type === 'header' ? { level: 2, align: 'left' } : undefined,
+      richtext: type === 'richtext' ? { content: [{ type: 'paragraph', children: [{ text: '' }] }], align: 'left' } : undefined,
     };
     
     if (parentId) {
@@ -146,6 +148,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
       case 'radio': return 'Radio Group';
       case 'date': return 'Date Field';
       case 'group': return 'Question Group';
+      case 'header': return 'Header';
+      case 'richtext': return '';
       default: return 'New Field';
     }
   };
@@ -157,6 +161,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
       case 'number': return 'Enter a number...';
       case 'email': return 'Enter your email...';
       case 'date': return 'Select a date...';
+      case 'header': return 'Enter heading text...';
+      case 'richtext': return 'Enter text here...';
       default: return '';
     }
   };
