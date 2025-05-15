@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FormElement, FormElementType } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
-import { ChevronDown, Type, AlignLeft, Hash, Mail, List, CheckSquare, Circle, CalendarDays, GripVertical, Trash2 } from 'lucide-react';
+import { ChevronDown, Type, AlignLeft, Hash, Mail, List, CheckSquare, Circle, CalendarDays, GripVertical, Trash2, HelpCircle } from 'lucide-react';
 import FormElementComponent from './FormElement';
 
 interface GroupElementProps {
@@ -72,18 +72,29 @@ const GroupElement: React.FC<GroupElementProps> = ({
                 <GripVertical size={16} className="text-gray-400" />
               </div>
             )}
-            <textarea
-              value={element.label}
-              onChange={handleLabelChange}
-              className="text-sm font-medium editable-text min-w-0 w-full resize-none overflow-hidden"
-              placeholder="Enter label..."
-              rows={1}
-              onInput={(e) => {
-                const target = e.target as HTMLTextAreaElement;
-                target.style.height = 'auto';
-                target.style.height = `${target.scrollHeight}px`;
-              }}
-            />
+            <div className="flex items-center gap-2">
+              {element.showTooltip && (
+                <div className="relative group/tooltip">
+                  <HelpCircle size={16} className="text-gray-400" />
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap z-50">
+                    {element.tooltipText || 'Tooltip text'}
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                  </div>
+                </div>
+              )}
+              <textarea
+                value={element.label}
+                onChange={handleLabelChange}
+                className="text-sm font-medium editable-text min-w-0 w-full resize-none overflow-hidden"
+                placeholder="Enter label..."
+                rows={1}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = 'auto';
+                  target.style.height = `${target.scrollHeight}px`;
+                }}
+              />
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <div className="relative" ref={menuRef}>
@@ -160,20 +171,31 @@ const GroupElement: React.FC<GroupElementProps> = ({
               <GripVertical size={16} className="text-gray-400" />
             </div>
           )}
-          <h3 className="text-xl font-semibold flex-1 min-w-0">
-            <textarea
-              value={element.label}
-              onChange={handleLabelChange}
-              className="editable-text min-w-0 w-full resize-none overflow-hidden"
-              placeholder="Enter group title..."
-              rows={1}
-              onInput={(e) => {
-                const target = e.target as HTMLTextAreaElement;
-                target.style.height = 'auto';
-                target.style.height = `${target.scrollHeight}px`;
-              }}
-            />
-          </h3>
+          <div className="flex items-center gap-2">
+            {element.showTooltip && (
+              <div className="relative group/tooltip">
+                <HelpCircle size={16} className="text-gray-400" />
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap z-50">
+                  {element.tooltipText || 'Tooltip text'}
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                </div>
+              </div>
+            )}
+            <h3 className="text-xl font-semibold flex-1 min-w-0">
+              <textarea
+                value={element.label}
+                onChange={handleLabelChange}
+                className="editable-text min-w-0 w-full resize-none overflow-hidden"
+                placeholder="Enter group title..."
+                rows={1}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = 'auto';
+                  target.style.height = `${target.scrollHeight}px`;
+                }}
+              />
+            </h3>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <div className="relative" ref={menuRef}>
