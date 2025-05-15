@@ -25,7 +25,7 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
   const initialValue: Descendant[] = useMemo(() => {
-    return element.richtext?.content ? element.richtext.content : [{
+    return element.richtext?.content || [{
       type: 'paragraph',
       children: [{ text: '' }],
     }];
