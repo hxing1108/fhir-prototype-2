@@ -29,6 +29,8 @@ export interface FormElement {
   max?: number;
   pattern?: string;
   elements?: FormElement[]; // For group elements
+  showTooltip?: boolean;
+  tooltipText?: string;
 }
 
 export interface FormSettings {

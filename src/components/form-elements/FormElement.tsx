@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormElement as FormElementType } from '../../types/form';
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
-import { Trash2, GripVertical } from 'lucide-react';
+import { Trash2, GripVertical, HelpCircle } from 'lucide-react';
 import { useFormContext } from '../../context/FormContext';
 import TextFieldElement from './TextFieldElement';
 import TextAreaElement from './TextAreaElement';
@@ -118,6 +118,15 @@ const FormElement: React.FC<FormElementProps> = ({
                   target.style.height = `${target.scrollHeight}px`;
                 }}
               />
+              {element.showTooltip && (
+                <div className="relative group/tooltip">
+                  <HelpCircle size={16} className="text-gray-400 flex-shrink-0" />
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap">
+                    {element.tooltipText || 'Tooltip text'}
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -135,5 +144,3 @@ const FormElement: React.FC<FormElementProps> = ({
     </div>
   );
 };
-
-export default FormElement;
