@@ -99,6 +99,9 @@ const FormElement: React.FC<FormElementProps> = ({
               </span>
             )}
             <div className="flex items-center gap-1 flex-1 min-w-0">
+              {element.required && (
+                <span className="text-error-500 text-xs flex-shrink-0">*</span>
+              )}
               <textarea
                 value={element.label}
                 onChange={handleLabelChange}
@@ -115,9 +118,6 @@ const FormElement: React.FC<FormElementProps> = ({
                   target.style.height = `${target.scrollHeight}px`;
                 }}
               />
-              {element.required && (
-                <span className="text-error-500 text-xs flex-shrink-0">*</span>
-              )}
             </div>
           </div>
         </div>
