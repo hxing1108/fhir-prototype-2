@@ -1,11 +1,14 @@
 import React from 'react';
 import { FormElement } from '../../types/form';
+import { useFormContext } from '../../context/FormContext';
 
 interface HeaderElementProps {
   element: FormElement;
 }
 
 const HeaderElement: React.FC<HeaderElementProps> = ({ element }) => {
+  const { updateElement } = useFormContext();
+
   const getHeaderSize = () => {
     switch (element.header?.level) {
       case 1: return 'text-4xl';
@@ -29,6 +32,7 @@ const HeaderElement: React.FC<HeaderElementProps> = ({ element }) => {
     >
       <textarea
         value={element.label}
+        onChange={(e) => updateElement(element.id, { label: e.target.value })}
         className="w-full bg-transparent border-0 focus:outline-none focus:ring-0 resize-none"
         placeholder="Enter heading text..."
         rows={1}

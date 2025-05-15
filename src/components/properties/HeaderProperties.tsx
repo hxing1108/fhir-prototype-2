@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
+import { AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 
 interface HeaderPropertiesProps {
   element: FormElement;
@@ -16,6 +17,12 @@ const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ element }) => {
   const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updateElement(element.id, {
       header: { ...element.header!, level: parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5 | 6 }
+    });
+  };
+
+  const handleAlignmentChange = (alignment: 'left' | 'center' | 'right') => {
+    updateElement(element.id, {
+      header: { ...element.header!, align: alignment }
     });
   };
 
@@ -46,6 +53,33 @@ const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ element }) => {
           <option value={5}>Heading 5</option>
           <option value={6}>Heading 6</option>
         </select>
+      </div>
+
+      <div>
+        <label className="label">Text Alignment</label>
+        <div className="flex items-center gap-1 border border-gray-200 rounded-md">
+          <button
+            type="button"
+            onClick={() => handleAlignmentChange('left')}
+            className={`p-2 ${element.header?.align === 'left' ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+          >
+            <AlignLeft size={16} />
+          </button>
+          <button
+            type="button"
+            onClick={() => handleAlignmentChange('center')}
+            className={`p-2 ${element.header?.align === 'center' ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+          >
+            <AlignCenter size={16} />
+          </button>
+          <button
+            type="button"
+            onClick={() => handleAlignmentChange('right')}
+            className={`p-2 ${element.header?.align === 'right' ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+          >
+            <AlignRight size={16} />
+          </button>
+        </div>
       </div>
 
       <div>
