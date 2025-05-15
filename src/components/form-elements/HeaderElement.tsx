@@ -36,9 +36,14 @@ const HeaderElement: React.FC<HeaderElementProps> = ({ element }) => {
       <textarea
         value={element.label}
         onChange={(e) => updateElement(element.id, { label: e.target.value })}
-        className="w-full bg-transparent border-0 focus:outline-none focus:ring-0 resize-none"
+        className="w-full bg-transparent border-0 focus:outline-none focus:ring-0 resize-none overflow-hidden whitespace-pre-wrap break-words"
         placeholder="Enter heading text..."
         rows={1}
+        style={{
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word',
+          whiteSpace: 'pre-wrap',
+        }}
         onInput={(e) => {
           const target = e.target as HTMLTextAreaElement;
           target.style.height = 'auto';
