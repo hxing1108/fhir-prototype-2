@@ -241,3 +241,5 @@ const FormBuilder: React.FC = () => {
     </div>
   );
 };
+
+export default FormBuilder
