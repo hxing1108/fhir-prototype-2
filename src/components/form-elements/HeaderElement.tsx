@@ -23,11 +23,14 @@ const HeaderElement: React.FC<HeaderElementProps> = ({ element }) => {
 
   const style = {
     textAlign: element.header?.align || 'left',
+    color: element.header?.color,
+    fontStyle: element.header?.italic ? 'italic' : 'normal',
+    fontWeight: element.header?.bold ? 'bold' : 'normal',
   };
 
   return (
     <div 
-      className={`${getHeaderSize()} font-semibold`}
+      className={`${getHeaderSize()}`}
       style={style}
     >
       <textarea

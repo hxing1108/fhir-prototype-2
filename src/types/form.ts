@@ -18,6 +18,9 @@ export interface FormElementOption {
 export interface HeaderElement {
   level: 1 | 2 | 3 | 4 | 5 | 6;
   align: 'left' | 'center' | 'right';
+  color?: string;
+  bold?: boolean;
+  italic?: boolean;
 }
 
 export interface FormElement {

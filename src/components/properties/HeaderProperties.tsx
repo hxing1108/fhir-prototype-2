@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
-import { AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
+import { AlignLeft, AlignCenter, AlignRight, Bold, Italic } from 'lucide-react';
 
 interface HeaderPropertiesProps {
   element: FormElement;
@@ -23,6 +23,21 @@ const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ element }) => {
   const handleAlignmentChange = (alignment: 'left' | 'center' | 'right') => {
     updateElement(element.id, {
       header: { ...element.header!, align: alignment }
+    });
+  };
+
+  const handleColorChange = (color: string) => {
+    updateElement(element.id, {
+      header: { ...element.header!, color }
+    });
+  };
+
+  const toggleStyle = (style: 'bold' | 'italic') => {
+    updateElement(element.id, {
+      header: { 
+        ...element.header!, 
+        [style]: !element.header?.[style]
+      }
     });
   };
 
@@ -54,6 +69,45 @@ const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ element }) => {
           <option value={5}>Heading 5</option>
           <option value={6}>Heading 6</option>
         </select>
+      </div>
+
+      <div>
+        <label className="label">Text Color</label>
+        <div className="flex items-center gap-2">
+          <input
+            type="color"
+            value={element.header?.color || '#000000'}
+            onChange={(e) => handleColorChange(e.target.value)}
+            className="h-8 w-8 rounded border border-gray-300"
+          />
+          <input
+            type="text"
+            value={element.header?.color || '#000000'}
+            onChange={(e) => handleColorChange(e.target.value)}
+            className="input flex-1"
+            placeholder="#000000"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="label">Text Style</label>
+        <div className="flex items-center gap-1 border border-gray-200 rounded-md">
+          <button
+            type="button"
+            onClick={() => toggleStyle('bold')}
+            className={`p-2 ${element.header?.bold ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+          >
+            <Bold size={16} />
+          </button>
+          <button
+            type="button"
+            onClick={() => toggleStyle('italic')}
+            className={`p-2 ${element.header?.italic ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+          >
+            <Italic size={16} />
+          </button>
+        </div>
       </div>
 
       <div>
