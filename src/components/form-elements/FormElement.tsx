@@ -144,3 +144,5 @@ const FormElement: React.FC<FormElementProps> = ({
     </div>
   );
 };
+
+export default FormElement
