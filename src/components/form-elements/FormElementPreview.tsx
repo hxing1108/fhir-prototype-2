@@ -144,12 +144,30 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
             {element.label}
           </div>
         );
+      case 'image':
+        const imageStyle = {
+          textAlign: element.image?.align || 'left',
+          maxWidth: element.image?.width || '100%',
+          height: element.image?.height || 'auto',
+        };
+        return (
+          <div style={{ textAlign: element.image?.align || 'left' }}>
+            {element.image?.src && (
+              <img
+                src={element.image.src}
+                alt={element.image.alt}
+                style={imageStyle}
+                className="max-w-full h-auto"
+              />
+            )}
+          </div>
+        );
       default:
         return <div>Unknown element type</div>;
     }
   };
 
-  if (element.type === 'header') {
+  if (element.type === 'header' || element.type === 'image') {
     return renderElementByType();
   }
 

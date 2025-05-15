@@ -61,7 +61,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
         : [],
       elements: type === 'group' ? [] : undefined,
       header: type === 'header' ? { level: 2, align: 'left' } : undefined,
-      richtext: type === 'richtext' ? { content: [{ type: 'paragraph', children: [{ text: '' }] }], align: 'left' } : undefined,
+      image: type === 'image' ? { src: '', alt: '', width: '100%', height: 'auto', align: 'left' } : undefined,
     };
     
     if (parentId) {
@@ -132,11 +132,9 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSelectedElementId(null);
   };
 
-  const updateFormSettings = (updates: Partial<FormSettings>) => {
+  const updateFormSettings = (updates: Partial<FormSettings>) =>
     setFormSettings({ ...formSettings, ...updates });
-  };
 
-  // Helper functions
   const getDefaultLabel = (type: FormElementType): string => {
     switch(type) {
       case 'text': return 'Text Field';
@@ -149,7 +147,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
       case 'date': return 'Date Field';
       case 'group': return 'Question Group';
       case 'header': return 'Header';
-      case 'richtext': return '';
+      case 'image': return '';
       default: return 'New Field';
     }
   };
@@ -162,7 +160,6 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
       case 'email': return 'Enter your email...';
       case 'date': return 'Select a date...';
       case 'header': return 'Enter heading text...';
-      case 'richtext': return 'Enter text here...';
       default: return '';
     }
   };

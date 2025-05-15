@@ -10,7 +10,7 @@ import CheckboxGroupElement from './CheckboxGroupElement';
 import RadioGroupElement from './RadioGroupElement';
 import GroupElement from './GroupElement';
 import HeaderElement from './HeaderElement';
-import RichTextElement from './RichTextElement';
+import ImageElement from './ImageElement';
 
 interface FormElementProps {
   element: FormElementType;
@@ -58,8 +58,8 @@ const FormElement: React.FC<FormElementProps> = ({
         );
       case 'header':
         return <HeaderElement element={element} />;
-      case 'richtext':
-        return <RichTextElement element={element} />;
+      case 'image':
+        return <ImageElement element={element} />;
       default:
         return <div>Unknown element type</div>;
     }
@@ -78,7 +78,7 @@ const FormElement: React.FC<FormElementProps> = ({
     return renderElementByType();
   }
 
-  if (element.type === 'header' || element.type === 'richtext') {
+  if (element.type === 'header' || element.type === 'image') {
     return (
       <div 
         className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}

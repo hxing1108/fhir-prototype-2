@@ -8,7 +8,8 @@ export type FormElementType =
   | 'radio' 
   | 'date'
   | 'group'
-  | 'header';
+  | 'header'
+  | 'image';
 
 export interface FormElementOption {
   value: string;
@@ -21,6 +22,14 @@ export interface HeaderElement {
   color?: string;
   bold?: boolean;
   italic?: boolean;
+}
+
+export interface ImageElement {
+  src: string;
+  alt: string;
+  width: string;
+  height: string;
+  align: 'left' | 'center' | 'right';
 }
 
 export interface FormElement {
@@ -41,4 +50,5 @@ export interface FormElement {
   showTooltip?: boolean;
   tooltipText?: string;
   header?: HeaderElement;
+  image?: ImageElement;
 }
