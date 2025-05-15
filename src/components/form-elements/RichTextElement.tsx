@@ -24,61 +24,41 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
   const { updateElement, formSettings } = useFormContext();
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
-  const initialValue = useMemo(() => {
+  const initialValue: Descendant[] = useMemo(() => {
     return element.richtext?.content || [{
       type: 'paragraph',
       children: [{ text: '' }],
     }];
   }, [element.richtext?.content]);
 
-  const ToolbarButton = ({ format, icon: Icon, isBlock = false }: any) => {
+  const Toolbar = () => {
     const editor = useSlate();
     
+    const ToolbarButton = ({ format, icon: Icon, isBlock = false }: any) => {
+      return (
+        <button
+          type="button"
+          onMouseDown={(e) => {
+            e.preventDefault();
+            if (isBlock) {
+              Transforms.setNodes(editor, { type: format });
+            } else {
+              const isActive = isFormatActive(editor, format);
+              Transforms.setNodes(
+                editor,
+                { [format]: !isActive },
+                { match: (n) => Editor.isText(n), split: true }
+              );
+            }
+          }}
+          className={`p-2 hover:bg-gray-50 ${isFormatActive(editor, format) ? 'bg-gray-100' : ''}`}
+        >
+          <Icon size={16} />
+        </button>
+      );
+    };
+
     return (
-      <button
-        type="button"
-        onMouseDown={(e) => {
-          e.preventDefault();
-          if (isBlock) {
-            Transforms.setNodes(editor, { type: format });
-          } else {
-            const isActive = isFormatActive(editor, format);
-            Transforms.setNodes(
-              editor,
-              { [format]: !isActive },
-              { match: (n) => Editor.isText(n), split: true }
-            );
-          }
-        }}
-        className={`p-2 hover:bg-gray-50 ${isFormatActive(editor, format) ? 'bg-gray-100' : ''}`}
-      >
-        <Icon size={16} />
-      </button>
-    );
-  };
-
-  const isFormatActive = (editor: Editor, format: string) => {
-    const [match] = Editor.nodes(editor, {
-      match: (n) => n[format] === true,
-      mode: 'all',
-    });
-    return !!match;
-  };
-
-  const handleChange = (value: Descendant[]) => {
-    updateElement(element.id, {
-      richtext: { ...element.richtext!, content: value }
-    });
-  };
-
-  const style = {
-    fontFamily: formSettings.fontFamily,
-    color: formSettings.textColor,
-    textAlign: element.richtext?.align || 'left',
-  };
-
-  return (
-    <div className="rich-text-editor">
       <div className="flex items-center gap-1 mb-2 border border-gray-200 rounded-md divide-x">
         <div className="flex items-center">
           <ToolbarButton format="bold" icon={Bold} />
@@ -141,9 +121,34 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
           </button>
         </div>
       </div>
+    );
+  };
 
-      <div style={style}>
-        <Slate editor={editor} value={initialValue} onChange={handleChange}>
+  const isFormatActive = (editor: Editor, format: string) => {
+    const [match] = Editor.nodes(editor, {
+      match: (n) => n[format] === true,
+      mode: 'all',
+    });
+    return !!match;
+  };
+
+  const handleChange = (value: Descendant[]) => {
+    updateElement(element.id, {
+      richtext: { ...element.richtext!, content: value }
+    });
+  };
+
+  const style = {
+    fontFamily: formSettings.fontFamily,
+    color: formSettings.textColor,
+    textAlign: element.richtext?.align || 'left',
+  };
+
+  return (
+    <div className="rich-text-editor">
+      <Slate editor={editor} value={initialValue} onChange={handleChange}>
+        <Toolbar />
+        <div style={style}>
           <Editable
             className="min-h-[100px] p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#2D2D85] focus:border-transparent"
             placeholder="Enter text here..."
@@ -172,8 +177,8 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
               return <span {...props.attributes}>{children}</span>;
             }, [])}
           />
-        </Slate>
-      </div>
+        </div>
+      </Slate>
     </div>
   );
 };
