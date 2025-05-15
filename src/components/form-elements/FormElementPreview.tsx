@@ -118,6 +118,12 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
       case 'header':
         const headerStyle = {
           textAlign: element.header?.align || 'left',
+          color: element.header?.color,
+          fontStyle: element.header?.italic ? 'italic' : 'normal',
+          fontWeight: element.header?.bold ? 'bold' : 'normal',
+          whiteSpace: 'pre-wrap',
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word'
         };
         const getHeaderSize = () => {
           switch (element.header?.level) {
@@ -132,29 +138,18 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
         };
         return (
           <div 
-            className={`${getHeaderSize()} font-semibold`}
+            className={`${getHeaderSize()} whitespace-pre-wrap break-words`}
             style={headerStyle}
           >
             {element.label}
           </div>
-        );
-      case 'richtext':
-        const richtextStyle = {
-          textAlign: element.richtext?.align || 'left',
-        };
-        return (
-          <div 
-            className="prose max-w-none"
-            style={richtextStyle}
-            dangerouslySetInnerHTML={{ __html: element.label }}
-          />
         );
       default:
         return <div>Unknown element type</div>;
     }
   };
 
-  if (element.type === 'header' || element.type === 'richtext') {
+  if (element.type === 'header') {
     return renderElementByType();
   }
 
