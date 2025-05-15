@@ -85,6 +85,42 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
         ></textarea>
       </div>
 
+      <div className="flex items-center justify-between py-3">
+        <div>
+          <label className="text-sm font-medium text-gray-700 block">
+            Show Tooltip
+          </label>
+          <p className="text-xs text-gray-500 mt-1">
+            Display a help icon with additional information
+          </p>
+        </div>
+        <label className="toggle-switch">
+          <input
+            type="checkbox"
+            name="showTooltip"
+            checked={element.showTooltip}
+            onChange={handleCheckboxChange}
+          />
+          <div className="toggle-switch-track">
+            <div className="toggle-switch-thumb"></div>
+          </div>
+        </label>
+      </div>
+
+      {element.showTooltip && (
+        <div>
+          <label className="label">Tooltip Text</label>
+          <textarea
+            name="tooltipText"
+            value={element.tooltipText || ''}
+            onChange={handleChange}
+            className="input"
+            rows={2}
+            placeholder="Enter tooltip text..."
+          ></textarea>
+        </div>
+      )}
+
       <div className="flex items-center">
         <input
           type="checkbox"
