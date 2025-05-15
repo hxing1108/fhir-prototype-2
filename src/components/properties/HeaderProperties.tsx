@@ -36,6 +36,7 @@ const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ element }) => {
           value={element.label}
           onChange={handleChange}
           className="input"
+          placeholder="Enter heading text..."
         />
       </div>
 

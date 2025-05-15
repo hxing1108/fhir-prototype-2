@@ -7,6 +7,7 @@ import CheckboxProperties from './properties/CheckboxProperties';
 import RadioProperties from './properties/RadioProperties';
 import GroupProperties from './properties/GroupProperties';
 import FormProperties from './properties/FormProperties';
+import HeaderProperties from './properties/HeaderProperties';
 
 const PropertiesSidebar: React.FC = () => {
   const { elements, selectedElementId, previewMode } = useFormContext();
@@ -47,6 +48,8 @@ const PropertiesSidebar: React.FC = () => {
         return <RadioProperties element={selectedElement} />;
       case 'group':
         return <GroupProperties element={selectedElement} />;
+      case 'header':
+        return <HeaderProperties element={selectedElement} />;
       default:
         return <div>Select an element to edit its properties</div>;
     }
