@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormElement } from '../../types/form';
+import { HelpCircle } from 'lucide-react';
 
 interface FormElementPreviewProps {
   element: FormElement;
@@ -128,10 +129,23 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
             {index}.
           </span>
         )}
-        <label className={`${groupTitleAsHeader && element.type === 'group' ? 'text-xl font-semibold' : 'label'}`}>
-          {element.label}
-          {element.required && <span className="text-error-500 ml-1">*</span>}
-        </label>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            {element.required && <span className="text-error-500">*</span>}
+            {element.showTooltip && (
+              <div className="relative group/tooltip">
+                <HelpCircle size={16} className="text-gray-400" />
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap z-50">
+                  {element.tooltipText || 'Tooltip text'}
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                </div>
+              </div>
+            )}
+          </div>
+          <label className={`${groupTitleAsHeader && element.type === 'group' ? 'text-xl font-semibold' : 'label'}`}>
+            {element.label}
+          </label>
+        </div>
       </div>
       {element.description && (
         <p className="text-sm text-gray-500 mb-1">{element.description}</p>
