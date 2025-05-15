@@ -7,11 +7,23 @@ export type FormElementType =
   | 'checkbox' 
   | 'radio' 
   | 'date'
-  | 'group';
+  | 'group'
+  | 'header'
+  | 'richtext';
 
 export interface FormElementOption {
   value: string;
   label: string;
+}
+
+export interface HeaderElement {
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+  align: 'left' | 'center' | 'right';
+}
+
+export interface RichTextElement {
+  content: any[];
+  align: 'left' | 'center' | 'right' | 'justify';
 }
 
 export interface FormElement {
@@ -28,9 +40,11 @@ export interface FormElement {
   min?: number;
   max?: number;
   pattern?: string;
-  elements?: FormElement[]; // For group elements
+  elements?: FormElement[];
   showTooltip?: boolean;
   tooltipText?: string;
+  header?: HeaderElement;
+  richtext?: RichTextElement;
 }
 
 export interface FormSettings {
