@@ -8,8 +8,7 @@ export type FormElementType =
   | 'radio' 
   | 'date'
   | 'group'
-  | 'header'
-  | 'richtext';
+  | 'header';
 
 export interface FormElementOption {
   value: string;
@@ -19,11 +18,6 @@ export interface FormElementOption {
 export interface HeaderElement {
   level: 1 | 2 | 3 | 4 | 5 | 6;
   align: 'left' | 'center' | 'right';
-}
-
-export interface RichTextElement {
-  content: any[];
-  align: 'left' | 'center' | 'right' | 'justify';
 }
 
 export interface FormElement {
@@ -44,14 +38,4 @@ export interface FormElement {
   showTooltip?: boolean;
   tooltipText?: string;
   header?: HeaderElement;
-  richtext?: RichTextElement;
-}
-
-export interface FormSettings {
-  backgroundColor: string;
-  textColor: string;
-  groupTitleAsHeader: boolean;
-  showQuestionNumbers: boolean;
-  fontFamily: string;
-  fontSize: string;
 }

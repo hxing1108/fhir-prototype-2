@@ -10,8 +10,7 @@ import {
   CalendarDays,
   Search,
   FolderPlus,
-  Heading,
-  Type as TextIcon
+  Heading
 } from 'lucide-react';
 import { useFormContext } from '../context/FormContext';
 import { FormElementType } from '../types/form';
@@ -39,7 +38,6 @@ const ElementsSidebar: React.FC = () => {
 
   const elementTypes = [
     { type: 'header' as FormElementType, icon: <Heading size={18} />, label: 'Header Text' },
-    { type: 'richtext' as FormElementType, icon: <TextIcon size={18} />, label: 'Rich Text' },
     { type: 'text' as FormElementType, icon: <Type size={18} />, label: 'Text Field' },
     { type: 'textarea' as FormElementType, icon: <AlignLeft size={18} />, label: 'Text Area' },
     { type: 'number' as FormElementType, icon: <Hash size={18} />, label: 'Number' },
@@ -94,5 +92,3 @@ const ElementsSidebar: React.FC = () => {
     </div>
   );
 };
-
-export default ElementsSidebar;

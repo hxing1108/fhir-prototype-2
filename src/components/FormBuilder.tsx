@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautif
 import { useFormContext } from '../context/FormContext';
 import FormElement from './form-elements/FormElement';
 import FormElementPreview from './form-elements/FormElementPreview';
-import { Plus, Type, AlignLeft, Hash, Mail, List, CheckSquare, Circle, CalendarDays, FolderPlus, ChevronDown } from 'lucide-react';
+import { Plus, Type, AlignLeft, Hash, Mail, List, CheckSquare, Circle, CalendarDays, FolderPlus, ChevronDown, Heading } from 'lucide-react';
 import { FormElementType } from '../types/form';
 
 const FormBuilder: React.FC = () => {
@@ -48,6 +48,7 @@ const FormBuilder: React.FC = () => {
   };
 
   const elementTypes = [
+    { type: 'header' as FormElementType, icon: <Heading size={16} />, label: 'Header Text' },
     { type: 'text' as FormElementType, icon: <Type size={16} />, label: 'Text Field' },
     { type: 'textarea' as FormElementType, icon: <AlignLeft size={16} />, label: 'Text Area' },
     { type: 'number' as FormElementType, icon: <Hash size={16} />, label: 'Number' },
@@ -80,7 +81,6 @@ const FormBuilder: React.FC = () => {
   };
 
   const handleFormBodyClick = (e: React.MouseEvent) => {
-    // Only select form body if clicking directly on it, not on child elements
     if (e.target === e.currentTarget) {
       setSelectedElementId(null);
     }
@@ -241,5 +241,3 @@ const FormBuilder: React.FC = () => {
     </div>
   );
 };
-
-export default FormBuilder;
