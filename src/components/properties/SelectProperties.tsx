@@ -3,6 +3,7 @@ import { IFormElement, FormElementOption } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { Plus, Trash2, GripVertical } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { Switch } from '@headlessui/react';
 
 interface SelectPropertiesProps {
   element: IFormElement;
@@ -88,7 +89,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
       <div className="flex items-center justify-between py-3">
         <div>
           <label className="text-sm font-medium text-gray-700 block">
-            Show Tooltip
+            Show tooltip for question
           </label>
           <p className="text-xs text-gray-500 mt-1">
             Display a help icon with additional information

@@ -15,7 +15,7 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
   showNumbers = false,
   groupTitleAsHeader = false
 }) => {
-  // Mapping from fontSize keys to Tailwind CSS classes - Co-locate for clarity or import from a shared constants file
+  // Mapping from fontSize keys to Tailwind CSS classes
   const fontSizeKeyToClassMap: Record<string, string> = {
     h1: 'text-4xl',
     h2: 'text-3xl',
@@ -24,7 +24,7 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
     h5: 'text-lg',
     h6: 'text-base',
   };
-  const defaultFontSizeKey = 'h3'; // Corresponds to text-2xl for heading mode if no size is set
+  const defaultFontSizeKey = 'h3'; 
   const defaultRawFontSizeClass = fontSizeKeyToClassMap[defaultFontSizeKey];
 
   // State for the free text input value and whether "Other" is checked
@@ -109,6 +109,15 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
                   defaultChecked={Array.isArray(element.defaultValue) && element.defaultValue.includes(option.value)}
                   className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
                 />
+                {option.showOptionTooltip && option.optionTooltipText && (
+                  <div className="relative group/tooltip flex-shrink-0 ml-1.5 mr-0.5">
+                    <HelpCircle size={14} className="text-gray-400" />
+                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap z-50 min-w-max max-w-xs">
+                      {option.optionTooltipText}
+                      <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
+                )}
                 <label
                   htmlFor={`preview-${element.id}-${optionIndex}`}
                   className="ml-2 text-sm text-gray-700"
@@ -152,17 +161,27 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
       case 'radio':
         return (
           <div className="space-y-2">
-            {element.options?.map((option, index) => (
-              <div key={index} className="flex items-center">
+            {element.options?.map((option, radioIndex) => (
+              <div key={radioIndex} className="flex items-center">
                 <input
                   type="radio"
-                  id={`preview-${element.id}-${index}`}
+                  id={`preview-${element.id}-${radioIndex}`}
                   name={element.id}
                   value={option.value}
+                  defaultChecked={element.defaultValue === option.value}
                   className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300"
                 />
+                {option.showOptionTooltip && option.optionTooltipText && (
+                  <div className="relative group/tooltip flex-shrink-0 ml-1.5 mr-0.5">
+                    <HelpCircle size={14} className="text-gray-400" />
+                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap z-50 min-w-max max-w-xs">
+                      {option.optionTooltipText}
+                      <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
+                )}
                 <label
-                  htmlFor={`preview-${element.id}-${index}`}
+                  htmlFor={`preview-${element.id}-${radioIndex}`}
                   className="ml-2 text-sm text-gray-700"
                 >
                   {option.label}
@@ -190,37 +209,30 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
         const headerConfig = element.header;
         const displayMode = headerConfig?.displayMode || 'heading';
         const fontSizeKey = headerConfig?.fontSize || defaultFontSizeKey;
-        
-        // Determine fontSizeClass: empty for rich text, calculated for heading
         const fontSizeClass = displayMode === 'heading' 
                               ? (fontSizeKeyToClassMap[fontSizeKey] || defaultRawFontSizeClass)
                               : '';
-
         const previewHeaderStyle: React.CSSProperties = {
           textAlign: headerConfig?.align || 'left',
           color: headerConfig?.color,
           fontStyle: headerConfig?.italic ? 'italic' : 'normal',
           fontWeight: headerConfig?.bold ? 'bold' : 'normal',
-          width: '100%', // Ensure full width for alignment
+          width: '100%',
           wordWrap: 'break-word',
           overflowWrap: 'break-word',
-          // whiteSpace: 'pre-wrap', // Consider if needed for rich text vs. heading text
         };
-
         if (displayMode === 'richtext') {
           return (
             <div 
-              className={`w-full ${fontSizeClass}`} // fontSizeClass will be empty string
+              className={`w-full ${fontSizeClass}`}
               style={previewHeaderStyle}
               dangerouslySetInnerHTML={{ __html: element.label || '' }}
             />
           );
         }
-        
-        // Default to 'heading' mode
         return (
           <div 
-            className={`w-full ${fontSizeClass} whitespace-pre-wrap break-words`} // Added whitespace-pre-wrap & break-words for heading text
+            className={`w-full ${fontSizeClass} whitespace-pre-wrap break-words`}
             style={previewHeaderStyle}
           >
             {element.label}

@@ -15,6 +15,8 @@ export type FormElementType =
 export interface FormElementOption {
   value: string;
   label: string;
+  showOptionTooltip?: boolean;
+  optionTooltipText?: string;
 }
 
 export interface HeaderElement {
