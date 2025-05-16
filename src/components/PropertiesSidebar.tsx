@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFormContext } from '../context/FormContext';
+import { IFormElement } from '../../types/form';
 import TextFieldProperties from './properties/TextFieldProperties';
 import TextAreaProperties from './properties/TextAreaProperties';
 import SelectProperties from './properties/SelectProperties';
@@ -9,12 +10,13 @@ import GroupProperties from './properties/GroupProperties';
 import FormProperties from './properties/FormProperties';
 import HeaderProperties from './properties/HeaderProperties';
 import ImageProperties from './properties/ImageProperties';
+import YesNoProperties from './properties/YesNoProperties';
 
 const PropertiesSidebar: React.FC = () => {
   const { elements, selectedElementId, previewMode } = useFormContext();
 
-  const findSelectedElement = (elements: FormElement[]): FormElement | undefined => {
-    for (const element of elements) {
+  const findSelectedElement = (els: IFormElement[]): IFormElement | undefined => {
+    for (const element of els) {
       if (element.id === selectedElementId) {
         return element;
       }
@@ -53,6 +55,8 @@ const PropertiesSidebar: React.FC = () => {
         return <HeaderProperties element={selectedElement} />;
       case 'image':
         return <ImageProperties element={selectedElement} />;
+      case 'yesNo':
+        return <YesNoProperties element={selectedElement} />;
       default:
         return <div>Select an element to edit its properties</div>;
     }

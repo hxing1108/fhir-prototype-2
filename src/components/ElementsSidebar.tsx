@@ -11,7 +11,8 @@ import {
   Search,
   FolderPlus,
   Heading,
-  Image
+  Image,
+  CheckCircle
 } from 'lucide-react';
 import { useFormContext } from '../context/FormContext';
 import { FormElementType } from '../types/form';
@@ -46,6 +47,7 @@ const ElementsSidebar: React.FC = () => {
     { type: 'select' as FormElementType, icon: <List size={18} />, label: 'Dropdown' },
     { type: 'checkbox' as FormElementType, icon: <CheckSquare size={18} />, label: 'Checkbox Group' },
     { type: 'radio' as FormElementType, icon: <Circle size={18} />, label: 'Radio Group' },
+    { type: 'yesNo' as FormElementType, icon: <CheckCircle size={18} />, label: 'Yes/No Question' },
     { type: 'date' as FormElementType, icon: <CalendarDays size={18} />, label: 'Date' },
     { type: 'group' as FormElementType, icon: <FolderPlus size={18} />, label: 'Question Group' },
     { type: 'image' as FormElementType, icon: <Image size={18} />, label: 'Image' },

@@ -64,6 +64,9 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
       elements: type === 'group' ? [] : undefined,
       header: type === 'header' ? { level: 2, align: 'left' } : undefined,
       image: type === 'image' ? { src: '', alt: '', width: '100%', height: 'auto', align: 'left' } : undefined,
+      yesLabel: type === 'yesNo' ? 'Yes' : undefined,
+      noLabel: type === 'yesNo' ? 'No' : undefined,
+      defaultValue: type === 'yesNo' ? undefined : (type === 'checkbox' ? [] : undefined)
     };
     
     if (parentId) {
@@ -168,6 +171,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
       case 'group': return 'Question Group';
       case 'header': return 'Header';
       case 'image': return '';
+      case 'yesNo': return 'Yes/No Question';
       default: return 'New Field';
     }
   };
@@ -180,6 +184,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
       case 'email': return 'Enter your email...';
       case 'date': return 'Select a date...';
       case 'header': return 'Enter heading text...';
+      case 'yesNo': return 'Enter your question here...';
       default: return '';
     }
   };

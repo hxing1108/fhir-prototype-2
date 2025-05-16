@@ -9,7 +9,8 @@ export type FormElementType =
   | 'date'
   | 'group'
   | 'header'
-  | 'image';
+  | 'image'
+  | 'yesNo';
 
 export interface FormElementOption {
   value: string;
@@ -51,6 +52,8 @@ export interface IFormElement {
   tooltipText?: string;
   header?: HeaderElement;
   image?: ImageElement;
+  yesLabel?: string;
+  noLabel?: string;
 }
 
 export interface FormSettings {

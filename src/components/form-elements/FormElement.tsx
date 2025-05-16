@@ -11,6 +11,7 @@ import RadioGroupElement from './RadioGroupElement';
 import GroupElement from './GroupElement';
 import HeaderElement from './HeaderElement';
 import ImageElement from './ImageElement';
+import YesNoElement from './YesNoElement';
 
 interface FormElementProps {
   element: FormElementType;
@@ -30,6 +31,17 @@ const FormElement: React.FC<FormElementProps> = ({
   groupTitleAsHeader = false
 }) => {
   const { removeElement, selectedElementId, setSelectedElementId, updateElement, formSettings } = useFormContext();
+
+  if (element.type === 'yesNo') {
+    return (
+      <YesNoElement 
+        element={element} 
+        dragHandleProps={dragHandleProps} 
+        index={index} 
+        showNumbers={showNumbers} 
+      />
+    );
+  }
 
   const renderElementByType = () => {
     switch (element.type) {

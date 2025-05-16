@@ -192,11 +192,47 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
           {element.label}
           {element.required && <span className="text-error-500 ml-1">*</span>}
         </label>
+        {element.type === 'yesNo' && (() => {
+          const yesVal = element.yesLabel || 'Yes';
+          const noVal = element.noLabel || 'No';
+          return (
+            <div className="flex items-center space-x-3 flex-shrink-0 ml-2">
+              <div className="flex items-center">
+                <input 
+                  type="radio" 
+                  id={`preview-${element.id}-yes`} 
+                  name={`preview-${element.id}`} 
+                  value={yesVal} 
+                  checked={element.defaultValue === yesVal}
+                  disabled 
+                  className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300"
+                />
+                <label htmlFor={`preview-${element.id}-yes`} className="ml-2 text-sm text-gray-700">
+                  {yesVal}
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input 
+                  type="radio" 
+                  id={`preview-${element.id}-no`} 
+                  name={`preview-${element.id}`} 
+                  value={noVal} 
+                  checked={element.defaultValue === noVal}
+                  disabled 
+                  className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300"
+                />
+                <label htmlFor={`preview-${element.id}-no`} className="ml-2 text-sm text-gray-700">
+                  {noVal}
+                </label>
+              </div>
+            </div>
+          );
+        })()}
       </div>
       {element.description && (
         <p className="text-sm text-gray-500 mb-1">{element.description}</p>
       )}
-      {renderElementByType()}
+      {element.type !== 'yesNo' && renderElementByType()}
     </div>
   );
 };
