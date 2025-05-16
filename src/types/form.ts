@@ -54,6 +54,9 @@ export interface IFormElement {
   image?: ImageElement;
   yesLabel?: string;
   noLabel?: string;
+  allowFreeText?: boolean;
+  freeTextLabel?: string;
+  freeTextValue?: string;
 }
 
 export interface FormSettings {

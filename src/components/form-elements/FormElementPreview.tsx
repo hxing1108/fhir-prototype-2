@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IFormElement } from '../../types/form';
 import { HelpCircle } from 'lucide-react';
 
@@ -15,6 +15,31 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
   showNumbers = false,
   groupTitleAsHeader = false
 }) => {
+  // State for the free text input value and whether "Other" is checked
+  const initialFreeTextValue = Array.isArray(element.defaultValue) && element.defaultValue.includes(element.freeTextLabel || 'Other:') 
+                                ? (element.freeTextValue || '') 
+                                : '';
+  const initialOtherChecked = Array.isArray(element.defaultValue) && element.defaultValue.includes(element.freeTextLabel || 'Other:');
+
+  const [otherChecked, setOtherChecked] = useState(initialOtherChecked);
+  const [freeTextInput, setFreeTextInput] = useState(initialFreeTextValue);
+
+  // Handle change for the "Other" checkbox
+  const handleOtherCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOtherChecked(e.target.checked);
+    if (!e.target.checked) {
+      setFreeTextInput(''); // Clear text if "Other" is unchecked
+      // Here you might also want to update the form's actual data if this preview were fully interactive
+      // For now, it just manages its own state for rendering.
+    }
+  };
+
+  // Handle change for the free text input
+  const handleFreeTextInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFreeTextInput(e.target.value);
+    // Similarly, update form data if needed
+  };
+
   const renderElementByType = () => {
     switch (element.type) {
       case 'text':
@@ -47,36 +72,69 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
             className="input"
             required={element.required}
           >
-            <option value="" disabled selected>
+            <option value="" disabled selected={!element.defaultValue}>
               {element.placeholder || 'Select an option'}
             </option>
-            {element.options?.map((option, index) => (
-              <option key={index} value={option.value}>
+            {element.options?.map((option, optionIndex) => (
+              <option key={optionIndex} value={option.value} selected={element.defaultValue === option.value}>
                 {option.label}
               </option>
             ))}
           </select>
         );
       case 'checkbox':
+        const freeTextCheckboxId = `preview-${element.id}-freetext-checkbox`;
+        const freeTextActualLabel = element.freeTextLabel || 'Other:';
         return (
           <div className="space-y-2">
-            {element.options?.map((option, index) => (
-              <div key={index} className="flex items-center">
+            {element.options?.map((option, optionIndex) => (
+              <div key={optionIndex} className="flex items-center">
                 <input
                   type="checkbox"
-                  id={`preview-${element.id}-${index}`}
+                  id={`preview-${element.id}-${optionIndex}`}
                   name={element.id}
                   value={option.value}
+                  defaultChecked={Array.isArray(element.defaultValue) && element.defaultValue.includes(option.value)}
                   className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
                 />
                 <label
-                  htmlFor={`preview-${element.id}-${index}`}
+                  htmlFor={`preview-${element.id}-${optionIndex}`}
                   className="ml-2 text-sm text-gray-700"
                 >
                   {option.label}
                 </label>
               </div>
             ))}
+            {element.allowFreeText && (
+              <div className="flex flex-col space-y-1">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id={freeTextCheckboxId}
+                    name={element.id}
+                    value={freeTextActualLabel}
+                    checked={otherChecked}
+                    onChange={handleOtherCheckboxChange}
+                    className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
+                  />
+                  <label
+                    htmlFor={freeTextCheckboxId}
+                    className="ml-2 text-sm text-gray-700"
+                  >
+                    {freeTextActualLabel}
+                  </label>
+                </div>
+                {otherChecked && (
+                  <input
+                    type="text"
+                    value={freeTextInput}
+                    onChange={handleFreeTextInputChange}
+                    placeholder="Please specify..."
+                    className="input ml-6"
+                  />
+                )}
+              </div>
+            )}
           </div>
         );
       case 'radio':

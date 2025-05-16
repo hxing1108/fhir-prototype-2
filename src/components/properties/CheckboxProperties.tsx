@@ -124,6 +124,45 @@ const CheckboxProperties: React.FC<CheckboxPropertiesProps> = ({ element }) => {
         </label>
       </div>
 
+      <div className="flex items-center justify-between py-3">
+        <div>
+          <label className="text-sm font-medium text-gray-700 block">
+            Allow free text input
+          </label>
+          <p className="text-xs text-gray-500 mt-1">
+            Adds an "Other" option with a text field
+          </p>
+        </div>
+        <label className="toggle-switch">
+          <input
+            type="checkbox"
+            name="allowFreeText"
+            checked={!!element.allowFreeText}
+            onChange={handleCheckboxChange}
+          />
+          <div className="toggle-switch-track">
+            <div className="toggle-switch-thumb"></div>
+          </div>
+        </label>
+      </div>
+
+      {element.allowFreeText && (
+        <div>
+          <label htmlFor="freeTextLabel" className="label">
+            Label for free text option
+          </label>
+          <input
+            type="text"
+            id="freeTextLabel"
+            name="freeTextLabel"
+            value={element.freeTextLabel || 'Other:'}
+            onChange={handleChange}
+            className="input"
+            placeholder="e.g., Other:, Please specify:"
+          />
+        </div>
+      )}
+
       <div>
         <label className="label">Options</label>
         <DragDropContext onDragEnd={handleDragEnd}>
