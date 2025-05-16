@@ -4,7 +4,7 @@ import { useFormContext } from '../context/FormContext';
 import FormElement from './form-elements/FormElement';
 import FormElementPreview from './form-elements/FormElementPreview';
 import { Plus, Type, AlignLeft, Hash, Mail, List, CheckSquare, Circle, CalendarDays, FolderPlus, ChevronDown, Heading } from 'lucide-react';
-import { FormElementType } from '../types/form';
+import { FormElementType, IFormElement } from '../types/form';
 
 const FormBuilder: React.FC = () => {
   const { 
@@ -16,6 +16,7 @@ const FormBuilder: React.FC = () => {
     addElement,
     formSettings
   } = useFormContext();
+  console.log('previewMode:', previewMode);
 
   const [showHeaderAddMenu, setShowHeaderAddMenu] = React.useState(false);
   const [showEmptyStateAddMenu, setShowEmptyStateAddMenu] = React.useState(false);
@@ -67,7 +68,7 @@ const FormBuilder: React.FC = () => {
     setShowEmptyStateAddMenu(false);
   };
 
-  const findSelectedGroup = (elements: FormElement[]): FormElement | null => {
+  const findSelectedGroup = (elements: IFormElement[]): IFormElement | null => {
     for (const element of elements) {
       if (element.id === selectedElementId && element.type === 'group') {
         return element;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormElement as FormElementType } from '../../types/form';
+import { IFormElement as FormElementType } from '../../types/form';
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 import { Trash2, GripVertical, HelpCircle } from 'lucide-react';
 import { useFormContext } from '../../context/FormContext';
@@ -14,7 +14,7 @@ import ImageElement from './ImageElement';
 
 interface FormElementProps {
   element: FormElementType;
-  dragHandleProps?: DraggableProvidedDragHandleProps;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null;
   isNested?: boolean;
   index?: number;
   showNumbers?: boolean;

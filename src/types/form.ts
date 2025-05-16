@@ -32,7 +32,7 @@ export interface ImageElement {
   align: 'left' | 'center' | 'right';
 }
 
-export interface FormElement {
+export interface IFormElement {
   id: string;
   type: FormElementType;
   label: string;
@@ -46,7 +46,7 @@ export interface FormElement {
   min?: number;
   max?: number;
   pattern?: string;
-  elements?: FormElement[];
+  elements?: IFormElement[];
   showTooltip?: boolean;
   tooltipText?: string;
   header?: HeaderElement;
