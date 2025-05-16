@@ -15,6 +15,18 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
   showNumbers = false,
   groupTitleAsHeader = false
 }) => {
+  // Mapping from fontSize keys to Tailwind CSS classes - Co-locate for clarity or import from a shared constants file
+  const fontSizeKeyToClassMap: Record<string, string> = {
+    h1: 'text-4xl',
+    h2: 'text-3xl',
+    h3: 'text-2xl',
+    h4: 'text-xl',
+    h5: 'text-lg',
+    h6: 'text-base',
+  };
+  const defaultFontSizeKey = 'h3'; // Corresponds to text-2xl for heading mode if no size is set
+  const defaultRawFontSizeClass = fontSizeKeyToClassMap[defaultFontSizeKey];
+
   // State for the free text input value and whether "Other" is checked
   const initialFreeTextValue = Array.isArray(element.defaultValue) && element.defaultValue.includes(element.freeTextLabel || 'Other:') 
                                 ? (element.freeTextValue || '') 
@@ -175,29 +187,41 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
           </div>
         );
       case 'header':
-        const headerStyle: React.CSSProperties = {
-          textAlign: element.header?.align || 'left',
-          color: element.header?.color,
-          fontStyle: element.header?.italic ? 'italic' : 'normal',
-          fontWeight: element.header?.bold ? 'bold' : 'normal',
-          whiteSpace: 'pre-wrap',
+        const headerConfig = element.header;
+        const displayMode = headerConfig?.displayMode || 'heading';
+        const fontSizeKey = headerConfig?.fontSize || defaultFontSizeKey;
+        
+        // Determine fontSizeClass: empty for rich text, calculated for heading
+        const fontSizeClass = displayMode === 'heading' 
+                              ? (fontSizeKeyToClassMap[fontSizeKey] || defaultRawFontSizeClass)
+                              : '';
+
+        const previewHeaderStyle: React.CSSProperties = {
+          textAlign: headerConfig?.align || 'left',
+          color: headerConfig?.color,
+          fontStyle: headerConfig?.italic ? 'italic' : 'normal',
+          fontWeight: headerConfig?.bold ? 'bold' : 'normal',
+          width: '100%', // Ensure full width for alignment
+          wordWrap: 'break-word',
           overflowWrap: 'break-word',
+          // whiteSpace: 'pre-wrap', // Consider if needed for rich text vs. heading text
         };
-        const getHeaderSize = () => {
-          switch (element.header?.level) {
-            case 1: return 'text-4xl';
-            case 2: return 'text-3xl';
-            case 3: return 'text-2xl';
-            case 4: return 'text-xl';
-            case 5: return 'text-lg';
-            case 6: return 'text-base';
-            default: return 'text-2xl';
-          }
-        };
+
+        if (displayMode === 'richtext') {
+          return (
+            <div 
+              className={`w-full ${fontSizeClass}`} // fontSizeClass will be empty string
+              style={previewHeaderStyle}
+              dangerouslySetInnerHTML={{ __html: element.label || '' }}
+            />
+          );
+        }
+        
+        // Default to 'heading' mode
         return (
           <div 
-            className={`${getHeaderSize()} whitespace-pre-wrap break-words`}
-            style={headerStyle}
+            className={`w-full ${fontSizeClass} whitespace-pre-wrap break-words`} // Added whitespace-pre-wrap & break-words for heading text
+            style={previewHeaderStyle}
           >
             {element.label}
           </div>

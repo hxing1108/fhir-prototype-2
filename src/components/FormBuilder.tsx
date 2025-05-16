@@ -62,7 +62,7 @@ const FormBuilder: React.FC = () => {
   };
 
   const elementTypes = [
-    { type: 'header' as FormElementType, icon: <Heading size={16} />, label: 'Header Text' },
+    { type: 'header' as FormElementType, icon: <Heading size={16} />, label: 'Header' },
     { type: 'text' as FormElementType, icon: <Type size={16} />, label: 'Text Field' },
     { type: 'textarea' as FormElementType, icon: <AlignLeft size={16} />, label: 'Text Area' },
     { type: 'number' as FormElementType, icon: <Hash size={16} />, label: 'Number' },
