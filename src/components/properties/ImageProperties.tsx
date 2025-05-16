@@ -1,11 +1,13 @@
 import React from 'react';
-import { FormElement } from '../../types/form';
+import { IFormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { AlignLeft, AlignCenter, AlignRight, Upload } from 'lucide-react';
 
 interface ImagePropertiesProps {
-  element: FormElement;
+  element: IFormElement;
 }
+
+const defaultImageProps = { src: '', alt: '', width: '100%', height: 'auto', align: 'left' as const };
 
 const ImageProperties: React.FC<ImagePropertiesProps> = ({ element }) => {
   const { updateElement } = useFormContext();
@@ -19,7 +21,7 @@ const ImageProperties: React.FC<ImagePropertiesProps> = ({ element }) => {
         const src = e.target?.result as string;
         updateElement(element.id, {
           image: {
-            ...element.image!,
+            ...(element.image || defaultImageProps),
             src,
             alt: file.name
           }
@@ -31,13 +33,13 @@ const ImageProperties: React.FC<ImagePropertiesProps> = ({ element }) => {
 
   const handleAlignmentChange = (align: 'left' | 'center' | 'right') => {
     updateElement(element.id, {
-      image: { ...element.image!, align }
+      image: { ...(element.image || defaultImageProps), align }
     });
   };
 
   const handleSizeChange = (dimension: 'width' | 'height', value: string) => {
     updateElement(element.id, {
-      image: { ...element.image!, [dimension]: value }
+      image: { ...(element.image || defaultImageProps), [dimension]: value }
     });
   };
 
@@ -84,9 +86,9 @@ const ImageProperties: React.FC<ImagePropertiesProps> = ({ element }) => {
         <label className="label">Alt Text</label>
         <input
           type="text"
-          value={element.image?.alt || ''}
+          value={(element.image || defaultImageProps).alt || ''}
           onChange={(e) => updateElement(element.id, {
-            image: { ...element.image!, alt: e.target.value }
+            image: { ...(element.image || defaultImageProps), alt: e.target.value }
           })}
           className="input"
           placeholder="Enter image description..."
@@ -98,7 +100,7 @@ const ImageProperties: React.FC<ImagePropertiesProps> = ({ element }) => {
           <label className="label">Width</label>
           <input
             type="text"
-            value={element.image?.width || '100%'}
+            value={(element.image || defaultImageProps).width || ''}
             onChange={(e) => handleSizeChange('width', e.target.value)}
             className="input"
             placeholder="e.g., 100%, 300px"
@@ -108,7 +110,7 @@ const ImageProperties: React.FC<ImagePropertiesProps> = ({ element }) => {
           <label className="label">Height</label>
           <input
             type="text"
-            value={element.image?.height || 'auto'}
+            value={(element.image || defaultImageProps).height || ''}
             onChange={(e) => handleSizeChange('height', e.target.value)}
             className="input"
             placeholder="e.g., auto, 200px"

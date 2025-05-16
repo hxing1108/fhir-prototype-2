@@ -1,9 +1,9 @@
 import React from 'react';
-import { FormElement } from '../../types/form';
+import { IFormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 
 interface GroupPropertiesProps {
-  element: FormElement;
+  element: IFormElement;
 }
 
 const GroupProperties: React.FC<GroupPropertiesProps> = ({ element }) => {
@@ -24,7 +24,7 @@ const GroupProperties: React.FC<GroupPropertiesProps> = ({ element }) => {
         <input
           type="text"
           name="label"
-          value={element.label}
+          value={element.label || ''}
           onChange={handleChange}
           className="input"
         />
@@ -54,7 +54,7 @@ const GroupProperties: React.FC<GroupPropertiesProps> = ({ element }) => {
           <input
             type="checkbox"
             name="showTooltip"
-            checked={element.showTooltip}
+            checked={!!element.showTooltip}
             onChange={handleCheckboxChange}
           />
           <div className="toggle-switch-track">

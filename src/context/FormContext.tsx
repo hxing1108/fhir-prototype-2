@@ -1,15 +1,16 @@
 import React, { createContext, useContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { FormElement, FormElementType, FormSettings } from '../types/form';
+import { IFormElement, FormElementType, FormSettings } from '../types/form';
 
 interface FormContextType {
-  elements: FormElement[];
-  addElement: (type: FormElementType, parentId?: string) => FormElement;
-  updateElement: (id: string, updates: Partial<FormElement>) => void;
+  elements: IFormElement[];
+  addElement: (type: FormElementType, parentId?: string) => IFormElement;
+  updateElement: (id: string, updates: Partial<IFormElement>) => void;
   removeElement: (id: string) => void;
   selectedElementId: string | null;
   setSelectedElementId: (id: string | null) => void;
   moveElement: (fromIndex: number, toIndex: number) => void;
+  moveElementInGroup: (groupId: string, fromIndex: number, toIndex: number) => void;
   previewMode: boolean;
   togglePreviewMode: () => void;
   formSettings: FormSettings;
@@ -33,6 +34,7 @@ const defaultFormContext: FormContextType = {
   selectedElementId: null,
   setSelectedElementId: () => {},
   moveElement: () => {},
+  moveElementInGroup: () => {},
   previewMode: false,
   togglePreviewMode: () => {},
   formSettings: defaultFormSettings,
@@ -44,13 +46,13 @@ const FormContext = createContext<FormContextType>(defaultFormContext);
 export const useFormContext = () => useContext(FormContext);
 
 export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [elements, setElements] = useState<FormElement[]>([]);
+  const [elements, setElements] = useState<IFormElement[]>([]);
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
   const [formSettings, setFormSettings] = useState<FormSettings>(defaultFormSettings);
 
-  const addElement = (type: FormElementType, parentId?: string): FormElement => {
-    const newElement: FormElement = {
+  const addElement = (type: FormElementType, parentId?: string): IFormElement => {
+    const newElement: IFormElement = {
       id: uuidv4(),
       type,
       label: getDefaultLabel(type),
@@ -82,8 +84,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return newElement;
   };
 
-  const updateElement = (id: string, updates: Partial<FormElement>) => {
-    const updateElementRecursive = (elements: FormElement[]): FormElement[] => {
+  const updateElement = (id: string, updates: Partial<IFormElement>) => {
+    const updateElementRecursive = (elements: IFormElement[]): IFormElement[] => {
       return elements.map(element => {
         if (element.id === id) {
           return { ...element, ...updates };
@@ -102,7 +104,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const removeElement = (id: string) => {
-    const removeElementRecursive = (elements: FormElement[]): FormElement[] => {
+    const removeElementRecursive = (elements: IFormElement[]): IFormElement[] => {
       return elements.filter(element => {
         if (element.id === id) {
           return false;
@@ -125,6 +127,24 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [removed] = newElements.splice(fromIndex, 1);
     newElements.splice(toIndex, 0, removed);
     setElements(newElements);
+  };
+
+  const moveElementInGroup = (groupId: string, fromIndex: number, toIndex: number) => {
+    setElements(prevElements => {
+      const newElements = [...prevElements];
+      const updateGroupElements = (currentElements: IFormElement[]): IFormElement[] => {
+        return currentElements.map(el => {
+          if (el.id === groupId && el.elements) {
+            const groupElements = [...el.elements];
+            const [removed] = groupElements.splice(fromIndex, 1);
+            groupElements.splice(toIndex, 0, removed);
+            return { ...el, elements: groupElements };
+          }
+          return el;
+        });
+      };
+      return updateGroupElements(newElements);
+    });
   };
 
   const togglePreviewMode = () => {
@@ -174,6 +194,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
         selectedElementId,
         setSelectedElementId,
         moveElement,
+        moveElementInGroup,
         previewMode,
         togglePreviewMode,
         formSettings,

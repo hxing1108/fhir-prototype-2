@@ -1,10 +1,10 @@
 import React from 'react';
-import { FormElement } from '../../types/form';
+import { IFormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { AlignLeft, AlignCenter, AlignRight, Bold, Italic } from 'lucide-react';
 
 interface HeaderPropertiesProps {
-  element: FormElement;
+  element: IFormElement;
 }
 
 const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ element }) => {
@@ -16,26 +16,26 @@ const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ element }) => {
 
   const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updateElement(element.id, {
-      header: { ...element.header!, level: parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5 | 6 }
+      header: { ...(element.header || { level: 2, align: 'left' }), level: parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5 | 6 }
     });
   };
 
   const handleAlignmentChange = (alignment: 'left' | 'center' | 'right') => {
     updateElement(element.id, {
-      header: { ...element.header!, align: alignment }
+      header: { ...(element.header || { level: 2, align: 'left' }), align: alignment }
     });
   };
 
   const handleColorChange = (color: string) => {
     updateElement(element.id, {
-      header: { ...element.header!, color }
+      header: { ...(element.header || { level: 2, align: 'left' }), color }
     });
   };
 
   const toggleStyle = (style: 'bold' | 'italic') => {
     updateElement(element.id, {
       header: { 
-        ...element.header!, 
+        ...(element.header || { level: 2, align: 'left' }), 
         [style]: !element.header?.[style]
       }
     });
@@ -48,7 +48,7 @@ const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ element }) => {
         <input
           type="text"
           name="label"
-          value={element.label}
+          value={element.label || ''}
           onChange={handleChange}
           className="input"
           placeholder="Enter heading text..."

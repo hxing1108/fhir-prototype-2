@@ -1,9 +1,10 @@
 import React from 'react';
-import { FormElement } from '../../types/form';
+import { IFormElement } from '../../types/form';
+import { HelpCircle } from 'lucide-react';
 
 interface FormElementPreviewProps {
-  element: FormElement;
-  index?: number;
+  element: IFormElement;
+  index?: string | number | undefined;
   showNumbers?: boolean;
   groupTitleAsHeader?: boolean;
 }
@@ -116,14 +117,13 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
           </div>
         );
       case 'header':
-        const headerStyle = {
+        const headerStyle: React.CSSProperties = {
           textAlign: element.header?.align || 'left',
           color: element.header?.color,
           fontStyle: element.header?.italic ? 'italic' : 'normal',
           fontWeight: element.header?.bold ? 'bold' : 'normal',
           whiteSpace: 'pre-wrap',
-          wordWrap: 'break-word',
-          overflowWrap: 'break-word'
+          overflowWrap: 'break-word',
         };
         const getHeaderSize = () => {
           switch (element.header?.level) {
@@ -173,13 +173,22 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
 
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mb-1">
         {showNumbers && index && (
-          <span className="text-sm font-medium text-gray-500">
+          <span className="text-sm font-medium text-gray-500 flex-shrink-0">
             {index}.
           </span>
         )}
-        <label className={`${groupTitleAsHeader && element.type === 'group' ? 'text-xl font-semibold' : 'label'}`}>
+        {element.showTooltip && (
+          <div className="relative group/tooltip flex-shrink-0">
+            <HelpCircle size={16} className="text-gray-400" />
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap z-50">
+              {element.tooltipText || 'Tooltip text'}
+              <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+            </div>
+          </div>
+        )}
+        <label className={`${groupTitleAsHeader && element.type === 'group' ? 'text-xl font-semibold' : 'label'} flex-1 min-w-0`}>
           {element.label}
           {element.required && <span className="text-error-500 ml-1">*</span>}
         </label>

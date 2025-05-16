@@ -86,7 +86,7 @@ const FormElement: React.FC<FormElementProps> = ({
       >
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center flex-1 min-w-0">
-            {!isNested && (
+            {dragHandleProps && (
               <div {...dragHandleProps} className="cursor-move p-1 -ml-1 flex-shrink-0">
                 <GripVertical size={16} className="text-gray-400" />
               </div>
@@ -118,7 +118,7 @@ const FormElement: React.FC<FormElementProps> = ({
     >
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center flex-1 min-w-0">
-          {!isNested && (
+          {dragHandleProps && (
             <div {...dragHandleProps} className="cursor-move p-1 -ml-1 flex-shrink-0">
               <GripVertical size={16} className="text-gray-400" />
             </div>

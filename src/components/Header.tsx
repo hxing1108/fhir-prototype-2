@@ -12,8 +12,8 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 text-gray-900 py-2">
-      <div className="w-full px-4 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 text-gray-900 py-2 h-14">
+      <div className="w-full px-4 flex items-center justify-between h-full">
         {/* Left section */}
         <div className="flex items-center space-x-4">
           <button className="flex items-center text-gray-600 hover:text-gray-900">

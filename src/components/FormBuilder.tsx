@@ -12,6 +12,7 @@ const FormBuilder: React.FC = () => {
     selectedElementId, 
     setSelectedElementId, 
     moveElement,
+    moveElementInGroup,
     previewMode,
     addElement,
     formSettings
@@ -38,14 +39,26 @@ const FormBuilder: React.FC = () => {
   }, []);
 
   const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-    
-    const sourceIndex = result.source.index;
-    const destinationIndex = result.destination.index;
-    
-    if (sourceIndex === destinationIndex) return;
-    
-    moveElement(sourceIndex, destinationIndex);
+    const { source, destination, type } = result;
+
+    if (!destination) return;
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    if (source.droppableId === destination.droppableId) {
+      if (source.droppableId === 'form-builder') {
+        moveElement(source.index, destination.index);
+      } else {
+        moveElementInGroup(source.droppableId, source.index, destination.index);
+      }
+    } else {
+      console.log('Moving between different lists is not yet implemented.', result);
+    }
   };
 
   const elementTypes = [

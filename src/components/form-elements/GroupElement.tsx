@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FormElement, FormElementType } from '../../types/form';
+import { IFormElement, FormElementType } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { ChevronDown, Type, AlignLeft, Hash, Mail, List, CheckSquare, Circle, CalendarDays, GripVertical, Trash2, HelpCircle } from 'lucide-react';
 import FormElementComponent from './FormElement';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 interface GroupElementProps {
-  element: FormElement;
+  element: IFormElement;
   dragHandleProps?: any;
   isNested?: boolean;
   showNumbers?: boolean;
@@ -143,18 +144,36 @@ const GroupElement: React.FC<GroupElementProps> = ({
           <p className="text-sm text-gray-500">{element.description}</p>
         )}
 
-        <div className="pl-4 border-l-2 border-gray-200 space-y-4 mt-4">
-          {element.elements?.map((childElement, index) => (
-            <FormElementComponent
-              key={childElement.id}
-              element={childElement}
-              isNested={true}
-              index={showNumbers ? index + 1 : undefined}
-              showNumbers={showNumbers}
-              groupTitleAsHeader={groupTitleAsHeader}
-            />
-          ))}
-        </div>
+        <Droppable droppableId={element.id} type="group-items">
+          {(provided, snapshot) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className={`pl-4 border-l-2 border-gray-200 space-y-4 mt-4 min-h-[50px] ${snapshot.isDraggingOver ? 'bg-blue-50' : ''}`}
+            >
+              {element.elements?.map((childElement, index) => (
+                <Draggable key={childElement.id} draggableId={childElement.id} index={index}>
+                  {(providedDraggable) => (
+                    <div
+                      ref={providedDraggable.innerRef}
+                      {...providedDraggable.draggableProps}
+                    >
+                      <FormElementComponent
+                        element={childElement}
+                        isNested={true}
+                        index={showNumbers ? index + 1 : undefined}
+                        showNumbers={showNumbers}
+                        groupTitleAsHeader={groupTitleAsHeader}
+                        dragHandleProps={providedDraggable.dragHandleProps}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </div>
     );
   }
@@ -244,18 +263,36 @@ const GroupElement: React.FC<GroupElementProps> = ({
         <p className="text-sm text-gray-500">{element.description}</p>
       )}
 
-      <div className="pl-4 border-l-2 border-gray-200 space-y-4 mt-4">
-        {element.elements?.map((childElement, index) => (
-          <FormElementComponent
-            key={childElement.id}
-            element={childElement}
-            isNested={true}
-            index={showNumbers ? index + 1 : undefined}
-            showNumbers={showNumbers}
-            groupTitleAsHeader={groupTitleAsHeader}
-          />
-        ))}
-      </div>
+      <Droppable droppableId={element.id} type="group-items">
+        {(provided, snapshot) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className={`pl-4 border-l-2 border-gray-200 space-y-4 mt-4 min-h-[50px] ${snapshot.isDraggingOver ? 'bg-blue-50' : ''}`}
+          >
+            {element.elements?.map((childElement, index) => (
+              <Draggable key={childElement.id} draggableId={childElement.id} index={index}>
+                {(providedDraggable) => (
+                  <div
+                    ref={providedDraggable.innerRef}
+                    {...providedDraggable.draggableProps}
+                  >
+                    <FormElementComponent
+                      element={childElement}
+                      isNested={true}
+                      index={showNumbers ? index + 1 : undefined}
+                      showNumbers={showNumbers}
+                      groupTitleAsHeader={groupTitleAsHeader}
+                      dragHandleProps={providedDraggable.dragHandleProps}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </div>
   );
 };

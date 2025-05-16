@@ -52,3 +52,12 @@ export interface IFormElement {
   header?: HeaderElement;
   image?: ImageElement;
 }
+
+export interface FormSettings {
+  backgroundColor: string;
+  textColor: string;
+  groupTitleAsHeader: boolean;
+  showQuestionNumbers: boolean;
+  fontFamily: string;
+  fontSize: string;
+}

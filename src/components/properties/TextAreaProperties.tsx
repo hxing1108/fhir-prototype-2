@@ -1,9 +1,9 @@
 import React from 'react';
-import { FormElement } from '../../types/form';
+import { IFormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 
 interface TextAreaPropertiesProps {
-  element: FormElement;
+  element: IFormElement;
 }
 
 const TextAreaProperties: React.FC<TextAreaPropertiesProps> = ({ element }) => {
@@ -11,7 +11,9 @@ const TextAreaProperties: React.FC<TextAreaPropertiesProps> = ({ element }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    const parsedValue = type === 'number' ? (value ? Number(value) : undefined) : value;
+    const parsedValue = type === 'number' 
+      ? (value === '' ? undefined : Number(value)) 
+      : value;
     
     updateElement(element.id, { [name]: parsedValue });
   };
@@ -39,7 +41,7 @@ const TextAreaProperties: React.FC<TextAreaPropertiesProps> = ({ element }) => {
         <input
           type="text"
           name="placeholder"
-          value={element.placeholder}
+          value={element.placeholder || ''}
           onChange={handleChange}
           className="input"
         />
@@ -69,7 +71,7 @@ const TextAreaProperties: React.FC<TextAreaPropertiesProps> = ({ element }) => {
           <input
             type="checkbox"
             name="showTooltip"
-            checked={element.showTooltip}
+            checked={!!element.showTooltip}
             onChange={handleCheckboxChange}
           />
           <div className="toggle-switch-track">
@@ -97,7 +99,7 @@ const TextAreaProperties: React.FC<TextAreaPropertiesProps> = ({ element }) => {
           type="checkbox"
           id="required"
           name="required"
-          checked={element.required}
+          checked={!!element.required}
           onChange={handleCheckboxChange}
           className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
         />
@@ -112,7 +114,7 @@ const TextAreaProperties: React.FC<TextAreaPropertiesProps> = ({ element }) => {
           <input
             type="number"
             name="minLength"
-            value={element.minLength || ''}
+            value={element.minLength === undefined ? '' : element.minLength}
             onChange={handleChange}
             className="input"
             min={0}
@@ -123,7 +125,7 @@ const TextAreaProperties: React.FC<TextAreaPropertiesProps> = ({ element }) => {
           <input
             type="number"
             name="maxLength"
-            value={element.maxLength || ''}
+            value={element.maxLength === undefined ? '' : element.maxLength}
             onChange={handleChange}
             className="input"
             min={0}

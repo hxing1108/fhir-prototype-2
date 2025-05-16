@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { FormElement, FormElementOption } from '../../types/form';
+import { IFormElement, FormElementOption } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { Plus, Trash2, GripVertical } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 interface RadioPropertiesProps {
-  element: FormElement;
+  element: IFormElement;
 }
 
 const RadioProperties: React.FC<RadioPropertiesProps> = ({ element }) => {
@@ -57,7 +57,7 @@ const RadioProperties: React.FC<RadioPropertiesProps> = ({ element }) => {
         <input
           type="text"
           name="label"
-          value={element.label}
+          value={element.label || ''}
           onChange={handleChange}
           className="input"
         />
@@ -87,7 +87,7 @@ const RadioProperties: React.FC<RadioPropertiesProps> = ({ element }) => {
           <input
             type="checkbox"
             name="showTooltip"
-            checked={element.showTooltip}
+            checked={!!element.showTooltip}
             onChange={handleCheckboxChange}
           />
           <div className="toggle-switch-track">
@@ -115,7 +115,7 @@ const RadioProperties: React.FC<RadioPropertiesProps> = ({ element }) => {
           type="checkbox"
           id="required"
           name="required"
-          checked={element.required}
+          checked={!!element.required}
           onChange={handleCheckboxChange}
           className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
         />

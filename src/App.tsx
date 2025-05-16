@@ -9,7 +9,7 @@ import { FormProvider } from './context/FormContext';
 function App() {
   return (
     <FormProvider>
-      <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900 font-sans">
+      <div className="h-screen flex flex-col bg-gray-50 text-gray-900 font-sans overflow-hidden">
         <Header />
         <EditorLayout
           leftSidebar={<ElementsSidebar />}

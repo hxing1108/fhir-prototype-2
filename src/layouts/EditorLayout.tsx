@@ -15,24 +15,29 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
   const { previewMode } = useFormContext();
 
   return (
-    <div className="flex flex-1 overflow-hidden">
+    <div className="flex flex-1 pt-14">
       {/* Left sidebar - Elements */}
       {!previewMode && (
-        <div className="w-64 border-r border-gray-200 bg-white hidden md:block">
+        <aside className="fixed top-14 left-0 w-64 h-[calc(100vh-3.5rem)] border-r border-gray-200 bg-white hidden md:block overflow-y-auto z-30">
           {leftSidebar}
-        </div>
+        </aside>
       )}
 
       {/* Main content area - Form Builder */}
-      <div className={`flex-1 overflow-auto ${previewMode ? 'max-w-3xl mx-auto' : ''}`}>
+      <main 
+        className={`overflow-y-auto h-[calc(100vh-3.5rem)] 
+                    ${previewMode 
+                      ? 'max-w-3xl mx-auto w-full' 
+                      : 'flex-1 ml-64 mr-72'}`}
+      >
         {mainContent}
-      </div>
+      </main>
 
       {/* Right sidebar - Properties */}
       {!previewMode && (
-        <div className="w-72 border-l border-gray-200 bg-white hidden lg:block">
+        <aside className="fixed top-14 right-0 w-72 h-[calc(100vh-3.5rem)] border-l border-gray-200 bg-white hidden lg:block overflow-y-auto z-30">
           {rightSidebar}
-        </div>
+        </aside>
       )}
     </div>
   );

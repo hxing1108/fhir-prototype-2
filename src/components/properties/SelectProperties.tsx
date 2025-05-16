@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { FormElement, FormElementOption } from '../../types/form';
+import { IFormElement, FormElementOption } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { Plus, Trash2, GripVertical } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 interface SelectPropertiesProps {
-  element: FormElement;
+  element: IFormElement;
 }
 
 const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
@@ -68,7 +68,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
         <input
           type="text"
           name="placeholder"
-          value={element.placeholder}
+          value={element.placeholder || ''}
           onChange={handleChange}
           className="input"
         />
@@ -98,7 +98,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
           <input
             type="checkbox"
             name="showTooltip"
-            checked={element.showTooltip}
+            checked={!!element.showTooltip}
             onChange={handleCheckboxChange}
           />
           <div className="toggle-switch-track">
@@ -126,7 +126,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
           type="checkbox"
           id="required"
           name="required"
-          checked={element.required}
+          checked={!!element.required}
           onChange={handleCheckboxChange}
           className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
         />

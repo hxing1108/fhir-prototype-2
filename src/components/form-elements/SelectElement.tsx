@@ -1,9 +1,9 @@
 import React from 'react';
-import { FormElement } from '../../types/form';
+import { IFormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 
 interface SelectElementProps {
-  element: FormElement;
+  element: IFormElement;
 }
 
 const SelectElement: React.FC<SelectElementProps> = ({ element }) => {
@@ -34,7 +34,7 @@ const SelectElement: React.FC<SelectElementProps> = ({ element }) => {
         ))}
       </div>
       <select className="input mt-2" disabled>
-        <option value="" disabled selected>
+        <option value="" disabled>
           {element.placeholder || 'Select an option'}
         </option>
         {element.options?.map((option, index) => (
