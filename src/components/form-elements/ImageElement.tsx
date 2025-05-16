@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
-import { FormElement } from '../../types/form';
+import { IFormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { Upload } from 'lucide-react';
 
 interface ImageElementProps {
-  element: FormElement;
+  element: IFormElement;
 }
 
 const ImageElement: React.FC<ImageElementProps> = ({ element }) => {
@@ -15,13 +15,15 @@ const ImageElement: React.FC<ImageElementProps> = ({ element }) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const src = e.target?.result as string;
+      reader.onload = (loadEvent) => {
+        const src = loadEvent.target?.result as string;
         updateElement(element.id, {
           image: {
-            ...element.image!,
-            src,
-            alt: file.name
+            src: src,
+            alt: element.image?.alt || file.name,
+            width: element.image?.width || '100%',
+            height: element.image?.height || 'auto',
+            align: element.image?.align || 'left',
           }
         });
       };
@@ -29,20 +31,21 @@ const ImageElement: React.FC<ImageElementProps> = ({ element }) => {
     }
   };
 
-  const imageStyle = {
-    textAlign: element.image?.align || 'left',
+  const textAlignStyle = element.image?.align || 'left';
+
+  const imgStyle: React.CSSProperties = {
     maxWidth: element.image?.width || '100%',
     height: element.image?.height || 'auto',
+    display: 'inline-block',
   };
 
   return (
-    <div style={{ textAlign: element.image?.align || 'left' }}>
+    <div style={{ textAlign: textAlignStyle }}>
       {element.image?.src ? (
         <img
           src={element.image.src}
-          alt={element.image.alt}
-          style={imageStyle}
-          className="max-w-full h-auto"
+          alt={element.image.alt || ''}
+          style={imgStyle}
         />
       ) : (
         <div 

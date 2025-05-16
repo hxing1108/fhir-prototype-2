@@ -246,7 +246,10 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
             </div>
           </div>
         )}
-        <label className={`${groupTitleAsHeader && element.type === 'group' ? 'text-xl font-semibold' : 'label'} flex-1 min-w-0`}>
+        <label 
+          className={`${groupTitleAsHeader && element.type === 'group' ? 'text-xl font-semibold' : 'label'} flex-1 min-w-0`}
+          style={{ marginBottom: 0 }}
+        >
           {element.label}
           {element.required && <span className="text-error-500 ml-1">*</span>}
         </label>
