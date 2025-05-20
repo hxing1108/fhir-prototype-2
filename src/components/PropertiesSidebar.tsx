@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from '../context/FormContext';
-import { IFormElement } from '../../types/form';
+import { IFormElement } from '../types/form';
 import TextFieldProperties from './properties/TextFieldProperties';
 import TextAreaProperties from './properties/TextAreaProperties';
 import SelectProperties from './properties/SelectProperties';
@@ -11,11 +11,22 @@ import FormProperties from './properties/FormProperties';
 import HeaderProperties from './properties/HeaderProperties';
 import ImageProperties from './properties/ImageProperties';
 import YesNoProperties from './properties/YesNoProperties';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const PropertiesSidebar: React.FC = () => {
-  const { elements, selectedElementId, previewMode } = useFormContext();
+  const {
+    elements,
+    selectedElementId,
+    previewMode,
+    updateElement,
+    formMetadata,
+    updateFormMetadata,
+  } = useFormContext();
 
-  const findSelectedElement = (els: IFormElement[]): IFormElement | undefined => {
+  const findSelectedElement = (
+    els: IFormElement[]
+  ): IFormElement | undefined => {
     for (const element of els) {
       if (element.id === selectedElementId) {
         return element;
@@ -73,6 +84,17 @@ const PropertiesSidebar: React.FC = () => {
     );
   }
 
+  if (!selectedElement) {
+    return (
+      <div className="bg-white p-4 rounded-lg shadow overflow-auto h-full">
+        <h2 className="text-lg font-medium text-gray-900 mb-4">
+          Form Settings
+        </h2>
+        <FormProperties />
+      </div>
+    );
+  }
+
   return (
     <div className="h-full flex flex-col overflow-auto">
       <div className="p-4 border-b border-gray-200">
@@ -80,9 +102,7 @@ const PropertiesSidebar: React.FC = () => {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <div className="p-4">
-          {renderPropertiesByType()}
-        </div>
+        <div className="p-4">{renderPropertiesByType()}</div>
       </div>
     </div>
   );

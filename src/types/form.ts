@@ -1,31 +1,35 @@
-export type FormElementType = 
-  | 'text' 
-  | 'textarea' 
-  | 'number' 
-  | 'email' 
-  | 'select' 
-  | 'checkbox' 
-  | 'radio' 
+import { FHIRCoding, FHIREnableWhen } from './fhir';
+
+export type FormElementType =
+  | 'text'
+  | 'textarea'
+  | 'number'
+  | 'email'
+  | 'select'
+  | 'checkbox'
+  | 'radio'
   | 'date'
   | 'group'
   | 'header'
   | 'image'
-  | 'yesNo';
+  | 'yesNo'
+  | 'dateTime'
+  | 'time'
+  | 'attachment'
+  | 'reference'
+  | 'quantity';
 
 export interface FormElementOption {
   value: string;
   label: string;
-  showOptionTooltip?: boolean;
-  optionTooltipText?: string;
 }
 
 export interface HeaderElement {
-  fontSize?: string;
+  level: 1 | 2 | 3 | 4 | 5 | 6;
   align: 'left' | 'center' | 'right';
   color?: string;
   bold?: boolean;
   italic?: boolean;
-  displayMode?: 'heading' | 'richtext';
 }
 
 export interface ImageElement {
@@ -60,6 +64,29 @@ export interface IFormElement {
   allowFreeText?: boolean;
   freeTextLabel?: string;
   freeTextValue?: string;
+  linkId?: string;
+  code?: FHIRCoding[];
+  enableWhen?: EnableWhen[];
+  answerValueSet?: string;
+  prefix?: string;
+  readOnly?: boolean;
+  maxOccurs?: number;
+  fhirType?: string;
+  definition?: string;
+  repeats?: boolean;
+}
+
+export interface EnableWhen {
+  question: string;
+  operator: string;
+  answerBoolean?: boolean;
+  answerDecimal?: number;
+  answerInteger?: number;
+  answerDate?: string;
+  answerDateTime?: string;
+  answerTime?: string;
+  answerString?: string;
+  answerCoding?: FHIRCoding;
 }
 
 export interface FormSettings {
@@ -69,4 +96,15 @@ export interface FormSettings {
   showQuestionNumbers: boolean;
   fontFamily: string;
   fontSize: string;
+}
+
+export interface FormMetadata {
+  id?: string;
+  url?: string;
+  status?: 'draft' | 'active' | 'retired' | 'unknown';
+  title?: string;
+  version?: string;
+  publisher?: string;
+  description?: string;
+  date?: string;
 }

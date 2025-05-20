@@ -7,15 +7,20 @@ interface TextFieldPropertiesProps {
   element: IFormElement;
 }
 
-const TextFieldProperties: React.FC<TextFieldPropertiesProps> = ({ element }) => {
+const TextFieldProperties: React.FC<TextFieldPropertiesProps> = ({
+  element,
+}) => {
   const { updateElement } = useFormContext();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value, type } = e.target;
-    const parsedValue = type === 'number' 
-      ? (value === '' ? undefined : Number(value))
-      : value;
-    
+    const parsedValue =
+      type === 'number' ? (value === '' ? undefined : Number(value)) : value;
+
     updateElement(element.id, { [name]: parsedValue });
   };
 

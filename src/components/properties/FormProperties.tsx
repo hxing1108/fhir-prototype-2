@@ -7,50 +7,68 @@ const FormProperties: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-sm font-medium text-gray-900 mb-4">Form Settings</h3>
-        
+        <h3 className="text-sm font-medium text-gray-900 mb-4">
+          Form Appearance
+        </h3>
+
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Background Color</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">
+              Background Color
+            </label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={formSettings.backgroundColor}
-                onChange={(e) => updateFormSettings({ backgroundColor: e.target.value })}
+                onChange={(e) =>
+                  updateFormSettings({ backgroundColor: e.target.value })
+                }
                 className="h-8 w-8 rounded border border-gray-300"
               />
               <input
                 type="text"
                 value={formSettings.backgroundColor}
-                onChange={(e) => updateFormSettings({ backgroundColor: e.target.value })}
+                onChange={(e) =>
+                  updateFormSettings({ backgroundColor: e.target.value })
+                }
                 className="input flex-1 text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Text Color</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">
+              Text Color
+            </label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={formSettings.textColor}
-                onChange={(e) => updateFormSettings({ textColor: e.target.value })}
+                onChange={(e) =>
+                  updateFormSettings({ textColor: e.target.value })
+                }
                 className="h-8 w-8 rounded border border-gray-300"
               />
               <input
                 type="text"
                 value={formSettings.textColor}
-                onChange={(e) => updateFormSettings({ textColor: e.target.value })}
+                onChange={(e) =>
+                  updateFormSettings({ textColor: e.target.value })
+                }
                 className="input flex-1 text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Font Family</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">
+              Font Family
+            </label>
             <select
               value={formSettings.fontFamily}
-              onChange={(e) => updateFormSettings({ fontFamily: e.target.value })}
+              onChange={(e) =>
+                updateFormSettings({ fontFamily: e.target.value })
+              }
               className="input text-sm"
             >
               <option value="Inter">Inter</option>
@@ -62,7 +80,9 @@ const FormProperties: React.FC = () => {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Font Size</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">
+              Font Size
+            </label>
             <select
               value={formSettings.fontSize}
               onChange={(e) => updateFormSettings({ fontSize: e.target.value })}
@@ -88,7 +108,11 @@ const FormProperties: React.FC = () => {
               <input
                 type="checkbox"
                 checked={formSettings.groupTitleAsHeader}
-                onChange={() => updateFormSettings({ groupTitleAsHeader: !formSettings.groupTitleAsHeader })}
+                onChange={() =>
+                  updateFormSettings({
+                    groupTitleAsHeader: !formSettings.groupTitleAsHeader,
+                  })
+                }
               />
               <div className="toggle-switch-track">
                 <div className="toggle-switch-thumb"></div>
@@ -109,7 +133,11 @@ const FormProperties: React.FC = () => {
               <input
                 type="checkbox"
                 checked={formSettings.showQuestionNumbers}
-                onChange={() => updateFormSettings({ showQuestionNumbers: !formSettings.showQuestionNumbers })}
+                onChange={() =>
+                  updateFormSettings({
+                    showQuestionNumbers: !formSettings.showQuestionNumbers,
+                  })
+                }
               />
               <div className="toggle-switch-track">
                 <div className="toggle-switch-thumb"></div>
