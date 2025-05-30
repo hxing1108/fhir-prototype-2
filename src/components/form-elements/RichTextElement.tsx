@@ -1,19 +1,25 @@
 import React, { useMemo, useCallback } from 'react';
-import { createEditor, Descendant, Editor, Transforms, Element as SlateElement } from 'slate';
+import {
+  createEditor,
+  Descendant,
+  Editor,
+  Transforms,
+  Element as SlateElement,
+} from 'slate';
 import { Slate, Editable, withReact, useSlate } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { FormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
-import { 
-  Bold, 
-  Italic, 
-  Underline, 
-  List, 
-  AlignLeft, 
-  AlignCenter, 
-  AlignRight, 
+import {
+  Bold,
+  Italic,
+  Underline,
+  List,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
   AlignJustify,
-  Link
+  Link,
 } from 'lucide-react';
 
 interface RichTextElementProps {
@@ -25,15 +31,19 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
   const initialValue: Descendant[] = useMemo(() => {
-    return element.richtext?.content || [{
-      type: 'paragraph',
-      children: [{ text: '' }],
-    }];
+    return (
+      element.richtext?.content || [
+        {
+          type: 'paragraph',
+          children: [{ text: '' }],
+        },
+      ]
+    );
   }, [element.richtext?.content]);
 
   const Toolbar = () => {
     const editor = useSlate();
-    
+
     const ToolbarButton = ({ format, icon: Icon, isBlock = false }: any) => {
       return (
         <button
@@ -51,7 +61,9 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
               );
             }
           }}
-          className={`p-2 hover:bg-gray-50 ${isFormatActive(editor, format) ? 'bg-gray-100' : ''}`}
+          className={`p-2 hover:bg-gray-50 ${
+            isFormatActive(editor, format) ? 'bg-gray-100' : ''
+          }`}
         >
           <Icon size={16} />
         </button>
@@ -65,7 +77,7 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
           <ToolbarButton format="italic" icon={Italic} />
           <ToolbarButton format="underline" icon={Underline} />
         </div>
-        
+
         <div className="flex items-center">
           <ToolbarButton format="bulleted-list" icon={List} isBlock />
         </div>
@@ -73,29 +85,61 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
         <div className="flex items-center">
           <button
             type="button"
-            onClick={() => updateElement(element.id, { richtext: { ...element.richtext!, align: 'left' } })}
-            className={`p-2 ${element.richtext?.align === 'left' ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+            onClick={() =>
+              updateElement(element.id, {
+                richtext: { ...element.richtext!, align: 'left' },
+              })
+            }
+            className={`p-2 ${
+              element.richtext?.align === 'left'
+                ? 'bg-gray-100'
+                : 'hover:bg-gray-50'
+            }`}
           >
             <AlignLeft size={16} />
           </button>
           <button
             type="button"
-            onClick={() => updateElement(element.id, { richtext: { ...element.richtext!, align: 'center' } })}
-            className={`p-2 ${element.richtext?.align === 'center' ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+            onClick={() =>
+              updateElement(element.id, {
+                richtext: { ...element.richtext!, align: 'center' },
+              })
+            }
+            className={`p-2 ${
+              element.richtext?.align === 'center'
+                ? 'bg-gray-100'
+                : 'hover:bg-gray-50'
+            }`}
           >
             <AlignCenter size={16} />
           </button>
           <button
             type="button"
-            onClick={() => updateElement(element.id, { richtext: { ...element.richtext!, align: 'right' } })}
-            className={`p-2 ${element.richtext?.align === 'right' ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+            onClick={() =>
+              updateElement(element.id, {
+                richtext: { ...element.richtext!, align: 'right' },
+              })
+            }
+            className={`p-2 ${
+              element.richtext?.align === 'right'
+                ? 'bg-gray-100'
+                : 'hover:bg-gray-50'
+            }`}
           >
             <AlignRight size={16} />
           </button>
           <button
             type="button"
-            onClick={() => updateElement(element.id, { richtext: { ...element.richtext!, align: 'justify' } })}
-            className={`p-2 ${element.richtext?.align === 'justify' ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+            onClick={() =>
+              updateElement(element.id, {
+                richtext: { ...element.richtext!, align: 'justify' },
+              })
+            }
+            className={`p-2 ${
+              element.richtext?.align === 'justify'
+                ? 'bg-gray-100'
+                : 'hover:bg-gray-50'
+            }`}
           >
             <AlignJustify size={16} />
           </button>
@@ -134,7 +178,7 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
 
   const handleChange = (value: Descendant[]) => {
     updateElement(element.id, {
-      richtext: { ...element.richtext!, content: value }
+      richtext: { ...element.richtext!, content: value },
     });
   };
 
@@ -172,7 +216,14 @@ const RichTextElement: React.FC<RichTextElementProps> = ({ element }) => {
                 children = <u>{children}</u>;
               }
               if (props.leaf.link) {
-                children = <a href={props.leaf.link} className="text-blue-600 hover:underline">{children}</a>;
+                children = (
+                  <a
+                    href={props.leaf.link}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {children}
+                  </a>
+                );
               }
               return <span {...props.attributes}>{children}</span>;
             }, [])}

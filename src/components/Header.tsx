@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useFormContext } from '../context/FormContext';
 import FHIRMetadataDialog from './FHIRMetadataDialog';
+import { FHIRXMLExportService } from '../services/FHIRXMLExportService';
 
 const Header: React.FC = () => {
   const [formName, setFormName] = useState('Untitled Form');
@@ -26,6 +27,9 @@ const Header: React.FC = () => {
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [showFHIRMetadataDialog, setShowFHIRMetadataDialog] = useState(false);
   const [showMetadataDialog, setShowMetadataDialog] = useState(false);
+
+  // Initialize XML export service
+  const xmlExportService = new FHIRXMLExportService();
 
   const handleFormNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormName(e.target.value);
@@ -73,6 +77,66 @@ const Header: React.FC = () => {
     a.download = `${
       formMetadata.title || formName || 'questionnaire'
     }_response.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    setShowExportMenu(false);
+  };
+
+  // Export as XML
+  const handleExportXML = () => {
+    if (!previewMode) {
+      alert(
+        'Please enable preview mode and fill out the form before exporting as XML.'
+      );
+      setShowExportMenu(false);
+      return;
+    }
+
+    const response = exportToFHIRQuestionnaireResponse();
+    const questionnaire = exportToFHIRQuestionnaire();
+    const xmlString = xmlExportService.enhancedQuestionnaireResponseToXML(response, questionnaire);
+    const blob = new Blob([xmlString], { type: 'application/xml' });
+
+    // Create a download link and trigger it
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${
+      formMetadata.title || formName || 'questionnaire'
+    }_response_with_metadata.xml`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    setShowExportMenu(false);
+  };
+
+  // Export as Combined XML Bundle
+  const handleExportCombinedXML = () => {
+    if (!previewMode) {
+      alert(
+        'Please enable preview mode and fill out the form before exporting as Combined XML Bundle.'
+      );
+      setShowExportMenu(false);
+      return;
+    }
+
+    const response = exportToFHIRQuestionnaireResponse();
+    const questionnaire = exportToFHIRQuestionnaire();
+    const xmlString = xmlExportService.combinedQuestionnaireResponseToXML(questionnaire, response);
+    const blob = new Blob([xmlString], { type: 'application/xml' });
+
+    // Create a download link and trigger it
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${
+      formMetadata.title || formName || 'questionnaire'
+    }_bundle.xml`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -176,6 +240,18 @@ const Header: React.FC = () => {
                     onClick={handleExportQuestionnaireResponse}
                   >
                     Export as FHIR QuestionnaireResponse
+                  </button>
+                  <button
+                    className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={handleExportXML}
+                  >
+                    Export as XML
+                  </button>
+                  <button
+                    className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={handleExportCombinedXML}
+                  >
+                    Export as Combined XML Bundle
                   </button>
                 </div>
               )}
