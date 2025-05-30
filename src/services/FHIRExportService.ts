@@ -84,6 +84,12 @@ export class FHIRExportService {
       };
     }
 
+    // Add tooltip data for form elements
+    if (element.showTooltip && element.tooltipText) {
+      item.showTooltip = element.showTooltip;
+      item.tooltipText = element.tooltipText;
+    }
+
     // Add validation constraints
     if (element.minLength !== undefined) item.minLength = element.minLength;
     if (element.maxLength !== undefined) item.maxLength = element.maxLength;

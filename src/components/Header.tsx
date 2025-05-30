@@ -97,7 +97,18 @@ const Header: React.FC = () => {
 
     const response = exportToFHIRQuestionnaireResponse();
     const questionnaire = exportToFHIRQuestionnaire();
-    const xmlString = xmlExportService.enhancedQuestionnaireResponseToXML(response, questionnaire);
+
+    // Debug logging
+    console.log('Form Data:', response);
+    console.log('Questionnaire:', questionnaire);
+    console.log('Response Items:', response.item);
+
+    const xmlString = xmlExportService.enhancedQuestionnaireResponseToXML(
+      response,
+      questionnaire
+    );
+    console.log('Generated XML:', xmlString);
+
     const blob = new Blob([xmlString], { type: 'application/xml' });
 
     // Create a download link and trigger it
@@ -127,7 +138,10 @@ const Header: React.FC = () => {
 
     const response = exportToFHIRQuestionnaireResponse();
     const questionnaire = exportToFHIRQuestionnaire();
-    const xmlString = xmlExportService.combinedQuestionnaireResponseToXML(questionnaire, response);
+    const xmlString = xmlExportService.combinedQuestionnaireResponseToXML(
+      questionnaire,
+      response
+    );
     const blob = new Blob([xmlString], { type: 'application/xml' });
 
     // Create a download link and trigger it
@@ -137,6 +151,33 @@ const Header: React.FC = () => {
     a.download = `${
       formMetadata.title || formName || 'questionnaire'
     }_bundle.xml`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    setShowExportMenu(false);
+  };
+
+  // Export Questionnaire as XML
+  const handleExportQuestionnaireXML = () => {
+    const questionnaire = exportToFHIRQuestionnaire();
+
+    // Debug logging
+    console.log('Questionnaire for XML:', questionnaire);
+
+    const xmlString = xmlExportService.questionnaireToXML(questionnaire);
+    console.log('Generated Questionnaire XML:', xmlString);
+
+    const blob = new Blob([xmlString], { type: 'application/xml' });
+
+    // Create a download link and trigger it
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${
+      formMetadata.title || formName || 'questionnaire'
+    }_questionnaire.xml`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -252,6 +293,12 @@ const Header: React.FC = () => {
                     onClick={handleExportCombinedXML}
                   >
                     Export as Combined XML Bundle
+                  </button>
+                  <button
+                    className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={handleExportQuestionnaireXML}
+                  >
+                    Export Questionnaire as XML
                   </button>
                 </div>
               )}

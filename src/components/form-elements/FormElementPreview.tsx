@@ -273,6 +273,20 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
         {renderQuestionNumber()}
         {element.label}
         {element.required && <span className="text-red-500 ml-1">*</span>}
+        {element.showTooltip && element.tooltipText && (
+          <div className="inline-block relative ml-2 group">
+            <HelpCircle
+              size={16}
+              className="text-gray-400 hover:text-gray-600 cursor-help"
+            />
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+              <div className="bg-gray-900 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap max-w-xs text-center">
+                {element.tooltipText}
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+              </div>
+            </div>
+          </div>
+        )}
       </label>
 
       {element.description && (

@@ -131,6 +131,8 @@ export interface FHIRQuestionnaireItem {
       valueString?: string;
     }>;
   };
+  showTooltip?: boolean;
+  tooltipText?: string;
 }
 
 /**
