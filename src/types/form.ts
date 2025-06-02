@@ -25,7 +25,9 @@ export interface FormElementOption {
 }
 
 export interface HeaderElement {
-  level: 1 | 2 | 3 | 4 | 5 | 6;
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  fontSize?: string;
+  displayMode?: 'heading' | 'richtext';
   align: 'left' | 'center' | 'right';
   color?: string;
   bold?: boolean;
@@ -38,6 +40,19 @@ export interface ImageElement {
   width: string;
   height: string;
   align: 'left' | 'center' | 'right';
+}
+
+export interface GDTAnswerMapping {
+  answerValue: string;
+  gdtCode: string;
+  description?: string;
+}
+
+export interface AcroFieldMapping {
+  inputInstruction?: string;
+  outputInstruction?: string;
+  defaultGDTCode?: string;
+  answerMappings?: GDTAnswerMapping[];
 }
 
 export interface IFormElement {
@@ -74,6 +89,7 @@ export interface IFormElement {
   fhirType?: string;
   definition?: string;
   repeats?: boolean;
+  acroField?: AcroFieldMapping;
 }
 
 export interface EnableWhen {
