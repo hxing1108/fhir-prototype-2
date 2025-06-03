@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { IFormElement, FormElementOption } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { Plus, Trash2, GripVertical } from 'lucide-react';
@@ -12,6 +12,18 @@ interface SelectPropertiesProps {
 const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
   const { updateElement } = useFormContext();
   const [newOption, setNewOption] = useState('');
+  const [showEmptyTooltip, setShowEmptyTooltip] = useState(false);
+  const addButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Auto-hide tooltip after 3 seconds
+  useEffect(() => {
+    if (showEmptyTooltip) {
+      const timer = setTimeout(() => {
+        setShowEmptyTooltip(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showEmptyTooltip]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     updateElement(element.id, { [e.target.name]: e.target.value });
@@ -28,11 +40,15 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
   };
 
   const handleAddOption = () => {
-    if (!newOption.trim()) return;
+    if (!newOption.trim()) {
+      setShowEmptyTooltip(true);
+      return;
+    }
     
     const newOptions = [...(element.options || []), { value: newOption, label: newOption }];
     updateElement(element.id, { options: newOptions });
     setNewOption('');
+    setShowEmptyTooltip(false);
   };
 
   const handleRemoveOption = (index: number) => {
@@ -184,7 +200,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
           </Droppable>
         </DragDropContext>
         
-        <div className="flex mt-2">
+        <div className="flex mt-2 relative">
           <input
             type="text"
             value={newOption}
@@ -197,14 +213,26 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
                 handleAddOption();
               }
             }}
+            onFocus={() => setShowEmptyTooltip(false)}
           />
           <button
+            ref={addButtonRef}
             type="button"
             onClick={handleAddOption}
-            className="btn btn-sm btn-secondary"
+            className="btn btn-sm btn-secondary relative"
           >
             <Plus size={16} />
           </button>
+          
+          {/* Empty option tooltip */}
+          {showEmptyTooltip && (
+            <div className="absolute bottom-full mb-2 right-0 z-50">
+              <div className="bg-red-500 text-white text-sm px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
+                Please enter text first
+                <div className="absolute top-full right-4 -mt-1 border-4 border-transparent border-t-red-500"></div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
