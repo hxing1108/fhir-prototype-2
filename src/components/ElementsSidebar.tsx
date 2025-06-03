@@ -39,7 +39,7 @@ const ElementsSidebar: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const elementTypes = [
-    { type: 'header' as FormElementType, icon: <Heading size={18} />, label: 'Header' },
+    { type: 'header' as FormElementType, icon: <Heading size={18} />, label: 'Label' },
     { type: 'text' as FormElementType, icon: <Type size={18} />, label: 'Text Field' },
     { type: 'textarea' as FormElementType, icon: <AlignLeft size={18} />, label: 'Text Area' },
     { type: 'number' as FormElementType, icon: <Hash size={18} />, label: 'Number' },
