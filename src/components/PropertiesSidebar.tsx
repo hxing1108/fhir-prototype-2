@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormContext } from '../context/FormContext';
 import { IFormElement } from '../types/form';
 import TextFieldProperties from './properties/TextFieldProperties';
@@ -11,6 +11,7 @@ import FormProperties from './properties/FormProperties';
 import HeaderProperties from './properties/HeaderProperties';
 import ImageProperties from './properties/ImageProperties';
 import YesNoProperties from './properties/YesNoProperties';
+import FHIRMetadataDialog from './FHIRMetadataDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -23,6 +24,8 @@ const PropertiesSidebar: React.FC = () => {
     formMetadata,
     updateFormMetadata,
   } = useFormContext();
+
+  const [showAcrofeldDialog, setShowAcrofeldDialog] = useState(false);
 
   const findSelectedElement = (
     els: IFormElement[]
@@ -73,6 +76,12 @@ const PropertiesSidebar: React.FC = () => {
     }
   };
 
+  const handleOpenAcrofeldDialog = () => {
+    if (selectedElement) {
+      setShowAcrofeldDialog(true);
+    }
+  };
+
   if (previewMode) {
     return (
       <div className="h-full flex flex-col p-6">
@@ -96,15 +105,59 @@ const PropertiesSidebar: React.FC = () => {
   }
 
   return (
-    <div className="h-full flex flex-col overflow-auto">
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="sidebar-title">Properties</h3>
+    <>
+      <div className="h-full flex flex-col overflow-auto">
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="sidebar-title">Properties</h3>
+        </div>
+
+        <div className="flex-1 overflow-auto">
+          <div className="p-4">{renderPropertiesByType()}</div>
+        </div>
+
+        {/* Add Acrofeld Button */}
+        <div className="p-4 border-t border-gray-200">
+          <button
+            onClick={handleOpenAcrofeldDialog}
+            disabled={!selectedElement}
+            className={`btn btn-secondary flex items-center justify-center w-full ${
+              !selectedElement ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            title="Add Acrofeld Configuration"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="16" 
+              height="16" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              className="lucide lucide-info mr-2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 16v-4"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+            Add Acrofeld
+          </button>
+          {!selectedElement && (
+            <p className="mt-2 text-xs text-gray-500 text-center">
+              Select an element to configure Acrofeld settings
+            </p>
+          )}
+        </div>
       </div>
 
-      <div className="flex-1 overflow-auto">
-        <div className="p-4">{renderPropertiesByType()}</div>
-      </div>
-    </div>
+      {/* Acrofeld Dialog */}
+      <FHIRMetadataDialog
+        isOpen={showAcrofeldDialog}
+        onClose={() => setShowAcrofeldDialog(false)}
+        initialTab="acrofield"
+      />
+    </>
   );
 };
 

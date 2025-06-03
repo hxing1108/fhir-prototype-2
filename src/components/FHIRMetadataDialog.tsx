@@ -6,6 +6,7 @@ import { IFormElement, FormMetadata, AcroFieldMapping } from '../types/form';
 interface FHIRMetadataDialogProps {
   isOpen: boolean;
   onClose: () => void;
+  initialTab?: TabType;
 }
 
 type TabType = 'fhir' | 'acrofield' | 'enablewhen';
@@ -13,6 +14,7 @@ type TabType = 'fhir' | 'acrofield' | 'enablewhen';
 const FHIRMetadataDialog: React.FC<FHIRMetadataDialogProps> = ({
   isOpen,
   onClose,
+  initialTab = 'fhir',
 }) => {
   const {
     elements,
@@ -24,7 +26,7 @@ const FHIRMetadataDialog: React.FC<FHIRMetadataDialogProps> = ({
 
   // State for dialog position and active tab
   const [position, setPosition] = useState({ x: 100, y: 100 });
-  const [activeTab, setActiveTab] = useState<TabType>('fhir');
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const dialogRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -54,6 +56,7 @@ const FHIRMetadataDialog: React.FC<FHIRMetadataDialogProps> = ({
   // Initialize temp state when dialog opens or selected element changes
   useEffect(() => {
     if (isOpen) {
+      setActiveTab(initialTab); // Set the initial tab when dialog opens
       setTempFormMetadata({ ...formMetadata });
       if (selectedElement) {
         setTempElementData({
@@ -70,7 +73,7 @@ const FHIRMetadataDialog: React.FC<FHIRMetadataDialogProps> = ({
       }
       setHasChanges(false);
     }
-  }, [isOpen, selectedElementId, formMetadata, selectedElement]);
+  }, [isOpen, selectedElementId, formMetadata, selectedElement, initialTab]);
 
   // Handle changes to temporary form metadata
   const handleTempFormMetadataChange = (updates: Partial<FormMetadata>) => {
