@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { useFormContext } from '../context/FormContext';
 import FormElement from './form-elements/FormElement';
@@ -23,6 +23,46 @@ const FormBuilder: React.FC = () => {
   const [showEmptyStateAddMenu, setShowEmptyStateAddMenu] = React.useState(false);
   const headerMenuRef = React.useRef<HTMLDivElement>(null);
   const emptyStateMenuRef = React.useRef<HTMLDivElement>(null);
+  const formContainerRef = useRef<HTMLDivElement>(null);
+  const [lastAddedElementId, setLastAddedElementId] = React.useState<string | null>(null);
+
+  // Auto-scroll to newly added elements
+  useEffect(() => {
+    if (selectedElementId && selectedElementId !== lastAddedElementId && !previewMode) {
+      // Use setTimeout to ensure the DOM has updated
+      const timer = setTimeout(() => {
+        const elementToScroll = document.querySelector(`[data-element-id="${selectedElementId}"]`);
+        if (elementToScroll && formContainerRef.current) {
+          // Get the form container's scroll parent (usually the main content area)
+          let scrollContainer = formContainerRef.current.parentElement;
+          while (scrollContainer && scrollContainer.scrollHeight === scrollContainer.clientHeight) {
+            scrollContainer = scrollContainer.parentElement;
+          }
+          
+          if (scrollContainer) {
+            const elementRect = elementToScroll.getBoundingClientRect();
+            const containerRect = scrollContainer.getBoundingClientRect();
+            
+            // Calculate the scroll position to center the element in view
+            const scrollTop = scrollContainer.scrollTop + 
+                             elementRect.top - 
+                             containerRect.top - 
+                             (containerRect.height / 2) + 
+                             (elementRect.height / 2);
+            
+            // Smooth scroll to the element
+            scrollContainer.scrollTo({
+              top: Math.max(0, scrollTop),
+              behavior: 'smooth'
+            });
+          }
+        }
+        setLastAddedElementId(selectedElementId);
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [selectedElementId, previewMode, lastAddedElementId]);
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -177,12 +217,15 @@ const FormBuilder: React.FC = () => {
       </div>
 
       <div className="flex-1 flex flex-col">
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+        <div 
+          ref={formContainerRef}
+          className="bg-white rounded-lg border border-gray-200 shadow-sm"
+        >
           {previewMode ? (
             <div className="p-6" style={formStyle}>
               <form onSubmit={(e) => e.preventDefault()}>
                 {elements.map((element, index) => (
-                  <div key={element.id} className="mb-6">
+                  <div key={element.id} className="mb-6" data-element-id={element.id}>
                     <FormElementPreview 
                       element={element} 
                       index={index + 1} 
@@ -230,6 +273,7 @@ const FormBuilder: React.FC = () => {
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 className={`mb-4 ${snapshot.isDragging ? 'element-dragging' : ''}`}
+                                data-element-id={element.id}
                               >
                                 <FormElement 
                                   element={element} 

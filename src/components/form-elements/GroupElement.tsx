@@ -157,6 +157,7 @@ const GroupElement: React.FC<GroupElementProps> = ({
                     <div
                       ref={providedDraggable.innerRef}
                       {...providedDraggable.draggableProps}
+                      data-element-id={childElement.id}
                     >
                       <FormElementComponent
                         element={childElement}
@@ -276,6 +277,7 @@ const GroupElement: React.FC<GroupElementProps> = ({
                   <div
                     ref={providedDraggable.innerRef}
                     {...providedDraggable.draggableProps}
+                    data-element-id={childElement.id}
                   >
                     <FormElementComponent
                       element={childElement}
