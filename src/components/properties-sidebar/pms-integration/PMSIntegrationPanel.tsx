@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { VariableSelectionDialog } from './VariableSelectionDialog';
+import { OutputDialog } from './OutputDialog';
 
 interface PMSIntegrationPanelProps {
   selectedElementId?: string;
@@ -18,6 +19,7 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
     output: false,
   });
   const [showVariableDialog, setShowVariableDialog] = useState(false);
+  const [showOutputDialog, setShowOutputDialog] = useState(false);
 
   const handleToggleTakeoverPMS = () => {
     if (!pmsEnabled.takeover) {
@@ -35,13 +37,31 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
   };
 
   const handleToggleOutputPMS = () => {
-    setPmsEnabled((prev) => ({ ...prev, output: !prev.output }));
+    if (!pmsEnabled.output) {
+      // When enabling, open the dialog to configure
+      setShowOutputDialog(true);
+      setPmsEnabled((prev) => ({ ...prev, output: true }));
+    } else {
+      // When disabling, just turn it off
+      setPmsEnabled((prev) => ({ ...prev, output: false }));
+    }
+  };
+
+  const handleOpenOutputDialog = () => {
+    setShowOutputDialog(true);
   };
 
   const handleVariableSave = (content: string) => {
-    console.log('Saved PMS content:', content);
+    console.log('Saved PMS takeover content:', content);
     if (selectedElementId) {
-      onVariableSave(selectedElementId, content);
+      onVariableSave(`takeover_${selectedElementId}`, content);
+    }
+  };
+
+  const handleOutputSave = (content: string) => {
+    console.log('Saved PMS output content:', content);
+    if (selectedElementId) {
+      onVariableSave(`output_${selectedElementId}`, content);
     }
   };
 
@@ -91,6 +111,7 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
           <div className="flex items-center space-x-3">
             {pmsEnabled.output && (
               <button
+                onClick={handleOpenOutputDialog}
                 className="p-2 text-sm font-medium rounded-md bg-white border border-gray-300 hover:bg-gray-50 flex items-center"
                 title="Edit Configuration"
               >
@@ -117,17 +138,35 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
         )}
       </div>
 
-      {/* Variable Selection Dialog */}
+      {/* Variable Selection Dialog for Takeover */}
       <VariableSelectionDialog
-        key={`${selectedElementId}-${
-          savedContent[selectedElementId || ''] || ''
+        key={`takeover_${selectedElementId}-${
+          savedContent[`takeover_${selectedElementId}`] || ''
         }`}
         isOpen={showVariableDialog}
         onClose={() => setShowVariableDialog(false)}
         onSave={handleVariableSave}
         initialContent={
-          selectedElementId ? savedContent[selectedElementId] || '' : ''
+          selectedElementId
+            ? savedContent[`takeover_${selectedElementId}`] || ''
+            : ''
         }
+      />
+
+      {/* Output Dialog */}
+      <OutputDialog
+        key={`output_${selectedElementId}-${
+          savedContent[`output_${selectedElementId}`] || ''
+        }`}
+        isOpen={showOutputDialog}
+        onClose={() => setShowOutputDialog(false)}
+        onSave={handleOutputSave}
+        initialContent={
+          selectedElementId
+            ? savedContent[`output_${selectedElementId}`] || ''
+            : ''
+        }
+        currentElementId={selectedElementId}
       />
     </>
   );
