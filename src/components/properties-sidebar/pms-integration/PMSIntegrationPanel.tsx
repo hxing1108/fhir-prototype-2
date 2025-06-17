@@ -82,13 +82,23 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
           </span>
           <div className="flex items-center space-x-3">
             {pmsEnabled.takeover && (
-              <button
-                onClick={handleOpenTakeoverDialog}
-                className="p-2 text-sm font-medium rounded-md bg-white border border-gray-300 hover:bg-gray-50 flex items-center"
-                title="Edit Configuration"
-              >
-                <ExternalLink size={16} />
-              </button>
+              <div className="relative">
+                <button
+                  onClick={handleOpenTakeoverDialog}
+                  className="p-2 text-sm font-medium rounded-md bg-white border border-gray-300 hover:bg-gray-50 flex items-center"
+                  title="Edit Configuration"
+                >
+                  <ExternalLink size={16} />
+                </button>
+                {/* Notification dot when content is saved */}
+                {selectedElementId &&
+                  savedContent[`takeover_${selectedElementId}`] && (
+                    <div
+                      className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
+                      style={{ backgroundColor: '#65E240' }}
+                    ></div>
+                  )}
+              </div>
             )}
             <label className="toggle-switch">
               <input
@@ -110,13 +120,23 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
           </span>
           <div className="flex items-center space-x-3">
             {pmsEnabled.output && (
-              <button
-                onClick={handleOpenOutputDialog}
-                className="p-2 text-sm font-medium rounded-md bg-white border border-gray-300 hover:bg-gray-50 flex items-center"
-                title="Edit Configuration"
-              >
-                <ExternalLink size={16} />
-              </button>
+              <div className="relative">
+                <button
+                  onClick={handleOpenOutputDialog}
+                  className="p-2 text-sm font-medium rounded-md bg-white border border-gray-300 hover:bg-gray-50 flex items-center"
+                  title="Edit Configuration"
+                >
+                  <ExternalLink size={16} />
+                </button>
+                {/* Notification dot when content is saved */}
+                {selectedElementId &&
+                  savedContent[`output_${selectedElementId}`] && (
+                    <div
+                      className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
+                      style={{ backgroundColor: '#2D2D80' }}
+                    ></div>
+                  )}
+              </div>
             )}
             <label className="toggle-switch">
               <input
