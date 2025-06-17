@@ -224,60 +224,14 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
         );
 
       case 'header':
-        // Check if it's in rich text mode
-        if (element.header?.displayMode === 'richtext') {
-          return (
-            <div
-              style={{
-                textAlign: element.header?.align || 'left',
-                color: element.header?.color,
-                fontWeight: element.header?.bold ? 'bold' : 'normal',
-                fontStyle: element.header?.italic ? 'italic' : 'normal',
-                fontSize: '1rem', // Regular body text size
-                lineHeight: '1.5',
-                margin: '0',
-                padding: '0',
-              }}
-              dangerouslySetInnerHTML={{ __html: element.label }}
-            />
-          );
-        }
-
-        // Extract level from either level property or fontSize property (for heading mode)
-        let headerLevel: 1 | 2 | 3 | 4 | 5 | 6 = element.header?.level || 2;
-        if (element.header?.fontSize) {
-          // Extract number from fontSize like 'h1', 'h2', etc.
-          const match = element.header.fontSize.match(/h(\d)/);
-          if (match) {
-            const extractedLevel = parseInt(match[1], 10);
-            if (extractedLevel >= 1 && extractedLevel <= 6) {
-              headerLevel = extractedLevel as 1 | 2 | 3 | 4 | 5 | 6;
-            }
-          }
-        }
-
-        // Define font sizes for each heading level
-        const fontSizes = {
-          1: '2.25rem', // 36px
-          2: '1.875rem', // 30px  
-          3: '1.5rem',   // 24px
-          4: '1.25rem',  // 20px
-          5: '1.125rem', // 18px
-          6: '1rem',     // 16px
-        };
-        
-        const HeaderTag = `h${headerLevel}` as keyof JSX.IntrinsicElements;
+        const HeaderTag = `h${
+          element.header?.level || 2
+        }` as keyof JSX.IntrinsicElements;
         return (
           <HeaderTag
             style={{
               textAlign: element.header?.align || 'left',
               color: element.header?.color,
-              fontWeight: element.header?.bold ? 'bold' : 'normal',
-              fontStyle: element.header?.italic ? 'italic' : 'normal',
-              fontSize: fontSizes[headerLevel],
-              lineHeight: '1.2',
-              margin: '0',
-              padding: '0',
             }}
           >
             {element.label}
@@ -295,9 +249,8 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
               src={element.image?.src}
               alt={element.image?.alt || ''}
               style={{
-                maxWidth: element.image?.width || '100%',
+                width: element.image?.width || '100%',
                 height: element.image?.height || 'auto',
-                display: 'inline-block',
               }}
               className="max-w-full"
             />
