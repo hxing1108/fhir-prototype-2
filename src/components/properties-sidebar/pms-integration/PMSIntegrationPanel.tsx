@@ -95,7 +95,7 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
                   savedContent[`takeover_${selectedElementId}`] && (
                     <div
                       className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
-                      style={{ backgroundColor: '#65E240' }}
+                      style={{ backgroundColor: '#DEE9FC' }}
                     ></div>
                   )}
               </div>
