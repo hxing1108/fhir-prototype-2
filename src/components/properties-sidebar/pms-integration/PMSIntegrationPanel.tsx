@@ -133,7 +133,7 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
                   savedContent[`output_${selectedElementId}`] && (
                     <div
                       className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
-                      style={{ backgroundColor: '#2D2D80' }}
+                      style={{ backgroundColor: '#78AAFF' }}
                     ></div>
                   )}
               </div>
