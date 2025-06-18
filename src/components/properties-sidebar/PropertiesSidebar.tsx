@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormContext } from '../../context/FormContext';
 import { IFormElement } from '../../types/form';
 import { ElementProperties } from './ElementProperties';
 import { PMSIntegrationPanel } from './pms-integration/PMSIntegrationPanel';
 import FormProperties from '../properties/FormProperties';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface PropertiesSidebarProps {}
 
 export const PropertiesSidebar: React.FC<PropertiesSidebarProps> = () => {
-  const { elements, selectedElementId, previewMode } = useFormContext();
+  const { elements, selectedElementId, previewMode, updateElement } = useFormContext();
   const [savedContent, setSavedContent] = useState<Record<string, string>>({});
+  const [savedDefaultTexts, setSavedDefaultTexts] = useState<Record<string, string>>({});
+  const [linkId, setLinkId] = useState<string>('');
 
   // Find the selected element recursively
   const findSelectedElement = (
@@ -29,11 +32,48 @@ export const PropertiesSidebar: React.FC<PropertiesSidebarProps> = () => {
 
   const selectedElement = findSelectedElement(elements);
 
+  // Initialize linkId when element is selected
+  useEffect(() => {
+    if (selectedElement) {
+      const currentLinkId = selectedElement.linkId;
+      if (currentLinkId) {
+        setLinkId(currentLinkId);
+      } else {
+        // Generate and immediately save default linkId
+        const defaultLinkId = generateDefaultLinkId();
+        setLinkId(defaultLinkId);
+        updateElement(selectedElement.id, { linkId: defaultLinkId });
+      }
+    } else {
+      setLinkId('');
+    }
+  }, [selectedElement, updateElement]);
+
+  // Generate a default linkId
+  const generateDefaultLinkId = (): string => {
+    return uuidv4();
+  };
+
+  // Handle linkId changes
+  const handleLinkIdChange = (newLinkId: string) => {
+    setLinkId(newLinkId);
+    if (selectedElement) {
+      updateElement(selectedElement.id, { linkId: newLinkId });
+    }
+  };
+
   const handleVariableSave = (elementId: string, content: string) => {
-    setSavedContent((prev) => ({
-      ...prev,
-      [elementId]: content,
-    }));
+    if (elementId.includes('_default_')) {
+      setSavedDefaultTexts((prev) => ({
+        ...prev,
+        [elementId]: content,
+      }));
+    } else {
+      setSavedContent((prev) => ({
+        ...prev,
+        [elementId]: content,
+      }));
+    }
   };
 
   // Preview mode view
@@ -64,8 +104,22 @@ export const PropertiesSidebar: React.FC<PropertiesSidebarProps> = () => {
   return (
     <div className="h-full flex flex-col overflow-auto">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-gray-200 bg-white">
         <h3 className="sidebar-title">Properties</h3>
+        
+        {/* LinkId Input */}
+        <div className="mt-0">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Form element name
+          </label>
+          <input
+            type="text"
+            value={linkId}
+            onChange={(e) => handleLinkIdChange(e.target.value)}
+            placeholder="fa310924-e32d-4b3d-8cb5-f97116691741"
+            className="block w-full px-3 py-0.5 border border-[#D3D3D3] rounded-md shadow-sm focus:ring-2 focus:ring-[#2D2D85] focus:border-transparent transition duration-200 bg-white text-sm"
+          />
+        </div>
       </div>
 
       {/* Element Properties Section */}
@@ -80,6 +134,7 @@ export const PropertiesSidebar: React.FC<PropertiesSidebarProps> = () => {
         selectedElementId={selectedElement.id}
         onVariableSave={handleVariableSave}
         savedContent={savedContent}
+        savedDefaultTexts={savedDefaultTexts}
       />
     </div>
   );
