@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFormContext } from '../../context/FormContext';
+import { IFormElement } from '../../types/form';
 import TextFieldProperties from './TextFieldProperties';
 import TextAreaProperties from './TextAreaProperties';
 import SelectProperties from './SelectProperties';
@@ -13,7 +14,7 @@ import RichTextProperties from './RichTextProperties';
 const PropertiesSidebar: React.FC = () => {
   const { elements, selectedElementId, previewMode } = useFormContext();
 
-  const findSelectedElement = (elements: FormElement[]): FormElement | undefined => {
+  const findSelectedElement = (elements: IFormElement[]): IFormElement | undefined => {
     for (const element of elements) {
       if (element.id === selectedElementId) {
         return element;

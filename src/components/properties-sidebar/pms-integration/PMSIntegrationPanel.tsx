@@ -7,12 +7,14 @@ interface PMSIntegrationPanelProps {
   selectedElementId?: string;
   onVariableSave: (elementId: string, content: string) => void;
   savedContent: Record<string, string>;
+  savedDefaultTexts: Record<string, string>;
 }
 
 export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
   selectedElementId,
   onVariableSave,
   savedContent,
+  savedDefaultTexts,
 }) => {
   const [pmsEnabled, setPmsEnabled] = useState({
     takeover: false,
@@ -58,10 +60,13 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
     }
   };
 
-  const handleOutputSave = (content: string) => {
-    console.log('Saved PMS output content:', content);
+  const handleOutputSave = (content: string, defaultText?: string) => {
+    console.log('Saved PMS output content:', content, 'Default text:', defaultText);
     if (selectedElementId) {
       onVariableSave(`output_${selectedElementId}`, content);
+      if (defaultText !== undefined) {
+        onVariableSave(`output_default_${selectedElementId}`, defaultText);
+      }
     }
   };
 
@@ -130,7 +135,8 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
                 </button>
                 {/* Notification dot when content is saved */}
                 {selectedElementId &&
-                  savedContent[`output_${selectedElementId}`] && (
+                  (savedContent[`output_${selectedElementId}`] || 
+                   savedDefaultTexts[`output_default_${selectedElementId}`]) && (
                     <div
                       className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
                       style={{ backgroundColor: '#78AAFF' }}
@@ -177,13 +183,18 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
       <OutputDialog
         key={`output_${selectedElementId}-${
           savedContent[`output_${selectedElementId}`] || ''
-        }`}
+        }-${savedDefaultTexts[`output_default_${selectedElementId}`] || ''}`}
         isOpen={showOutputDialog}
         onClose={() => setShowOutputDialog(false)}
         onSave={handleOutputSave}
         initialContent={
           selectedElementId
             ? savedContent[`output_${selectedElementId}`] || ''
+            : ''
+        }
+        initialDefaultText={
+          selectedElementId
+            ? savedDefaultTexts[`output_default_${selectedElementId}`] || ''
             : ''
         }
         currentElementId={selectedElementId}

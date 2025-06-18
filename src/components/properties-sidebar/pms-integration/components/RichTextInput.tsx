@@ -5,6 +5,7 @@ export interface RichTextInputProps {
   onChange: (value: string) => void;
   placeholder?: string;
   onVariableInsert?: () => void;
+  className?: string;
 }
 
 export const RichTextInput: React.FC<RichTextInputProps> = ({
@@ -12,6 +13,7 @@ export const RichTextInput: React.FC<RichTextInputProps> = ({
   onChange,
   placeholder,
   onVariableInsert,
+  className = '',
 }) => {
   const contentEditableRef = useRef<HTMLDivElement>(null);
   const lastValueRef = useRef<string>();
@@ -238,11 +240,11 @@ export const RichTextInput: React.FC<RichTextInputProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className={`relative ${className}`}>
       <div
         ref={contentEditableRef}
         contentEditable
-        className="input min-h-[120px] overflow-auto whitespace-pre-wrap leading-loose"
+        className="input min-h-[120px] h-full overflow-auto whitespace-pre-wrap leading-loose"
         onInput={handleInput}
         onKeyDown={handleKeyDown}
         onClick={handleClick}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RichTextInput } from './components/RichTextInput';
+import { CustomDropdownWithGDT, DropdownOption } from './components/CustomDropdownWithGDT';
 
 export interface VariableSelectionDialogProps {
   isOpen: boolean;
@@ -11,7 +12,6 @@ export interface VariableSelectionDialogProps {
 export const VariableSelectionDialog: React.FC<
   VariableSelectionDialogProps
 > = ({ isOpen, onClose, onSave, initialContent = '' }) => {
-  const [selectedVariable, setSelectedVariable] = useState('');
   const [content, setContent] = useState(initialContent);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
@@ -19,7 +19,7 @@ export const VariableSelectionDialog: React.FC<
   const headerRef = useRef<HTMLDivElement>(null);
 
   // Available variables for PMS integration
-  const variables = [
+  const variables: DropdownOption[] = [
     { label: 'Patient Birth Date', value: '#DD:MM:YYYY:PATIENTBIRTHDATE#' },
     { label: 'Patient Name', value: '#PATIENTNAME#' },
     { label: 'Patient ID', value: '#PATIENTID#' },
@@ -31,7 +31,6 @@ export const VariableSelectionDialog: React.FC<
 
   const handleVariableSelect = (variableValue: string) => {
     setContent((prev) => prev + variableValue);
-    setSelectedVariable('');
   };
 
   const handleSave = () => {
@@ -41,7 +40,6 @@ export const VariableSelectionDialog: React.FC<
 
   const handleClose = () => {
     setContent(initialContent); // Reset to initial content instead of empty
-    setSelectedVariable('');
     onClose();
   };
 
@@ -71,11 +69,11 @@ export const VariableSelectionDialog: React.FC<
         if (pmsPanel) {
           const panelRect = pmsPanel.getBoundingClientRect();
           const dialogWidth = 500; // Approximate dialog width
-          const dialogHeight = 450; // Approximate dialog height
+          const dialogHeight = 450; // Dialog height
 
           // Position to the left of the panel with some spacing
           let x = panelRect.left - dialogWidth - 30; // 30px gap
-          let y = panelRect.top + 50; // Offset down a bit from panel top
+          let y = panelRect.top + 20; // Reduced offset since dialog is taller
 
           // Ensure dialog doesn't go off-screen to the left
           if (x < 20) {
@@ -175,8 +173,8 @@ export const VariableSelectionDialog: React.FC<
       }}
     >
       <div
-        className="bg-white rounded-lg shadow-xl overflow-auto"
-        style={{ maxHeight: '80vh' }}
+        className="bg-white rounded-lg shadow-xl overflow-hidden flex flex-col"
+        style={{ maxHeight: '90vh', minHeight: '450px' }}
       >
         <div
           ref={headerRef}
@@ -225,34 +223,31 @@ export const VariableSelectionDialog: React.FC<
           </button>
         </div>
 
-        <div className="p-6 space-y-4">
-          <div>
+        <div className="p-6 flex flex-col flex-1">
+          <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Insert variables for "IN section"
             </label>
-            <select
-              value={selectedVariable}
-              onChange={(e) => handleVariableSelect(e.target.value)}
-              className="input"
-            >
-              <option value="">Select a variable...</option>
-              {variables.map((variable) => (
-                <option key={variable.value} value={variable.value}>
-                  {variable.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <RichTextInput
-              value={content}
-              onChange={setContent}
-              placeholder="Enter text or select variables from the dropdown above..."
+            <CustomDropdownWithGDT
+              options={variables}
+              onSelect={handleVariableSelect}
+              placeholder="Select a variable..."
+              className="w-full"
             />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-4">
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1">
+              <RichTextInput
+                value={content}
+                onChange={setContent}
+                placeholder="Enter text or select variables from the dropdown above..."
+                className="h-full"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end space-x-3 pt-4 mt-auto">
             <button
               onClick={handleClose}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"

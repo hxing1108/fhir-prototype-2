@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { RichTextInput } from './components/RichTextInput';
 import { useFormContext } from '../../../context/FormContext';
 import { IFormElement } from '../../../types/form';
+import { CustomDropdownWithGDT, DropdownOption } from './components/CustomDropdownWithGDT';
 
 export interface OutputDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (content: string) => void;
+  onSave: (content: string, defaultText?: string) => void;
   initialContent?: string;
+  initialDefaultText?: string;
   currentElementId?: string;
 }
 
@@ -16,11 +18,12 @@ export const OutputDialog: React.FC<OutputDialogProps> = ({
   onClose,
   onSave,
   initialContent = '',
+  initialDefaultText = '',
   currentElementId,
 }) => {
-  const [selectedOutputVariable, setSelectedOutputVariable] = useState('');
-  const [selectedLinkId, setSelectedLinkId] = useState('');
   const [content, setContent] = useState(initialContent);
+  const [outSectionEnabled, setOutSectionEnabled] = useState(false);
+  const [defaultText, setDefaultText] = useState(initialDefaultText);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -29,7 +32,7 @@ export const OutputDialog: React.FC<OutputDialogProps> = ({
   const { elements } = useFormContext();
 
   // Output variables for first dropdown
-  const outputVariables = [
+  const outputVariables: DropdownOption[] = [
     { label: 'Content', value: '#CONTENT#' },
     { label: 'Patient Birth Date', value: '#DD:MM:YYYY:PATIENTBIRTHDATE#' },
     { label: 'Current Date', value: '#DD:MM:YYYY:CURRENTDATE#' },
@@ -63,29 +66,21 @@ export const OutputDialog: React.FC<OutputDialogProps> = ({
 
   const linkIdOptions = getAllLinkIds(elements);
 
-  const handleOutputVariableSelect = (variableValue: string) => {
+  const handleVariableSelect = (variableValue: string) => {
     if (variableValue) {
       setContent((prev) => prev + variableValue);
-      setSelectedOutputVariable('');
-    }
-  };
-
-  const handleLinkIdSelect = (linkIdValue: string) => {
-    if (linkIdValue) {
-      setContent((prev) => prev + linkIdValue);
-      setSelectedLinkId('');
     }
   };
 
   const handleSave = () => {
-    onSave(content);
+    onSave(content, outSectionEnabled ? defaultText : undefined);
     onClose();
   };
 
   const handleClose = () => {
     setContent(initialContent); // Reset to initial content instead of empty
-    setSelectedOutputVariable('');
-    setSelectedLinkId('');
+    setDefaultText(initialDefaultText);
+    setOutSectionEnabled(!!initialDefaultText);
     onClose();
   };
 
@@ -93,8 +88,10 @@ export const OutputDialog: React.FC<OutputDialogProps> = ({
   useEffect(() => {
     if (isOpen) {
       setContent(initialContent);
+      setDefaultText(initialDefaultText);
+      setOutSectionEnabled(!!initialDefaultText);
     }
-  }, [initialContent, isOpen]);
+  }, [initialContent, initialDefaultText, isOpen]);
 
   // Reset position state when dialog closes
   useEffect(() => {
@@ -114,10 +111,10 @@ export const OutputDialog: React.FC<OutputDialogProps> = ({
         if (pmsPanel) {
           const panelRect = pmsPanel.getBoundingClientRect();
           const dialogWidth = 500;
-          const dialogHeight = 500;
+          const dialogHeight = 450; // Dialog height
 
           let x = panelRect.left - dialogWidth - 30;
-          let y = panelRect.top + 50;
+          let y = panelRect.top + 20; // Reduced offset since dialog is taller
 
           if (x < 20) {
             x = panelRect.right + 30;
@@ -204,8 +201,8 @@ export const OutputDialog: React.FC<OutputDialogProps> = ({
       }}
     >
       <div
-        className="bg-white rounded-lg shadow-xl overflow-auto"
-        style={{ maxHeight: '80vh' }}
+        className="bg-white rounded-lg shadow-xl overflow-hidden flex flex-col"
+        style={{ maxHeight: '90vh', minHeight: '450px' }}
       >
         <div
           ref={headerRef}
@@ -254,56 +251,77 @@ export const OutputDialog: React.FC<OutputDialogProps> = ({
           </button>
         </div>
 
-        <div className="p-6 space-y-4">
-          <div>
+        <div className="p-6 flex flex-col flex-1">
+          <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Insert variables for "OUT section"
             </label>
 
             {/* First dropdown - Output variables */}
             <div className="mb-3">
-              <select
-                value={selectedOutputVariable}
-                onChange={(e) => handleOutputVariableSelect(e.target.value)}
-                className="input"
-              >
-                <option value="">Select output variable...</option>
-                {outputVariables.map((variable) => (
-                  <option key={variable.value} value={variable.value}>
-                    {variable.label}
-                  </option>
-                ))}
-              </select>
+              <CustomDropdownWithGDT
+                options={outputVariables}
+                onSelect={handleVariableSelect}
+                placeholder="Select output variable..."
+                className="w-full"
+              />
             </div>
 
             {/* Second dropdown - LinkIds from other questions */}
             <div>
-              <select
-                value={selectedLinkId}
-                onChange={(e) => handleLinkIdSelect(e.target.value)}
-                className="input"
+              <CustomDropdownWithGDT
+                options={linkIdOptions}
+                onSelect={handleVariableSelect}
+                placeholder={linkIdOptions.length === 0 ? 'No other questions available' : 'Select question linkId...'}
+                className="w-full"
                 disabled={linkIdOptions.length === 0}
-              >
-                <option value="">
-                  {linkIdOptions.length === 0
-                    ? 'No other questions available'
-                    : 'Select question linkId...'}
-                </option>
-                {linkIdOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           </div>
 
-          <div>
-            <RichTextInput
-              value={content}
-              onChange={setContent}
-              placeholder="Enter text or select variables from the dropdowns above..."
-            />
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1">
+              <RichTextInput
+                value={content}
+                onChange={setContent}
+                placeholder="Enter text or select variables from the dropdowns above..."
+                className="h-full"
+              />
+            </div>
+          </div>
+
+          {/* Enable OUT Section */}
+          <div className="pt-4 border-t border-gray-200 mt-auto">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-medium text-gray-700">
+                Enable OUT empty
+              </span>
+              <label className="toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={outSectionEnabled}
+                  onChange={(e) => setOutSectionEnabled(e.target.checked)}
+                />
+                <div className="toggle-switch-track">
+                  <div className="toggle-switch-thumb"></div>
+                </div>
+              </label>
+            </div>
+
+            {outSectionEnabled && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Default text when element is not filled
+                </label>
+                <input
+                  type="text"
+                  value={defaultText}
+                  onChange={(e) => setDefaultText(e.target.value)}
+                  placeholder="Enter default text for empty fields..."
+                  className="input h-10"
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
