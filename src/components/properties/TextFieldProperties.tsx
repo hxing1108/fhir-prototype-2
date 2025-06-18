@@ -100,17 +100,25 @@ const TextFieldProperties: React.FC<TextFieldPropertiesProps> = ({
         </div>
       )}
 
-      <div className="flex items-center">
-        <input
-          type="checkbox"
-          id="required"
-          name="required"
-          checked={!!element.required}
-          onChange={handleCheckboxChange}
-          className="h-4 w-4 text-[#2D2D85] focus:ring-[#2D2D85] border-gray-300 rounded"
-        />
-        <label htmlFor="required" className="ml-2 text-sm text-gray-700">
-          Required field
+      <div className="flex items-center justify-between py-3">
+        <div>
+          <label className="text-sm font-medium text-gray-700 block">
+            Required field
+          </label>
+          <p className="text-xs text-gray-500 mt-1">
+            This field must be filled out
+          </p>
+        </div>
+        <label className="toggle-switch">
+          <input
+            type="checkbox"
+            name="required"
+            checked={!!element.required}
+            onChange={handleCheckboxChange}
+          />
+          <div className="toggle-switch-track">
+            <div className="toggle-switch-thumb"></div>
+          </div>
         </label>
       </div>
 
