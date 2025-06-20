@@ -35,18 +35,6 @@ const TextEditorProperties: React.FC<TextEditorPropertiesProps> = ({
     });
   };
 
-  const handleTextEditorCheckboxChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, checked } = e.target;
-    updateElement(element.id, {
-      textEditor: {
-        ...element.textEditor,
-        [name]: checked,
-      },
-    });
-  };
-
   return (
     <div className="space-y-4">
       <div>
@@ -96,64 +84,6 @@ const TextEditorProperties: React.FC<TextEditorPropertiesProps> = ({
           <option value="400px">Extra Large (400px)</option>
         </select>
       </div>
-
-      <div className="flex items-center justify-between py-3">
-        <div>
-          <label className="text-sm font-medium text-gray-700 block">
-            Show toolbar
-          </label>
-          <p className="text-xs text-gray-500 mt-1">
-            Display the rich text formatting toolbar
-          </p>
-        </div>
-        <label className="toggle-switch">
-          <input
-            type="checkbox"
-            name="showToolbar"
-            checked={!!element.textEditor?.showToolbar}
-            onChange={handleTextEditorCheckboxChange}
-          />
-          <div className="toggle-switch-track">
-            <div className="toggle-switch-thumb"></div>
-          </div>
-        </label>
-      </div>
-
-      <div className="flex items-center justify-between py-3">
-        <div>
-          <label className="text-sm font-medium text-gray-700 block">
-            Show tooltip for question
-          </label>
-          <p className="text-xs text-gray-500 mt-1">
-            Display a help icon with additional information
-          </p>
-        </div>
-        <label className="toggle-switch">
-          <input
-            type="checkbox"
-            name="showTooltip"
-            checked={!!element.showTooltip}
-            onChange={handleCheckboxChange}
-          />
-          <div className="toggle-switch-track">
-            <div className="toggle-switch-thumb"></div>
-          </div>
-        </label>
-      </div>
-
-      {element.showTooltip && (
-        <div>
-          <label className="label">Tooltip Text</label>
-          <textarea
-            name="tooltipText"
-            value={element.tooltipText || ''}
-            onChange={handleChange}
-            className="input"
-            rows={2}
-            placeholder="Enter tooltip text..."
-          ></textarea>
-        </div>
-      )}
 
       <div className="flex items-center justify-between py-3">
         <div>
