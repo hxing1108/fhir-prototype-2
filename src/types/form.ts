@@ -17,7 +17,8 @@ export type FormElementType =
   | 'time'
   | 'attachment'
   | 'reference'
-  | 'quantity';
+  | 'quantity'
+  | 'textEditor';
 
 export interface FormElementOption {
   value: string;
@@ -42,6 +43,12 @@ export interface ImageElement {
   width: string;
   height: string;
   align: 'left' | 'center' | 'right';
+}
+
+export interface TextEditorElement {
+  content: string;
+  height?: string;
+  showToolbar?: boolean;
 }
 
 export interface GDTAnswerMapping {
@@ -76,6 +83,7 @@ export interface IFormElement {
   tooltipText?: string;
   header?: HeaderElement;
   image?: ImageElement;
+  textEditor?: TextEditorElement;
   yesLabel?: string;
   noLabel?: string;
   allowFreeText?: boolean;

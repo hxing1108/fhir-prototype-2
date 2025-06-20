@@ -1,16 +1,19 @@
 import React from 'react';
 import { IFormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
-import { Switch } from '@headlessui/react';
 
-interface YesNoPropertiesProps {
+interface TextEditorPropertiesProps {
   element: IFormElement;
 }
 
-const YesNoProperties: React.FC<YesNoPropertiesProps> = ({ element }) => {
+const TextEditorProperties: React.FC<TextEditorPropertiesProps> = ({
+  element,
+}) => {
   const { updateElement } = useFormContext();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     updateElement(element.id, { [name]: value });
   };
@@ -20,41 +23,51 @@ const YesNoProperties: React.FC<YesNoPropertiesProps> = ({ element }) => {
     updateElement(element.id, { [name]: checked });
   };
 
+  const handleTextEditorChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    updateElement(element.id, {
+      textEditor: {
+        ...element.textEditor,
+        [name]: value,
+      },
+    });
+  };
+
+  const handleTextEditorCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, checked } = e.target;
+    updateElement(element.id, {
+      textEditor: {
+        ...element.textEditor,
+        [name]: checked,
+      },
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div>
-        <label className="label">Question Label</label>
+        <label className="label">Label</label>
         <input
           type="text"
           name="label"
-          value={element.label || ''}
+          value={element.label}
           onChange={handleChange}
           className="input"
-          placeholder="Enter your question..."
         />
       </div>
 
       <div>
-        <label className="label">'Yes' Option Label</label>
+        <label className="label">Placeholder</label>
         <input
           type="text"
-          name="yesLabel"
-          value={element.yesLabel || ''} 
+          name="placeholder"
+          value={element.placeholder || ''}
           onChange={handleChange}
           className="input"
-          placeholder="Yes"
-        />
-      </div>
-
-      <div>
-        <label className="label">'No' Option Label</label>
-        <input
-          type="text"
-          name="noLabel"
-          value={element.noLabel || ''} 
-          onChange={handleChange}
-          className="input"
-          placeholder="No"
         />
       </div>
 
@@ -67,6 +80,43 @@ const YesNoProperties: React.FC<YesNoPropertiesProps> = ({ element }) => {
           className="input"
           rows={2}
         ></textarea>
+      </div>
+
+      <div>
+        <label className="label">Editor Height</label>
+        <select
+          name="height"
+          value={element.textEditor?.height || '200px'}
+          onChange={handleTextEditorChange}
+          className="input"
+        >
+          <option value="150px">Small (150px)</option>
+          <option value="200px">Medium (200px)</option>
+          <option value="300px">Large (300px)</option>
+          <option value="400px">Extra Large (400px)</option>
+        </select>
+      </div>
+
+      <div className="flex items-center justify-between py-3">
+        <div>
+          <label className="text-sm font-medium text-gray-700 block">
+            Show toolbar
+          </label>
+          <p className="text-xs text-gray-500 mt-1">
+            Display the rich text formatting toolbar
+          </p>
+        </div>
+        <label className="toggle-switch">
+          <input
+            type="checkbox"
+            name="showToolbar"
+            checked={!!element.textEditor?.showToolbar}
+            onChange={handleTextEditorCheckboxChange}
+          />
+          <div className="toggle-switch-track">
+            <div className="toggle-switch-thumb"></div>
+          </div>
+        </label>
       </div>
 
       <div className="flex items-center justify-between py-3">
@@ -130,4 +180,4 @@ const YesNoProperties: React.FC<YesNoPropertiesProps> = ({ element }) => {
   );
 };
 
-export default YesNoProperties; 
+export default TextEditorProperties;

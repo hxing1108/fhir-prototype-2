@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IFormElement, FormElementOption } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { HelpCircle } from 'lucide-react';
+import TextEditorElement from './TextEditorElement';
 
 interface FormElementPreviewProps {
   element: IFormElement;
@@ -212,6 +213,9 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
           </div>
         );
 
+      case 'textEditor':
+        return <TextEditorElement element={element} isPreview={true} />;
+
       case 'group':
         return (
           <div className="border border-gray-200 rounded-md p-4 bg-gray-50">
@@ -259,13 +263,13 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
         // Define font sizes for each heading level
         const fontSizes = {
           1: '2.25rem', // 36px
-          2: '1.875rem', // 30px  
-          3: '1.5rem',   // 24px
-          4: '1.25rem',  // 20px
+          2: '1.875rem', // 30px
+          3: '1.5rem', // 24px
+          4: '1.25rem', // 20px
           5: '1.125rem', // 18px
-          6: '1rem',     // 16px
+          6: '1rem', // 16px
         };
-        
+
         const HeaderTag = `h${headerLevel}` as keyof JSX.IntrinsicElements;
         return (
           <HeaderTag
@@ -310,7 +314,11 @@ const FormElementPreview: React.FC<FormElementPreviewProps> = ({
   };
 
   // Don't render anything for display-only elements in the response
-  if (element.type === 'header' || element.type === 'image') {
+  if (
+    element.type === 'header' ||
+    element.type === 'image' ||
+    element.type === 'textEditor'
+  ) {
     return renderPreview();
   }
 

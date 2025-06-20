@@ -10,6 +10,7 @@ import FormProperties from '../properties/FormProperties';
 import HeaderProperties from '../properties/HeaderProperties';
 import ImageProperties from '../properties/ImageProperties';
 import YesNoProperties from '../properties/YesNoProperties';
+import TextEditorProperties from '../properties/TextEditorProperties';
 
 interface ElementPropertiesProps {
   selectedElement?: IFormElement;
@@ -44,6 +45,8 @@ export const ElementProperties: React.FC<ElementPropertiesProps> = ({
       return <ImageProperties element={selectedElement} />;
     case 'yesNo':
       return <YesNoProperties element={selectedElement} />;
+    case 'textEditor':
+      return <TextEditorProperties element={selectedElement} />;
     default:
       return <div>Select an element to edit its properties</div>;
   }

@@ -12,6 +12,7 @@ import GroupElement from './GroupElement';
 import HeaderElement from './HeaderElement';
 import ImageElement from './ImageElement';
 import YesNoElement from './YesNoElement';
+import TextEditorElement from './TextEditorElement';
 
 interface FormElementProps {
   element: FormElementType;
@@ -22,23 +23,29 @@ interface FormElementProps {
   groupTitleAsHeader?: boolean;
 }
 
-const FormElement: React.FC<FormElementProps> = ({ 
-  element, 
-  dragHandleProps, 
+const FormElement: React.FC<FormElementProps> = ({
+  element,
+  dragHandleProps,
   isNested = false,
   index,
   showNumbers = false,
-  groupTitleAsHeader = false
+  groupTitleAsHeader = false,
 }) => {
-  const { removeElement, selectedElementId, setSelectedElementId, updateElement, formSettings } = useFormContext();
+  const {
+    removeElement,
+    selectedElementId,
+    setSelectedElementId,
+    updateElement,
+    formSettings,
+  } = useFormContext();
 
   if (element.type === 'yesNo') {
     return (
-      <YesNoElement 
-        element={element} 
-        dragHandleProps={dragHandleProps} 
-        index={index} 
-        showNumbers={showNumbers} 
+      <YesNoElement
+        element={element}
+        dragHandleProps={dragHandleProps}
+        index={index}
+        showNumbers={showNumbers}
       />
     );
   }
@@ -58,10 +65,12 @@ const FormElement: React.FC<FormElementProps> = ({
         return <CheckboxGroupElement element={element} />;
       case 'radio':
         return <RadioGroupElement element={element} />;
+      case 'textEditor':
+        return <TextEditorElement element={element} />;
       case 'group':
         return (
-          <GroupElement 
-            element={element} 
+          <GroupElement
+            element={element}
             dragHandleProps={dragHandleProps}
             isNested={isNested}
             showNumbers={showNumbers}
@@ -90,16 +99,25 @@ const FormElement: React.FC<FormElementProps> = ({
     return renderElementByType();
   }
 
-  if (element.type === 'header' || element.type === 'image') {
+  if (
+    element.type === 'header' ||
+    element.type === 'image' ||
+    element.type === 'textEditor'
+  ) {
     return (
-      <div 
-        className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
+      <div
+        className={`form-element group ${
+          selectedElementId === element.id ? 'form-element-selected' : ''
+        }`}
         onClick={handleClick}
       >
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center flex-1 min-w-0">
             {dragHandleProps && (
-              <div {...dragHandleProps} className="cursor-move p-1 -ml-1 flex-shrink-0">
+              <div
+                {...dragHandleProps}
+                className="cursor-move p-1 -ml-1 flex-shrink-0"
+              >
                 <GripVertical size={16} className="text-gray-400" />
               </div>
             )}
@@ -120,18 +138,23 @@ const FormElement: React.FC<FormElementProps> = ({
   }
 
   const labelStyle = {
-    fontSize: formSettings.fontSize
+    fontSize: formSettings.fontSize,
   };
 
   return (
-    <div 
-      className={`form-element group ${selectedElementId === element.id ? 'form-element-selected' : ''}`}
+    <div
+      className={`form-element group ${
+        selectedElementId === element.id ? 'form-element-selected' : ''
+      }`}
       onClick={handleClick}
     >
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center flex-1 min-w-0">
           {dragHandleProps && (
-            <div {...dragHandleProps} className="cursor-move p-1 -ml-1 flex-shrink-0">
+            <div
+              {...dragHandleProps}
+              className="cursor-move p-1 -ml-1 flex-shrink-0"
+            >
               <GripVertical size={16} className="text-gray-400" />
             </div>
           )}

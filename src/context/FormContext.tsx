@@ -125,6 +125,10 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({
         type === 'image'
           ? { src: '', alt: '', width: '100%', height: 'auto', align: 'left' }
           : undefined,
+      textEditor:
+        type === 'textEditor'
+          ? { content: '', height: '200px', showToolbar: true }
+          : undefined,
       yesLabel: type === 'yesNo' ? 'Yes' : undefined,
       noLabel: type === 'yesNo' ? 'No' : undefined,
       defaultValue:
@@ -261,6 +265,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({
         return '';
       case 'yesNo':
         return 'Yes/No Question';
+      case 'textEditor':
+        return 'Rich Text Editor';
       case 'dateTime':
         return 'Date Time Field';
       case 'time':
@@ -296,6 +302,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({
         return 'Enter heading text...';
       case 'yesNo':
         return 'Enter your question here...';
+      case 'textEditor':
+        return 'Enter your content here...';
       case 'attachment':
         return 'Add an attachment...';
       case 'reference':

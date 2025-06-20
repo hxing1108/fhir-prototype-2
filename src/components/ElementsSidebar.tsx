@@ -1,18 +1,19 @@
 import React from 'react';
-import { 
-  Type, 
-  AlignLeft, 
-  Hash, 
-  Mail, 
-  List, 
-  CheckSquare, 
-  Circle, 
+import {
+  Type,
+  AlignLeft,
+  Hash,
+  Mail,
+  List,
+  CheckSquare,
+  Circle,
   CalendarDays,
   Search,
   FolderPlus,
   Heading,
   Image,
-  CheckCircle
+  CheckCircle,
+  Edit,
 } from 'lucide-react';
 import { useFormContext } from '../context/FormContext';
 import { FormElementType } from '../types/form';
@@ -24,8 +25,12 @@ interface ElementButtonProps {
   onClick: () => void;
 }
 
-const ElementButton: React.FC<ElementButtonProps> = ({ icon, label, onClick }) => (
-  <button 
+const ElementButton: React.FC<ElementButtonProps> = ({
+  icon,
+  label,
+  onClick,
+}) => (
+  <button
     className="flex items-center p-3 rounded-md hover:bg-gray-50 w-full transition-colors"
     onClick={onClick}
   >
@@ -39,22 +44,70 @@ const ElementsSidebar: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const elementTypes = [
-    { type: 'header' as FormElementType, icon: <Heading size={18} />, label: 'Label' },
-    { type: 'text' as FormElementType, icon: <Type size={18} />, label: 'Text Field' },
-    { type: 'textarea' as FormElementType, icon: <AlignLeft size={18} />, label: 'Text Area' },
-    { type: 'number' as FormElementType, icon: <Hash size={18} />, label: 'Number' },
-    { type: 'email' as FormElementType, icon: <Mail size={18} />, label: 'Email' },
-    { type: 'select' as FormElementType, icon: <List size={18} />, label: 'Dropdown' },
-    { type: 'checkbox' as FormElementType, icon: <CheckSquare size={18} />, label: 'Checkbox Group' },
-    { type: 'radio' as FormElementType, icon: <Circle size={18} />, label: 'Radio Group' },
-    { type: 'yesNo' as FormElementType, icon: <CheckCircle size={18} />, label: 'Yes/No Question' },
-    { type: 'date' as FormElementType, icon: <CalendarDays size={18} />, label: 'Date' },
-    { type: 'group' as FormElementType, icon: <FolderPlus size={18} />, label: 'Question Group' },
-    { type: 'image' as FormElementType, icon: <Image size={18} />, label: 'Image' },
+    {
+      type: 'header' as FormElementType,
+      icon: <Heading size={18} />,
+      label: 'Label',
+    },
+    {
+      type: 'text' as FormElementType,
+      icon: <Type size={18} />,
+      label: 'Text Field',
+    },
+    {
+      type: 'textEditor' as FormElementType,
+      icon: <Edit size={18} />,
+      label: 'Text Editor',
+    },
+    {
+      type: 'number' as FormElementType,
+      icon: <Hash size={18} />,
+      label: 'Number',
+    },
+    {
+      type: 'email' as FormElementType,
+      icon: <Mail size={18} />,
+      label: 'Email',
+    },
+    {
+      type: 'select' as FormElementType,
+      icon: <List size={18} />,
+      label: 'Dropdown',
+    },
+    {
+      type: 'checkbox' as FormElementType,
+      icon: <CheckSquare size={18} />,
+      label: 'Checkbox Group',
+    },
+    {
+      type: 'radio' as FormElementType,
+      icon: <Circle size={18} />,
+      label: 'Radio Group',
+    },
+    {
+      type: 'yesNo' as FormElementType,
+      icon: <CheckCircle size={18} />,
+      label: 'Yes/No Question',
+    },
+    {
+      type: 'date' as FormElementType,
+      icon: <CalendarDays size={18} />,
+      label: 'Date',
+    },
+    {
+      type: 'group' as FormElementType,
+      icon: <FolderPlus size={18} />,
+      label: 'Question Group',
+    },
+    {
+      type: 'image' as FormElementType,
+      icon: <Image size={18} />,
+      label: 'Image',
+    },
   ];
 
   const filteredElements = searchQuery
-    ? elementTypes.filter(element => 
+    ? elementTypes.filter((element) =>
         element.label.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : elementTypes;
