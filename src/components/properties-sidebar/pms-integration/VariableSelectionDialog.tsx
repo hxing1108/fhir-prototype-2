@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RichTextInput } from './components/RichTextInput';
-import { CustomDropdownWithGDT, DropdownOption } from './components/CustomDropdownWithGDT';
+import {
+  CustomDropdownWithGDT,
+  DropdownOption,
+} from './components/CustomDropdownWithGDT';
 
 export interface VariableSelectionDialogProps {
   isOpen: boolean;
@@ -20,11 +23,14 @@ export const VariableSelectionDialog: React.FC<
 
   // Available variables for PMS integration
   const variables: DropdownOption[] = [
-    { label: 'Patient Birth Date', value: '#DD:MM:YYYY:PATIENTBIRTHDATE#' },
+    {
+      label: 'Patient Birth Date',
+      value: '#PATIENTBIRTHDATE#',
+    },
     { label: 'Patient Name', value: '#PATIENTNAME#' },
-    { label: 'Patient ID', value: '#PATIENTID#' },
-    { label: 'Current Date', value: '#DD:MM:YYYY:CURRENTDATE#' },
-    { label: 'Current Time', value: '#HH:MM:CURRENTTIME#' },
+    { label: 'Patient Given Name', value: '#PATIENTGIVENNAME#' },
+    { label: 'Patient Sex', value: '#PATIENTSEX#' },
+    { label: 'Current Date', value: '#CUR_DATE#' },
     { label: 'Doctor Name', value: '#DOCTORNAME#' },
     { label: 'Practice Name', value: '#PRACTICENAME#' },
   ];

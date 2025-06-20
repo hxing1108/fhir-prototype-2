@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { RichTextInput } from './components/RichTextInput';
 import { useFormContext } from '../../../context/FormContext';
 import { IFormElement } from '../../../types/form';
-import { CustomDropdownWithGDT, DropdownOption } from './components/CustomDropdownWithGDT';
+import {
+  CustomDropdownWithGDT,
+  DropdownOption,
+} from './components/CustomDropdownWithGDT';
 
 export interface OutputDialogProps {
   isOpen: boolean;
@@ -272,9 +275,14 @@ export const OutputDialog: React.FC<OutputDialogProps> = ({
               <CustomDropdownWithGDT
                 options={linkIdOptions}
                 onSelect={handleVariableSelect}
-                placeholder={linkIdOptions.length === 0 ? 'No other questions available' : 'Select question linkId...'}
+                placeholder={
+                  linkIdOptions.length === 0
+                    ? 'No other questions available'
+                    : 'Select question linkId...'
+                }
                 className="w-full"
                 disabled={linkIdOptions.length === 0}
+                hideGDTInput={true}
               />
             </div>
           </div>

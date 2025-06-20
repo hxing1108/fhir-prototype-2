@@ -13,6 +13,7 @@ export interface CustomDropdownWithGDTProps {
   placeholder: string;
   className?: string;
   disabled?: boolean;
+  hideGDTInput?: boolean;
 }
 
 export const CustomDropdownWithGDT: React.FC<CustomDropdownWithGDTProps> = ({
@@ -21,6 +22,7 @@ export const CustomDropdownWithGDT: React.FC<CustomDropdownWithGDTProps> = ({
   placeholder,
   className = '',
   disabled = false,
+  hideGDTInput = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [gdtCode, setGdtCode] = useState('');
@@ -29,7 +31,10 @@ export const CustomDropdownWithGDT: React.FC<CustomDropdownWithGDTProps> = ({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -47,7 +52,7 @@ export const CustomDropdownWithGDT: React.FC<CustomDropdownWithGDTProps> = ({
 
   const handleGdtCodeAdd = () => {
     if (!gdtCode.trim()) return;
-    
+
     const variable = GDTMappingService.gdtCodeToVariable(gdtCode.trim());
     if (variable) {
       onSelect(variable);
@@ -91,7 +96,9 @@ export const CustomDropdownWithGDT: React.FC<CustomDropdownWithGDTProps> = ({
           <div className="max-h-48 overflow-y-auto">
             {options.length === 0 ? (
               <div className="px-3 py-2 text-gray-500 text-sm">
-                {placeholder.includes('question') ? 'No other questions available' : 'No options available'}
+                {placeholder.includes('question')
+                  ? 'No other questions available'
+                  : 'No options available'}
               </div>
             ) : (
               options.map((option) => (
@@ -107,40 +114,42 @@ export const CustomDropdownWithGDT: React.FC<CustomDropdownWithGDTProps> = ({
             )}
           </div>
 
-          {/* GDT Code input section */}
-          <div className="border-t border-gray-200 p-3 bg-gray-50">
-            <label className="block text-xs font-medium text-gray-700 mb-2">
-              Add GDT Code Variable
-            </label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="text"
-                className="flex-1 px-2 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter GDT code"
-                value={gdtCode}
-                onChange={(e) => setGdtCode(e.target.value)}
-                onKeyPress={handleKeyPress}
-                onClick={(e) => e.stopPropagation()}
-              />
-              <button
-                type="button"
-                onClick={handleGdtCodeAdd}
-                disabled={!gdtCode.trim()}
-                className={`btn flex items-center ${
-                  !gdtCode.trim() 
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                    : 'btn-primary hover:bg-blue-700'
-                }`}
-              >
-                <Plus size={16} />
-              </button>
+          {/* GDT Code input section - only show if hideGDTInput is false */}
+          {!hideGDTInput && (
+            <div className="border-t border-gray-200 p-3 bg-gray-50">
+              <label className="block text-xs font-medium text-gray-700 mb-2">
+                Add GDT Code Variable
+              </label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  className="flex-1 px-2 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter GDT code"
+                  value={gdtCode}
+                  onChange={(e) => setGdtCode(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <button
+                  type="button"
+                  onClick={handleGdtCodeAdd}
+                  disabled={!gdtCode.trim()}
+                  className={`btn flex items-center ${
+                    !gdtCode.trim()
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'btn-primary hover:bg-blue-700'
+                  }`}
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                e.g., 3101 → Patient Name
+              </p>
             </div>
-            <p className="mt-1 text-xs text-gray-500">
-              e.g., 3101 → Patient Name
-            </p>
-          </div>
+          )}
         </div>
       )}
     </div>
   );
-}; 
+};

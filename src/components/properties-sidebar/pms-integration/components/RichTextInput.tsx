@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { GDTMappingService } from '../../../../services/GDTMappingService';
 
 export interface RichTextInputProps {
   value: string;
@@ -39,10 +40,20 @@ export const RichTextInput: React.FC<RichTextInputProps> = ({
         }
       }
 
+      // Determine display name for the pill
+      let displayName = match[0].replace(/#/g, '').split(':').pop() || match[0];
+
+      // Check if it's a GDT variable (format #EF_[CODE]#)
+      const gdtMatch = match[0].match(/#EF_(\d+)#/);
+      if (gdtMatch) {
+        const gdtCode = gdtMatch[1];
+        // Simple format: EF_[CODE]
+        displayName = `EF_${gdtCode}`;
+      }
+
       // Add the variable as a pill
-      const varName = match[0].replace(/#/g, '').split(':').pop() || match[0];
       parts.push(
-        `<span contenteditable="false" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mx-1 select-none" data-variable="${match[0]}">${varName}<button class="variable-delete text-blue-600 hover:text-blue-800" type="button">×</button></span>`
+        `<span contenteditable="false" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mx-1 select-none" data-variable="${match[0]}">${displayName}<button class="variable-delete text-blue-600 hover:text-blue-800" type="button">×</button></span>`
       );
       lastIndex = match.index + match[0].length;
     }
