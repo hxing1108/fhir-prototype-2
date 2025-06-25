@@ -223,17 +223,7 @@ const HeaderProperties: React.FC<HeaderPropertiesProps> = ({ element }) => {
         </div>
       </div>
       
-      {/* Description - Always Visible */}
-      <div>
-        <label className="label">Description (Optional)</label>
-        <textarea
-          name="description"
-          value={element.description || ''}
-          onChange={handleChange}
-          className="input"
-          rows={2}
-        ></textarea>
-      </div>
+
     </div>
   );
 };

@@ -59,16 +59,7 @@ const TextEditorProperties: React.FC<TextEditorPropertiesProps> = ({
         />
       </div>
 
-      <div>
-        <label className="label">Description (Optional)</label>
-        <textarea
-          name="description"
-          value={element.description || ''}
-          onChange={handleChange}
-          className="input"
-          rows={2}
-        ></textarea>
-      </div>
+
 
       <div>
         <label className="label">Editor Height</label>

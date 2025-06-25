@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { IFormElement, FormElementOption } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { Plus, Trash2, GripVertical } from 'lucide-react';
@@ -11,19 +11,6 @@ interface SelectPropertiesProps {
 
 const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
   const { updateElement } = useFormContext();
-  const [newOption, setNewOption] = useState('');
-  const [showEmptyTooltip, setShowEmptyTooltip] = useState(false);
-  const addButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Auto-hide tooltip after 3 seconds
-  useEffect(() => {
-    if (showEmptyTooltip) {
-      const timer = setTimeout(() => {
-        setShowEmptyTooltip(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [showEmptyTooltip]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     updateElement(element.id, { [e.target.name]: e.target.value });
@@ -40,15 +27,10 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
   };
 
   const handleAddOption = () => {
-    if (!newOption.trim()) {
-      setShowEmptyTooltip(true);
-      return;
-    }
-    
-    const newOptions = [...(element.options || []), { value: newOption, label: newOption }];
+    const optionCount = (element.options || []).length + 1;
+    const newOptionLabel = `Option ${optionCount}`;
+    const newOptions = [...(element.options || []), { value: newOptionLabel, label: newOptionLabel }];
     updateElement(element.id, { options: newOptions });
-    setNewOption('');
-    setShowEmptyTooltip(false);
   };
 
   const handleRemoveOption = (index: number) => {
@@ -92,14 +74,61 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
       </div>
 
       <div>
-        <label className="label">Description (Optional)</label>
-        <textarea
-          name="description"
-          value={element.description || ''}
-          onChange={handleChange}
-          className="input"
-          rows={2}
-        ></textarea>
+        <div className="flex items-center justify-between mb-3">
+          <label className="label">Options</label>
+          <button
+            type="button"
+            onClick={handleAddOption}
+            className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200"
+          >
+            <Plus size={16} />
+          </button>
+        </div>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="options-list">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="space-y-2"
+              >
+                {element.options?.map((option, index) => (
+                  <Draggable key={index.toString()} draggableId={index.toString()} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        className="flex items-center space-x-2"
+                      >
+                        <div
+                          {...provided.dragHandleProps}
+                          className="cursor-move text-gray-400"
+                        >
+                          <GripVertical size={16} />
+                        </div>
+                        <input
+                          type="text"
+                          value={option.label}
+                          onChange={(e) => handleOptionChange(index, 'label', e.target.value)}
+                          className="input flex-1"
+                          placeholder="Option label"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveOption(index)}
+                          className="p-1 text-gray-400 hover:text-error-500"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
 
       <div className="flex items-center justify-between py-3">
@@ -158,90 +187,6 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ element }) => {
             <div className="toggle-switch-thumb"></div>
           </div>
         </label>
-      </div>
-
-      <div>
-        <label className="label">Options</label>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="options-list">
-            {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="space-y-2 mb-3"
-              >
-                {element.options?.map((option, index) => (
-                  <Draggable key={index.toString()} draggableId={index.toString()} index={index}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        className="flex items-center space-x-2"
-                      >
-                        <div
-                          {...provided.dragHandleProps}
-                          className="cursor-move text-gray-400"
-                        >
-                          <GripVertical size={16} />
-                        </div>
-                        <input
-                          type="text"
-                          value={option.label}
-                          onChange={(e) => handleOptionChange(index, 'label', e.target.value)}
-                          className="input flex-1"
-                          placeholder="Option label"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveOption(index)}
-                          className="p-1 text-gray-400 hover:text-error-500"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-        
-        <div className="flex mt-2 relative">
-          <input
-            type="text"
-            value={newOption}
-            onChange={(e) => setNewOption(e.target.value)}
-            className="input flex-1 mr-2"
-            placeholder="Add new option"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleAddOption();
-              }
-            }}
-            onFocus={() => setShowEmptyTooltip(false)}
-          />
-          <button
-            ref={addButtonRef}
-            type="button"
-            onClick={handleAddOption}
-            className="btn btn-sm btn-secondary relative"
-          >
-            <Plus size={16} />
-          </button>
-          
-          {/* Empty option tooltip */}
-          {showEmptyTooltip && (
-            <div className="absolute bottom-full mb-2 right-0 z-50">
-              <div className="bg-red-500 text-white text-sm px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
-                Please enter text first
-                <div className="absolute top-full right-4 -mt-1 border-4 border-transparent border-t-red-500"></div>
-              </div>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

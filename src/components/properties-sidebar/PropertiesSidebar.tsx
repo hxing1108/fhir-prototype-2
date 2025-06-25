@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useFormContext } from '../../context/FormContext';
-import { IFormElement } from '../../types/form';
+import { IFormElement, VisibilitySettings } from '../../types/form';
 import { ElementProperties } from './ElementProperties';
+import { VisibilityPanel } from './visibility/VisibilityPanel';
 import { PMSIntegrationPanel } from './pms-integration/PMSIntegrationPanel';
 import FormProperties from '../properties/FormProperties';
 import { v4 as uuidv4 } from 'uuid';
@@ -76,6 +77,10 @@ export const PropertiesSidebar: React.FC<PropertiesSidebarProps> = () => {
     }
   };
 
+  const handleVisibilityChange = (elementId: string, settings: VisibilitySettings) => {
+    updateElement(elementId, { visibility: settings });
+  };
+
   // Preview mode view
   if (previewMode) {
     return (
@@ -128,6 +133,13 @@ export const PropertiesSidebar: React.FC<PropertiesSidebarProps> = () => {
           <ElementProperties selectedElement={selectedElement} />
         </div>
       </div>
+
+      {/* Visibility Section */}
+      <VisibilityPanel
+        selectedElementId={selectedElement.id}
+        visibilitySettings={selectedElement.visibility}
+        onVisibilityChange={handleVisibilityChange}
+      />
 
       {/* PMS Integration Section */}
       <PMSIntegrationPanel

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { IFormElement, FormElementOption } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 import { Plus, Trash2, GripVertical, HelpCircle, MessageSquarePlus } from 'lucide-react';
@@ -11,19 +11,6 @@ interface RadioPropertiesProps {
 
 const RadioProperties: React.FC<RadioPropertiesProps> = ({ element }) => {
   const { updateElement } = useFormContext();
-  const [newOption, setNewOption] = useState('');
-  const [showEmptyTooltip, setShowEmptyTooltip] = useState(false);
-  const addButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Auto-hide tooltip after 3 seconds
-  useEffect(() => {
-    if (showEmptyTooltip) {
-      const timer = setTimeout(() => {
-        setShowEmptyTooltip(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [showEmptyTooltip]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     updateElement(element.id, { [e.target.name]: e.target.value });
@@ -54,20 +41,16 @@ const RadioProperties: React.FC<RadioPropertiesProps> = ({ element }) => {
   };
 
   const handleAddOption = () => {
-    if (!newOption.trim()) {
-      setShowEmptyTooltip(true);
-      return;
-    }
+    const optionCount = (element.options || []).length + 1;
+    const newOptionLabel = `Option ${optionCount}`;
     const newOptionObject: FormElementOption = {
-      value: newOption,
-      label: newOption,
+      value: newOptionLabel,
+      label: newOptionLabel,
       showOptionTooltip: false,
       optionTooltipText: ''
     };
     const newOptions = [...(element.options || []), newOptionObject];
     updateElement(element.id, { options: newOptions });
-    setNewOption('');
-    setShowEmptyTooltip(false);
   };
 
   const handleRemoveOption = (index: number) => {
@@ -100,83 +83,23 @@ const RadioProperties: React.FC<RadioPropertiesProps> = ({ element }) => {
       </div>
 
       <div>
-        <label className="label">Description (Optional)</label>
-        <textarea
-          name="description"
-          value={element.description || ''}
-          onChange={handleChange}
-          className="input"
-          rows={2}
-        ></textarea>
-      </div>
-
-      <div className="flex items-center justify-between py-3">
-        <div>
-          <label className="text-sm font-medium text-gray-700 block">
-            Show tooltip for question
-          </label>
-          <p className="text-xs text-gray-500 mt-1">
-            Display a help icon with additional information for the entire question.
-          </p>
+        <div className="flex items-center justify-between mb-3">
+          <label className="label">Options</label>
+          <button
+            type="button"
+            onClick={handleAddOption}
+            className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200"
+          >
+            <Plus size={16} />
+          </button>
         </div>
-        <label className="toggle-switch">
-          <input
-            type="checkbox"
-            name="showTooltip"
-            checked={!!element.showTooltip}
-            onChange={handleCheckboxChange}
-          />
-          <div className="toggle-switch-track">
-            <div className="toggle-switch-thumb"></div>
-          </div>
-        </label>
-      </div>
-
-      {element.showTooltip && (
-        <div>
-          <label className="label">Tooltip Text (for question)</label>
-          <textarea
-            name="tooltipText"
-            value={element.tooltipText || ''}
-            onChange={handleChange}
-            className="input"
-            rows={2}
-            placeholder="Enter tooltip text for the question..."
-          ></textarea>
-        </div>
-      )}
-
-      <div className="flex items-center justify-between py-3">
-        <div>
-          <label className="text-sm font-medium text-gray-700 block">
-            Required field
-          </label>
-          <p className="text-xs text-gray-500 mt-1">
-            This field must be filled out
-          </p>
-        </div>
-        <label className="toggle-switch">
-          <input
-            type="checkbox"
-            name="required"
-            checked={!!element.required}
-            onChange={handleCheckboxChange}
-          />
-          <div className="toggle-switch-track">
-            <div className="toggle-switch-thumb"></div>
-          </div>
-        </label>
-      </div>
-
-      <div>
-        <label className="label">Options</label>
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="options-list">
             {(provided) => (
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="space-y-3 mb-3"
+                className="space-y-3"
               >
                 {element.options?.map((option, index) => (
                   <Draggable key={index.toString()} draggableId={index.toString()} index={index}>
@@ -238,41 +161,64 @@ const RadioProperties: React.FC<RadioPropertiesProps> = ({ element }) => {
             )}
           </Droppable>
         </DragDropContext>
-        
-        <div className="flex mt-2 relative">
-          <input
-            type="text"
-            value={newOption}
-            onChange={(e) => setNewOption(e.target.value)}
-            className="input flex-1 mr-2"
-            placeholder="Add new option"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleAddOption();
-              }
-            }}
-            onFocus={() => setShowEmptyTooltip(false)}
-          />
-          <button
-            ref={addButtonRef}
-            type="button"
-            onClick={handleAddOption}
-            className="btn btn-sm btn-secondary relative"
-          >
-            <Plus size={16} />
-          </button>
-          
-          {/* Empty option tooltip */}
-          {showEmptyTooltip && (
-            <div className="absolute bottom-full mb-2 right-0 z-50">
-              <div className="bg-red-500 text-white text-sm px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
-                Please enter text first
-                <div className="absolute top-full right-4 -mt-1 border-4 border-transparent border-t-red-500"></div>
-              </div>
-            </div>
-          )}
+      </div>
+
+      <div className="flex items-center justify-between py-3">
+        <div>
+          <label className="text-sm font-medium text-gray-700 block">
+            Show tooltip for question
+          </label>
+          <p className="text-xs text-gray-500 mt-1">
+            Display a help icon with additional information for the entire question.
+          </p>
         </div>
+        <label className="toggle-switch">
+          <input
+            type="checkbox"
+            name="showTooltip"
+            checked={!!element.showTooltip}
+            onChange={handleCheckboxChange}
+          />
+          <div className="toggle-switch-track">
+            <div className="toggle-switch-thumb"></div>
+          </div>
+        </label>
+      </div>
+
+      {element.showTooltip && (
+        <div>
+          <label className="label">Tooltip Text (for question)</label>
+          <textarea
+            name="tooltipText"
+            value={element.tooltipText || ''}
+            onChange={handleChange}
+            className="input"
+            rows={2}
+            placeholder="Enter tooltip text for the question..."
+          ></textarea>
+        </div>
+      )}
+
+      <div className="flex items-center justify-between py-3">
+        <div>
+          <label className="text-sm font-medium text-gray-700 block">
+            Required field
+          </label>
+          <p className="text-xs text-gray-500 mt-1">
+            This field must be filled out
+          </p>
+        </div>
+        <label className="toggle-switch">
+          <input
+            type="checkbox"
+            name="required"
+            checked={!!element.required}
+            onChange={handleCheckboxChange}
+          />
+          <div className="toggle-switch-track">
+            <div className="toggle-switch-thumb"></div>
+          </div>
+        </label>
       </div>
     </div>
   );

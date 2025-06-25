@@ -58,16 +58,7 @@ const YesNoProperties: React.FC<YesNoPropertiesProps> = ({ element }) => {
         />
       </div>
 
-      <div>
-        <label className="label">Description (Optional)</label>
-        <textarea
-          name="description"
-          value={element.description || ''}
-          onChange={handleChange}
-          className="input"
-          rows={2}
-        ></textarea>
-      </div>
+
 
       <div className="flex items-center justify-between py-3">
         <div>

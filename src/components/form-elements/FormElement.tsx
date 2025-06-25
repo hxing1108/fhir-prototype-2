@@ -164,36 +164,48 @@ const FormElement: React.FC<FormElementProps> = ({
                 {index}.
               </span>
             )}
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              {element.showTooltip && (
-                <div className="relative group/tooltip flex-shrink-0">
-                  <HelpCircle size={16} className="text-gray-400" />
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap z-50">
-                    {element.tooltipText || 'Tooltip text'}
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                {element.showTooltip && (
+                  <div className="relative group/tooltip flex-shrink-0">
+                    <HelpCircle size={16} className="text-gray-400" />
+                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 whitespace-nowrap z-50">
+                      {element.tooltipText || 'Tooltip text'}
+                      <div className="absolute left-1/2 -translate-x-1/2 top-full -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
                   </div>
+                )}
+                <div className="relative flex-1 min-w-0">
+                  <textarea
+                    value={element.label}
+                    onChange={handleLabelChange}
+                    className="editable-text min-w-0 w-full resize-none overflow-hidden bg-transparent"
+                    placeholder="Enter label..."
+                    style={{
+                      ...labelStyle,
+                      height: 'auto',
+                      verticalAlign: 'middle',
+                      alignSelf: 'center',
+                    }}
+                    rows={1}
+                    onInput={(e) => {
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = 'auto';
+                      target.style.height = `${target.scrollHeight}px`;
+                    }}
+                  />
+                  {element.required && (
+                    <div 
+                      className="absolute inset-0 pointer-events-none whitespace-pre-wrap"
+                      style={{
+                        ...labelStyle,
+                        color: 'transparent',
+                      }}
+                    >
+                      {element.label} <span className="text-error-500 text-xs">*</span>
+                    </div>
+                  )}
                 </div>
-              )}
-              <textarea
-                value={element.label}
-                onChange={handleLabelChange}
-                className="editable-text min-w-0 w-full resize-none overflow-hidden"
-                placeholder="Enter label..."
-                style={{
-                  ...labelStyle,
-                  height: 'auto',
-                }}
-                rows={1}
-                onInput={(e) => {
-                  const target = e.target as HTMLTextAreaElement;
-                  target.style.height = 'auto';
-                  target.style.height = `${target.scrollHeight}px`;
-                }}
-              />
-              {element.required && (
-                <span className="text-error-500 text-xs flex-shrink-0">*</span>
-              )}
-            </div>
+              </div>
           </div>
         </div>
         <button

@@ -38,7 +38,7 @@ const TextFieldProperties: React.FC<TextFieldPropertiesProps> = ({
           name="label"
           value={element.label}
           onChange={handleChange}
-          className="input h-[60px] overflow-y-auto"
+          className="input"
         />
       </div>
 
@@ -53,16 +53,7 @@ const TextFieldProperties: React.FC<TextFieldPropertiesProps> = ({
         />
       </div>
 
-      <div>
-        <label className="label">Description (Optional)</label>
-        <textarea
-          name="description"
-          value={element.description || ''}
-          onChange={handleChange}
-          className="input"
-          rows={2}
-        ></textarea>
-      </div>
+
 
       <div className="flex items-center justify-between py-3">
         <div>

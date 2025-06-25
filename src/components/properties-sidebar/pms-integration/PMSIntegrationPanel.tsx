@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronRight } from 'lucide-react';
 import { VariableSelectionDialog } from './VariableSelectionDialog';
 import { OutputDialog } from './OutputDialog';
 
@@ -22,6 +22,7 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
   });
   const [showVariableDialog, setShowVariableDialog] = useState(false);
   const [showOutputDialog, setShowOutputDialog] = useState(false);
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
   const handleToggleTakeoverPMS = () => {
     if (!pmsEnabled.takeover) {
@@ -70,97 +71,117 @@ export const PMSIntegrationPanel: React.FC<PMSIntegrationPanelProps> = ({
     }
   };
 
+  const toggleAccordion = () => {
+    setIsAccordionOpen(!isAccordionOpen);
+  };
+
   return (
     <>
       <div
-        className="p-4 border-t border-gray-200 space-y-3"
+        className="border-t border-gray-200"
         data-testid="pms-integration-panel"
       >
-        <h4 className="text-sm font-medium text-gray-700 mb-3">
-          PMS Integration
-        </h4>
+        {/* Accordion Header */}
+        <button
+          onClick={toggleAccordion}
+          className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors duration-150"
+        >
+          <h4 className="text-sm font-medium text-gray-700">
+            PMS Integration
+          </h4>
+          {isAccordionOpen ? (
+            <ChevronDown size={16} className="text-gray-500" />
+          ) : (
+            <ChevronRight size={16} className="text-gray-500" />
+          )}
+        </button>
 
-        {/* Takeover from PMS */}
-        <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-          <span className="text-sm font-medium text-gray-700">
-            Takeover from PMS
-          </span>
-          <div className="flex items-center space-x-3">
-            {pmsEnabled.takeover && (
-              <div className="relative">
-                <button
-                  onClick={handleOpenTakeoverDialog}
-                  className="p-2 text-sm font-medium rounded-md bg-white border border-gray-300 hover:bg-gray-50 flex items-center"
-                  title="Edit Configuration"
-                >
-                  <ExternalLink size={16} />
-                </button>
-                {/* Notification dot when content is saved */}
-                {selectedElementId &&
-                  savedContent[`takeover_${selectedElementId}`] && (
-                    <div
-                      className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
-                      style={{ backgroundColor: '#78AAFF' }}
-                    ></div>
-                  )}
+        {/* Accordion Content */}
+        {isAccordionOpen && (
+          <div className="px-4 pb-4 space-y-3">
+            {/* Takeover from PMS */}
+            <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+              <span className="text-sm font-medium text-gray-700">
+                Takeover from PMS
+              </span>
+              <div className="flex items-center space-x-3">
+                {pmsEnabled.takeover && (
+                  <div className="relative">
+                    <button
+                      onClick={handleOpenTakeoverDialog}
+                      className="p-2 text-sm font-medium rounded-md bg-white border border-gray-300 hover:bg-gray-50 flex items-center"
+                      title="Edit Configuration"
+                    >
+                      <ExternalLink size={16} />
+                    </button>
+                    {/* Notification dot when content is saved */}
+                    {selectedElementId &&
+                      savedContent[`takeover_${selectedElementId}`] && (
+                        <div
+                          className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
+                          style={{ backgroundColor: '#78AAFF' }}
+                        ></div>
+                      )}
+                  </div>
+                )}
+                <label className="toggle-switch">
+                  <input
+                    type="checkbox"
+                    checked={pmsEnabled.takeover}
+                    onChange={handleToggleTakeoverPMS}
+                  />
+                  <div className="toggle-switch-track">
+                    <div className="toggle-switch-thumb"></div>
+                  </div>
+                </label>
               </div>
+            </div>
+
+            {/* Output to PMS system */}
+            <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+              <span className="text-sm font-medium text-gray-700">
+                Output to PMS system
+              </span>
+              <div className="flex items-center space-x-3">
+                {pmsEnabled.output && (
+                  <div className="relative">
+                    <button
+                      onClick={handleOpenOutputDialog}
+                      className="p-2 text-sm font-medium rounded-md bg-white border border-gray-300 hover:bg-gray-50 flex items-center"
+                      title="Edit Configuration"
+                    >
+                      <ExternalLink size={16} />
+                    </button>
+                    {/* Notification dot when content is saved */}
+                    {selectedElementId &&
+                      (savedContent[`output_${selectedElementId}`] || 
+                       savedDefaultTexts[`output_default_${selectedElementId}`]) && (
+                        <div
+                          className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
+                          style={{ backgroundColor: '#78AAFF' }}
+                        ></div>
+                      )}
+                  </div>
+                )}
+                <label className="toggle-switch">
+                  <input
+                    type="checkbox"
+                    checked={pmsEnabled.output}
+                    onChange={handleToggleOutputPMS}
+                  />
+                  <div className="toggle-switch-track">
+                    <div className="toggle-switch-thumb"></div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {!selectedElementId && (
+              <p className="mt-2 text-xs text-gray-500 text-center">
+                Select an element to configure PMS settings
+              </p>
             )}
-            <label className="toggle-switch">
-              <input
-                type="checkbox"
-                checked={pmsEnabled.takeover}
-                onChange={handleToggleTakeoverPMS}
-              />
-              <div className="toggle-switch-track">
-                <div className="toggle-switch-thumb"></div>
-              </div>
-            </label>
           </div>
-        </div>
-
-        {/* Output to PMS system */}
-        <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-          <span className="text-sm font-medium text-gray-700">
-            Output to PMS system
-          </span>
-          <div className="flex items-center space-x-3">
-            {pmsEnabled.output && (
-              <div className="relative">
-                <button
-                  onClick={handleOpenOutputDialog}
-                  className="p-2 text-sm font-medium rounded-md bg-white border border-gray-300 hover:bg-gray-50 flex items-center"
-                  title="Edit Configuration"
-                >
-                  <ExternalLink size={16} />
-                </button>
-                {/* Notification dot when content is saved */}
-                {selectedElementId &&
-                  (savedContent[`output_${selectedElementId}`] || 
-                   savedDefaultTexts[`output_default_${selectedElementId}`]) && (
-                    <div
-                      className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
-                      style={{ backgroundColor: '#78AAFF' }}
-                    ></div>
-                  )}
-              </div>
-            )}
-            <label className="toggle-switch">
-              <input
-                type="checkbox"
-                checked={pmsEnabled.output}
-                onChange={handleToggleOutputPMS}
-              />
-              <div className="toggle-switch-track">
-                <div className="toggle-switch-thumb"></div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        {!selectedElementId && (
-          <p className="mt-2 text-xs text-gray-500 text-center">
-            Select an element to configure PMS settings
-          </p>
         )}
       </div>
 

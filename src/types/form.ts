@@ -100,6 +100,7 @@ export interface IFormElement {
   definition?: string;
   repeats?: boolean;
   acroField?: AcroFieldMapping;
+  visibility?: VisibilitySettings;
 }
 
 export interface EnableWhen {
@@ -113,6 +114,28 @@ export interface EnableWhen {
   answerTime?: string;
   answerString?: string;
   answerCoding?: FHIRCoding;
+}
+
+export interface VisibilityCondition {
+  id: string;
+  sourceFieldId: string;        // Which field to check
+  operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'is_empty' | 'is_not_empty' | 'greater_than' | 'less_than';
+  value?: string | number | boolean;  // The value to compare against
+  logic: 'AND' | 'OR';         // Logic connector for multiple conditions
+}
+
+export interface VisibilityRule {
+  id: string;
+  conditions: VisibilityCondition[];
+  action: 'show' | 'hide';     // What to do when conditions are met
+  targetType: 'next_question' | 'specific_question' | 'end_form';
+  targetQuestionId?: string;   // For specific question targeting
+}
+
+export interface VisibilitySettings {
+  enabled: boolean;
+  rules: VisibilityRule[];
+  defaultAction: 'show' | 'hide';  // What to do when no rules match
 }
 
 export interface FormSettings {

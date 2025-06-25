@@ -155,8 +155,8 @@ const FormBuilder: React.FC = () => {
             <ChevronDown size={16} className={`transform transition-transform ${showEmptyStateAddMenu ? 'rotate-180' : ''}`} />
           </button>
           
-          {showEmptyStateAddMenu && (
-            <div className="absolute left-1/2 transform -translate-x-1/2 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+                      {showEmptyStateAddMenu && (
+              <div className="absolute left-1/2 transform -translate-x-1/2 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50">
               {elementTypes.map((type) => (
                 <button
                   key={type.type}
@@ -199,7 +199,7 @@ const FormBuilder: React.FC = () => {
             </button>
             
             {showHeaderAddMenu && (
-              <div className="absolute left-1/2 transform -translate-x-1/2 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50">
                 {elementTypes.map((type) => (
                   <button
                     key={type.type}

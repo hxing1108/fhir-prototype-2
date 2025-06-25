@@ -1,9 +1,9 @@
 import React from 'react';
-import { FormElement } from '../../types/form';
+import { IFormElement } from '../../types/form';
 import { useFormContext } from '../../context/FormContext';
 
 interface RichTextPropertiesProps {
-  element: FormElement;
+  element: IFormElement;
 }
 
 const RichTextProperties: React.FC<RichTextPropertiesProps> = ({ element }) => {
@@ -27,17 +27,7 @@ const RichTextProperties: React.FC<RichTextPropertiesProps> = ({ element }) => {
         />
       </div>
 
-      <div>
-        <label className="label">Description (Optional)</label>
-        <textarea
-          name="description"
-          value={element.description || ''}
-          onChange={handleChange}
-          className="input"
-          rows={2}
-          placeholder="Add a description or instructions..."
-        ></textarea>
-      </div>
+
     </div>
   );
 };
